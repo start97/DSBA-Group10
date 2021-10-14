@@ -74,5 +74,10 @@ All data sets were retrieved on local government open data portals. At the momen
 
 # Schedule & timeline
 
+We agreed on meeting on a daily basis (every Thurdays at 0130 PM). The milestones of our project are the following:
+21/10
+28/10
+04/11
+11/11
 
 
