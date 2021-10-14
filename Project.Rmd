@@ -37,14 +37,14 @@ date: "17/10/2021"
 output: html_document
 ---
 
-# Background and motivation
+# Background and motivation (Marine, Augustin, Daniel)
 
 - Privacy matters a lot to us. We see a  tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. 
 - University courses: Digital privacy. GDPR course, law about what government can do or not with our personal data
 - Refer to critical articles
 
 
-# Project objectives (Augustin)
+# Project objectives (Augustin and Daniel)
 
 Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance make them feel safer (Madden & Rainie, 2015).
 
@@ -53,7 +53,7 @@ Throughout this research, the widespread belief that people who have “nothing 
 On the one hand, the rationale behind the installation of these systems seems to be very clear for governments. On Buffalo’s open data website, one can read that “the City of Buffalo deploys a real-time, citywide video surveillance system to augment the public safety efforts of the Buffalo Police Department”. Yet, on the other one, evidence that this actually works is scarcer.
 
 
-# Research questions (Almost done)
+# Research questions 
 
 - Does the presence of CCTVs actually deter crime?
 - What types of crimes may be deterred by surveillance cameras?
@@ -61,18 +61,18 @@ On the one hand, the rationale behind the installation of these systems seems to
 - Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 - Are there more public cameras in lower income/higher unemployment areas compared to higher income areas? (Does the government respect privacy issues depending on your income level?)
 
-# Data source 
+# Data source (Augustin, Daniel, Marine)
 
 All data sets were retrieved on local government open data portals. At the moment, we have 7 data sets. We have data concerning 3 different cities in the United States: Baltimore, Buffalo and Washington DC.
 
-# Data description
+# Data description (Daniel, Augustin, Marine)
 
 - Describe columns/variables
 - Describe which type of data
 - Describe how clean the provided datasets are?
 
 
-# Schedule & timeline
+# Schedule & timeline (Done)
 
 We agreed on meeting on a daily basis (every Thurdays at 0130 PM). The milestones of our project are the following:
 
@@ -83,25 +83,33 @@ We agreed on meeting on a daily basis (every Thurdays at 0130 PM). The milestone
 
 28/10 - Thursday meeting at 1:30 PM
 
-1) 
+1) Start tidy datasets (Remove N.As) - We have 3 datasets for Baltimore
+2) Fix bugs/ iterate and ask questions
+3) TBD
 
 04/11 - Thursday meeting at 1:30 PM
 
+TBD
 
 10/11 - Project update 
 
+TBD
 
 11/11 - Thursday meeting at 1:30 PM
 
+TBD
 
 18/11 - Thursday meeting at 1:30 PM
 
+TBD
 
 25/11 - Thursday meeting at 1:30 PM
 
+TBD
 
 4/12 - Thursday meeting at 1:30 PM
 
+TBD
 
 11/12 - Thursday meeting at 1:30 PM
 
