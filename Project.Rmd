@@ -67,10 +67,12 @@ All data sets were retrieved on local government open data portals. At the momen
 
 # Data description
 
-- Describe columns
+- Describe columns/variables
 - Describe which type of data
-- Describe how clean the provided datasets are? 
+- Describe how clean the provided datasets are?
 
 
 # Schedule & timeline
+
+
 
