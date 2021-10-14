@@ -58,13 +58,18 @@ On the one hand, the rationale behind the installation of these systems seems to
 - Does the presence of CCTVs actually deter crime?
 - What types of crimes may be deterred by surveillance cameras?
 - Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
-- 
+- Is the impact of CCTV installment on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
 # Data source
 
 All data sets were retrieved on local government open data portals. At the moment, we have 7 data sets. We have data concerning 3 different cities in the United States: Baltimore, Buffalo and Washington DC.
 
 # Data description
+
+- Describe columns
+- Describe which type of data
+- Describe how clean the provided datasets are? 
+
 
 # Schedule & timeline
 
