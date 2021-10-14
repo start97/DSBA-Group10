@@ -1,5 +1,5 @@
 ---
-title: "Project for Data Science for Business Analytics: Project draft"
+title: "Data Science for Business Analytics: Project draft"
 author: "from Daniel Welz, Augustin [Add surname] , Marine [Add surname] "
 date: "`r Sys.Date()`"
 output:
