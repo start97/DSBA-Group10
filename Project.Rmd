@@ -40,22 +40,19 @@ output: html_document
 
 # Project objectives (Augustin and Daniel)
 
-Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). The rationale behind the installation of these systems seems to be very clear for governments. On Buffalo’s open data website, one can read that “the City of Buffalo deploys a real-time, citywide video surveillance system to augment the public safety efforts of the Buffalo Police Department”.Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance make them feel safer (Madden & Rainie, 2015).
+Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). The rationale behind the installation of these systems seems to be very clear for governments. On Buffalo’s (NY) open data website, one can read that “the City of Buffalo deploys a real-time, citywide video surveillance system to augment the public safety efforts of the Buffalo Police Department”.Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance make them feel safer (Madden & Rainie, 2015).
 
-Throughout this research, the widespread belief that people who have “nothing to hide" should be content with the expansion of CCTV networks as the latter makes them safer is challenged (Madden & Rainie, 2015). Indeed, on top of the manifold privacy issues linked with this surge in video surveillance systems, one might ask the question wether these camera actually make people safer?
+Throughout this research, the widespread belief that people who have “nothing to hide" should be content with the expansion of CCTV networks as the latter makes them safer is challenged (Madden & Rainie, 2015). Indeed, on top of the manifold privacy issues linked with this surge in video surveillance systems, one might ask the question whether these camera actually make people safer?
 
-Thereby, the goal of this project is to first investigate the crime deterrent potential of CCTVs. The latter will also be compared to the different types of crime that are comitted. 
-
-
-
+Thereby, the goal of this project is to first investigate the crime deterrent potential of CCTVs. The latter will also be compared to the different types of crime that are committed. Over a second phase, 
 
 # Research questions 
 
 - Does the presence of CCTVs actually deter crime?
 - What types of crimes may be deterred by surveillance cameras?
-- Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
 - Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 - Are there more public cameras in lower income/higher unemployment areas compared to higher income areas? (Does the government respect privacy issues depending on your income level?)
+- Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
 
 # Data source (Augustin, Daniel, Marine)
 
