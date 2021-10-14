@@ -59,7 +59,7 @@ On the one hand, the rationale behind the installation of these systems seems to
 - What types of crimes may be deterred by surveillance cameras?
 - Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
 - Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
-- Are there more public cameras in lower income/higher unemployment areas compared to higher income areas? (Does the government respect privacy issues dependening on your income level?)
+- Are there more public cameras in lower income/higher unemployment areas compared to higher income areas? (Does the government respect privacy issues depending on your income level?)
 
 # Data source 
 
@@ -73,6 +73,7 @@ All data sets were retrieved on local government open data portals. At the momen
 
 
 # Schedule & timeline
+
 
 
 
