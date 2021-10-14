@@ -58,7 +58,7 @@ In a world where CCTVs and other surveillance systems are flourishing, it might 
 
 # Data source (Augustin, Daniel, Marine)
 
-All data sets were retrieved on local government open data portals. Initially, we found data sets regarding 3 different cities in the United States: Baltimore, Buffalo and Washington DC. For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly 
+All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found data sets regarding 3 different cities in the United States: Baltimore, Buffalo and Washington DC. For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. We finally decided to opt for Baltimore because 
 
 # Data description (Daniel, Augustin, Marine)
 
