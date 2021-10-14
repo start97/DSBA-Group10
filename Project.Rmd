@@ -41,6 +41,7 @@ output: html_document
 
 
 
+
 # Project objectives
 
 Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance make them feel safer (Madden & Rainie, 2015).
