@@ -44,7 +44,7 @@ output: html_document
 - Refer to critical articles
 
 
-# Project objectives
+# Project objectives (Augustin)
 
 Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance make them feel safer (Madden & Rainie, 2015).
 
@@ -53,7 +53,7 @@ Throughout this research, the widespread belief that people who have “nothing 
 On the one hand, the rationale behind the installation of these systems seems to be very clear for governments. On Buffalo’s open data website, one can read that “the City of Buffalo deploys a real-time, citywide video surveillance system to augment the public safety efforts of the Buffalo Police Department”. Yet, on the other one, evidence that this actually works is scarcer.
 
 
-# Research questions
+# Research questions (Almost done)
 
 - Does the presence of CCTVs actually deter crime?
 - What types of crimes may be deterred by surveillance cameras?
@@ -61,7 +61,7 @@ On the one hand, the rationale behind the installation of these systems seems to
 - Is the impact of CCTV installment on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 - Are there more public cameras in lower income/higher unemployment areas compared to higher income areas? (Does the government respect privacy issues dependening on your income level?)
 
-# Data source
+# Data source 
 
 All data sets were retrieved on local government open data portals. At the moment, we have 7 data sets. We have data concerning 3 different cities in the United States: Baltimore, Buffalo and Washington DC.
 
