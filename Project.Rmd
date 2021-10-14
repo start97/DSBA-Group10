@@ -1,0 +1,28 @@
+---
+title: "Project for Data Science for Business Analytics: Project draft"
+author: "from Daniel Welz, Augustin [Add surname] , Marine [Add surname] "
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    theme: cerulean
+    highlight: tango
+    toc: true
+    toc_float: true
+    code_folding: hide
+    number_sections: true
+bibliography: references.bib
+link-citations: yes
+runtime: shiny
+---
+
+```{r, echo = FALSE, message = FALSE}
+source(here::here("setup.R"))
+```
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
