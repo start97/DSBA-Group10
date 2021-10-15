@@ -46,7 +46,7 @@ Thereby, throughout this research, the widespread belief that people who have â€
 
 The goal of this project is to first investigate the crime deterrent potential of CCTVs in a US city. This potential will also be compared to the different types of crime that are committed. Over a second phase, the dispersion of CCTVs within a city will be investigated. Indeed, according to some researches, mass surveillance has a stronger impact on communities already disadvantaged by their poverty, race, religion, ethnicity, or immigration status (Gellman & Adler-Bell, 2017). We would like to see whether our data enables us to validate or invalidate this theory. It would also be extremly interesting, even though tricky, to see whether the installation of surveillance systems could potentially create even more pernicious issues such as crime displacement.
 
-In a world where CCTVs and other surveillance systems are flourishing, it might be good to take a step back and question both the efficacy and the implementation design of such methods often portrayed as miraculous solutions.
+In a world where CCTVs and other surveillance systems are flourishing, it might be beneficial to take a step back and question both the efficacy and the implementation design of such methods often portrayed as miraculous solutions.
 
 # Research questions 
 
@@ -61,6 +61,13 @@ In a world where CCTVs and other surveillance systems are flourishing, it might 
 All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found data sets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer and comparing the CCTV locations of Buffalo and Baltimore, we found out that the CCTV data set for Baltimore was more complete. Furthermore, by simply looking at we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore.
 
 # Data description (Daniel, Augustin, Marine)
+
+Data set about criminality in the Baltimore: This dataset represents the location and characteristics of major (Part 1) crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. Data updated as of October 05, 2021 at 13:56:39. 
+
+Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks)
+
+Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line.This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. 
+
 
 - Describe columns/variables
 - Describe which type of data
