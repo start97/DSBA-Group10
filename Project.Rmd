@@ -88,13 +88,13 @@ All data sets were retrieved on local government open data portals (https://data
 
 Data set about criminality in  Baltimore: This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore.
 
-Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks).
+Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
 
 X = Longitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
 Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
-CAM_NUM = Number of the camera
+OBJECTID = ID of of the camera, 837 in total
 
 LOCATION = 
 
@@ -117,14 +117,6 @@ community = name of the community statistical area. The Baltimore Data Collabora
 neigh = name of the neighbourhoods contained in the area. 
 
 tracts = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
-
-
-
-
-- Describe columns/variables
-- Describe which type of data
-- Describe how clean the provided datasets are?
-
 
 # Schedule & timeline (Done)
 
