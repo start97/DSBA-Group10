@@ -35,22 +35,20 @@ output: html_document
 
 # Background and motivation (Marine, Augustin, Daniel)
 
-(- Privacy matters a lot to us. We see a  tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. 
-- University courses: Digital privacy. GDPR course, law about what government can do or not with our personal data
-- Refer to critical articles)
-
 Backgrounds :
 
 Augustin : Augustin obtained a degree in Business Administration at the University of St-Gallen where he had the opportunity to develop a strong interest in digital business ethics. He wrote his bachelor’s thesis on the privacy implications of the use of fear appeals in home surveillance devices’ marketing strategy.
 
-Marine : I made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). I am presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) of the Unversity of Lausanne. I had the opportunity last year to take the data protection course and learn more about cyber security and crime in general. 
+Marine : Marine made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). She is presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) at the Unversity of Lausanne.Last year, she had the opportunity  to take a data protection course and learn more about cyber security and crime in general.
+
+Daniel:
 
 
+Motivations :
 
+From our respective backgrounds, we derive a strong interest in new technologies and privacy. Privacy matters a lot to us and we are convinced that  
 
-Motivations : 
-
-Privacy matters a lot to us. We see a tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. It is interesting to ask ourselves if this massive collection of our data leads to more security or more restrictions of our freedoms. 
+Privacy matters a lot to us. Yet, one observes a tendency of the government and other stakeholders (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. It is interesting to ask ourselves if this massive collection of our data leads to more security or more restrictions of our freedoms. 
 
 If we look at European laws like the GDPR, the collection and processing of our data must be proportionate to the purpose of that processing. Therefor, It is of interest for us to determine if these applications are the same in the United States and to see if the installation of cameras, with the objective of security, really allows to reduce crime and to secure a city. 
 
@@ -70,7 +68,7 @@ Throughout this research, the widespread belief that people who have “nothing 
 
 The goal of this project is to first investigate the crime deterrent potential of CCTVs in a US city. This potential will also be compared to the different types of crime that are committed in this area. Over a second phase, the dispersion of CCTVs within the city will be investigated. Indeed, according to some researches, mass surveillance has a stronger impact on communities already disadvantaged by their poverty, race, religion, ethnicity, or immigration status (Gellman & Adler-Bell, 2017). We would like to see whether our data enables us to validate or invalidate this theory. It would also be extremely interesting, even though tricky, to see whether the installation of surveillance systems could potentially create even more pernicious issues such as crime displacement.
 
-In a world where CCTVs and other surveillance systems are flourishing, it might be beneficial to take a step back and question both the efficacy and the implementation design of such technologies often portrayed as miraculous solutions.
+In a world where CCTVs and other surveillance systems are flourishing, it might be beneficial to take a step back and question both the efficacy and the implementation design of such technologies often portrayed as miraculous solutions to very complex issues.
 
 # Research questions 
 
@@ -82,41 +80,39 @@ In a world where CCTVs and other surveillance systems are flourishing, it might 
 
 # Data source (Augustin, Daniel, Marine)
 
-All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found datasets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found datasets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer to compare the CCTV locations of Buffalo and Baltimore, we found out that the CCTV dataset for Baltimore was more complete. Furthermore, by simply looking at the map we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we finally found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found datasets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found datasets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer to compare the CCTV locations of Buffalo and Baltimore, we found out that the CCTV dataset for Baltimore was more complete. Furthermore, by simply looking at the map we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
 # Data description (Daniel, Augustin, Marine)
 
 Data set about criminality in  Baltimore: This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. This dataset contains 350'294 observations.
 
-X =
-
-Y =
-
 RowID = ID of the row, 350'294 in total
 
-CrimeDateTime = date and time when the crime was committed. Format yyyy/mm/dd hh:mm:sstzd
+CrimeDateTime = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd
 
 CrimeCode = Code corresponding to the type of crime committed
 
-Location = ???
+Location = Textual information on where the crime was committed 
 
-Description = 
+Description = Textual description of the crime committed corresponding to a CrimeCode.
 
-Inside/Outside = 
+Inside/Outside = Provides information on whether crime was committed inside or outside
 
-Weapon = 
+Weapon = Provides details on what weapon has been used, if any
 
-Post = ???
+Post = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl
 
-District = 
+District = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.
 
-Neighborhood = 
+Neighborhood = Name of the Neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.
 
-Latitude = 
+Latitude = Latitude, Coordinate system: EPSG:4326 WGS 84
 
-Longitude =
+Longitude = Longitude, Coordinate system: EPSG:4326 WGS 84
 
-GeoLocation = Combination of latitude and longitude 
+GeoLocation = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84
+
+Premise = Information on the premise where the crime was committed. One counts more than 120'000 observations in the streets.
 
 Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
 
@@ -126,11 +122,11 @@ Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
 OBJECTID = ID of of the camera, 837 in total
 
-CAM_NUM = ????
+CAM_NUM = ???? honestly don't what it is, it might be the actual number of the cam and this might imply that not all cameras installed are present in the dataset
 
-LOCATION = ????
+LOCATION = Textual information on where the crime was committed 
 
-PROJ = ????
+PROJ = ???? Again, it seems to be information about the neighbourhood but it hardly ever matches "standard" neighbourhood names
 
 XCCORD = Longitude, Coordinate system: EPSG:4326 WGS 84
 
@@ -140,7 +136,7 @@ Data set about neighbourhood metrics: This dataset provides information about th
 
 CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
-hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year.
+hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.
 
 Shape__Area - Shape__Length = standard fields to determine the area and the perimeter of a polygon
 
