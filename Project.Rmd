@@ -31,6 +31,8 @@ date: "17/10/2021"
 output: html_document
 ---
 
+#Test 3
+
 # Background and motivation (Marine, Augustin, Daniel)
 
 - Privacy matters a lot to us. We see a  tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. 
