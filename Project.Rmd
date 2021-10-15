@@ -58,7 +58,7 @@ In a world where CCTVs and other surveillance systems are flourishing, it might 
 
 # Data source (Augustin, Daniel, Marine)
 
-All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found data sets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer and comparing the CCTV locations of Buffalo and Baltimore, we found out that the CCTV data set for Baltimore was more complete. Furthermore, by simply looking at we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore.
+All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found data sets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer and comparing the CCTV locations of Buffalo and Baltimore, we found out that the CCTV data set for Baltimore was more complete. Furthermore, by simply looking at we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we also found a data set showing the reference boundaries of the Community Statistical Area geographies.
 
 # Data description (Daniel, Augustin, Marine)
 
@@ -72,7 +72,9 @@ CSA2010 = name of the community statistical area. The Baltimore Data Collaborati
 
 hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year.
 
+Shape__Area - Shape__Length = 
 
+Data set about Community Statistical Areas: This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies.
 
 
 - Describe columns/variables
