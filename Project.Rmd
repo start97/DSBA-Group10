@@ -35,9 +35,9 @@ output: html_document
 
 # Background and motivation (Marine, Augustin, Daniel)
 
-- Privacy matters a lot to us. We see a  tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. 
+(- Privacy matters a lot to us. We see a  tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. 
 - University courses: Digital privacy. GDPR course, law about what government can do or not with our personal data
-- Refer to critical articles
+- Refer to critical articles)
 
 Privacy matters a lot to us. We see a tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. It is interesting to ask ourselves if this massive collection of our data leads to more security or more restrictions of our freedoms. 
 
