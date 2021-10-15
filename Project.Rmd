@@ -60,15 +60,15 @@ In a world where CCTVs and other surveillance systems are flourishing, it might 
 
 # Data source (Augustin, Daniel, Marine)
 
-All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found data sets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer to compare the CCTV locations of Buffalo and Baltimore, we found out that the CCTV data set for Baltimore was more complete. Furthermore, by simply looking at the map we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we finally found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations togehther.
+All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found data sets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found data sets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics. We quickly realised that, for feasibility reasons, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer to compare the CCTV locations of Buffalo and Baltimore, we found out that the CCTV data set for Baltimore was more complete. Furthermore, by simply looking at the map we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we finally found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
 # Data description (Daniel, Augustin, Marine)
 
-Data set about criminality in  Baltimore: This dataset represents the location and characteristics of major (Part 1) crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. Data updated as of October 05, 2021 at 13:56:39. 
+Data set about criminality in  Baltimore: This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore.
 
 Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks).
 
-Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. This dataset contains 55 observation, one percentage for each community statistical area. The most relevant variables are the following: 
+Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
 CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
@@ -76,7 +76,15 @@ hhpov15 - hhpov19 = each these five column contains the percent of Family Househ
 
 Shape__Area - Shape__Length = 
 
-Data set about Community Statistical Areas: This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies.
+Data set about Community Statistical Areas: This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations.One for each of area. The most relevant variables are the following:
+
+community = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+
+neigh = name of the neighbourhoods contained in the area. 
+
+tracts = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
+
+
 
 
 - Describe columns/variables
@@ -86,22 +94,22 @@ Data set about Community Statistical Areas: This dataset provides information ab
 
 # Schedule & timeline (Done)
 
-We agreed on meeting on a daily basis (every Thurdays at 0130 PM). The milestones of our project are the following:
+We agreed on meeting on a daily basis (every Thurdays at 1:30 PM). The milestones of our project are the following:
 
 21/10 - Thursday meeting at 1:30 PM
 
-1) For each research question, write down exactly the steps which need to be made with the data. Step-by-step (Which variables are important to answering the research question: Then we have 5 manuals in the end, which needed to be executed.)
-2) Start tidy datasets (Remove N.As) - We have 3 datasets for Baltimore
+1) For each research question, write down exactly the steps which need to be made with the data. Step-by-step (Which variables are important to answering the research question: Then we have 5 manuals in the end, which needs to be executed.)
+2) Start tidy datasets (Remove N.As) - We have 4 datasets for Baltimore
 
 28/10 - Thursday meeting at 1:30 PM
 
-1) Start tidy datasets (Remove N.As) - We have 3 datasets for Baltimore
-2) Fix bugs/ iterate and ask questions
-3) TBD
+1) Finish tidy datasets - We have 4 datasets for Baltimore
+2) Link the different datasets together using the geographical data
+3) Fix bugs/ iterate and ask questions
 
 04/11 - Thursday meeting at 1:30 PM
 
-TBD
+1) Have at least one research question answered.
 
 10/11 - Project update 
 
