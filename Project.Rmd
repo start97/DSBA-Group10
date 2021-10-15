@@ -39,6 +39,17 @@ output: html_document
 - University courses: Digital privacy. GDPR course, law about what government can do or not with our personal data
 - Refer to critical articles)
 
+Backgrounds :
+
+Augustin : Augustin obtained a degree in Business Administration at the University of St-Gallen where he had the opportunity to develop a strong interest in digital business ethics. He wrote his bachelor’s thesis on the privacy implications of the use of fear appeals in home surveillance devices’ marketing strategy.
+
+Marine : I made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). I am presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) of the Unversity of Lausanne. I had the opportunity last year to take the data protection course and learn more about cyber security and crime in general. 
+
+
+
+
+Motivations : 
+
 Privacy matters a lot to us. We see a tendency of the government and other stakeholder (e.g. businesses such as GAFA) to take more and more control in our daily lives. We think we have a right to privacy. It is interesting to ask ourselves if this massive collection of our data leads to more security or more restrictions of our freedoms. 
 
 If we look at European laws like the GDPR, the collection and processing of our data must be proportionate to the purpose of that processing. Therefor, It is of interest for us to determine if these applications are the same in the United States and to see if the installation of cameras, with the objective of security, really allows to reduce crime and to secure a city. 
