@@ -64,9 +64,15 @@ All data sets were retrieved on local government open data portals (https://data
 
 Data set about criminality in the Baltimore: This dataset represents the location and characteristics of major (Part 1) crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. Data updated as of October 05, 2021 at 13:56:39. 
 
-Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks)
+Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks).
 
-Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line.This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. 
+Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. This dataset contains 55 observation, one percentage for each community statistical area. The most relevant variables are the following: 
+
+CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+
+hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year.
+
+
 
 
 - Describe columns/variables
