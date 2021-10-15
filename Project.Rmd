@@ -68,7 +68,7 @@ Data set about criminality in  Baltimore: This dataset represents the location a
 
 Data set about CCTV location in Baltimore: This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks).
 
-Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
+Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
 CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
@@ -76,7 +76,7 @@ hhpov15 - hhpov19 = each these five column contains the percent of Family Househ
 
 Shape__Area - Shape__Length = 
 
-Data set about Community Statistical Areas: This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations.One for each of area. The most relevant variables are the following:
+Data set about Community Statistical Areas: This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
 
 community = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
