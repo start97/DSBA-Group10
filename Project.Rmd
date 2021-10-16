@@ -39,7 +39,7 @@ Backgrounds :
 
 Augustin : Augustin obtained a degree in Business Administration at the University of St-Gallen where he had the opportunity to develop a strong interest in digital business ethics. He wrote his bachelor’s thesis on the privacy implications of the use of fear appeals in home surveillance devices’ marketing strategy.
 
-Marine : Marine made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). She is presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) at the Unversity of Lausanne. Last year, she had the opportunity  to take a data protection course and learn more about cyber security and crime in general. [Comment DW: Maybe add a personal point, what makes you unique as a person, maybe a fun fact?]
+Marine : Marine made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). She is presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) at the Unversity of Lausanne. Last year, she had the opportunity  to take a data protection course and learn more about cyber security and crime in general.
 
 Daniel: Daniel is an exchange student from Koblenz, Germany. Daniel obtained a degree in Business Administration/Management at the WHU - Otto Beisheim School of Management, Germany. He is currently pursuing a Master of Management with focusing on family businesses, entrepreneurship and data science in his courses. Interestingly regarding this project, Daniel spend several months in the United states after high school and thus he can relate to the topic about police violence and crimes in the US. 
 
