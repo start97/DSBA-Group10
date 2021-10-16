@@ -31,7 +31,6 @@ date: "17/10/2021"
 output: html_document
 ---
 
-#Test 3
 
 # Background and motivation (Marine, Augustin, Daniel)
 
@@ -39,13 +38,13 @@ Backgrounds :
 
 Augustin : Augustin obtained a degree in Business Administration at the University of St-Gallen where he had the opportunity to develop a strong interest in digital business ethics. He wrote his bachelor’s thesis on the privacy implications of the use of fear appeals in home surveillance devices’ marketing strategy.
 
-Marine : Marine made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). She is presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) at the Unversity of Lausanne. Last year, she had the opportunity  to take a data protection course and learn more about cyber security and crime in general.
+Marine : Marine made a bachelor in Law at the UBO (Université de Bretagne-Occidentale). She is presently into the Master DCS (Droit, Criminalité et Sécurité des technologies de l'information) at the Unversity of Lausanne. Last year, she had the opportunity to take a data protection course and learn more about cyber security and crime in general.
 
-Daniel: Daniel is an exchange student from Koblenz, Germany. Daniel obtained a degree in Business Administration/Management at the WHU - Otto Beisheim School of Management, Germany. He is currently pursuing a Master of Management with focusing on family businesses, entrepreneurship and data science in his courses. Interestingly regarding this project, Daniel spend several months in the United states after high school and thus he can relate to the topic about police violence and crimes in the US. 
+Daniel: Daniel is an exchange student from Koblenz, Germany. Daniel obtained a bachelor's degree in Business Administration/Management at the WHU - Otto Beisheim School of Management, Germany. He is currently pursuing a Master of Management with focusing on family businesses, entrepreneurship and data science in his courses. Interestingly regarding this project, Daniel spend several months in the United states after high school and thus he can relate to the topic about police violence and crimes in the US. 
 
 Motivations :
 
-Firstly, from our respective backgrounds, we derive a strong interest in new technologies and privacy. We believe that every person is entitled to the fundamental right to privacy. Unfortunately, one observes an increasing tendency of governments and other stakeholders (e.g. businesses such as GAFA (Google, Amazon, Facebook, Apple)) to take more and more control in our daily lives through digital technologies such as cameras, computers or smartphones. For these reasons it is interesting to ask ourselves if this massive collection of our data leads to more security or more restrictions of our freedoms. 
+Firstly, from our respective backgrounds, we derive a strong interest in new technologies and privacy. We believe that every person is entitled to the fundamental right to privacy. Unfortunately, one observes an increasing tendency of governments and other stakeholders (e.g. businesses such as GAFA (Google, Amazon, Facebook, Apple)) to take more and more control in our daily lives through digital technologies such as cameras, computers or smartphones. For these reasons it is interesting to ask ourselves if this massive collection of our data leads to more security or more restrictions of our freedom. 
 
 Secondly, if we look at European law like the GDPR, collection and processing of our data must be proportionate to the purpose of that processing. Therefore, it is of our interest to determine if these applications are the same in the United States and to see if the installation of cameras, with the objective of security, really allows to reduce crime and to make a city more secure. 
 
@@ -61,11 +60,11 @@ https://qz.com/1589864/do-cameras-and-drones-everywhere-make-us-any-safer/
 
 # Project objectives (Augustin and Daniel)
 
-Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). The rationale behind the installation of these systems seems to be very clear for governments. On Buffalo’s (NY) open data website, one can read that “the City of Buffalo deploys a real-time, citywide video surveillance system to augment the public safety efforts of the Buffalo Police Department”. Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance makes them feel safer (Madden & Rainie, 2015).
+Video surveillance (CCTV) is a technology that is nowadays deeply woven into the everyday life of many people as one tends to expect it in many varied circumstances (Ossola, 2019). The rationale behind the installation of these systems seems to be very clear for governments. FOr example, on Buffalo’s (NY) open data website, one can read that “the City of Buffalo deploys a real-time, citywide video surveillance system to augment the public safety efforts of the Buffalo Police Department”. Yet, the development of this new technology, is not exempt from any controversy. For instance, many observers claim that the expansion of video surveillance poses an unregulated threat to privacy (ACLU, 2021). Still, many people seem to be willing to accept this loss in privacy as the surge in video surveillance makes them feel safer (Madden & Rainie, 2015).
 
-Throughout this research, the widespread belief that people who have “nothing to hide" should be content with the expansion of CCTV networks as the latter make them safer is challenged (Madden & Rainie, 2015). Indeed, on top of the manifold privacy issues linked with this surge in video surveillance systems, one might legitimately ask the question whether these cameras actually make people safer?
+Throughout this research, we challenge the widespread belief that people who have “nothing to hide" should be content with the expansion of CCTV networks as the latter makes them safer (Madden & Rainie, 2015). Indeed, on top of many privacy issues linked with this surge in video surveillance systems, one might legitimately ask the question whether these cameras actually make people safer?
 
-The goal of this project in the first phase is to investigate the crime deterrent potential of CCTVs in a US city. This potential will also be compared to the different types of crime that are committed in this area. In the second phase, the dispersion of CCTVs within the city will be investigated. Indeed, according to some researches, mass surveillance has a stronger impact on communities already disadvantaged by their poverty, race, religion, ethnicity, or immigration status (Gellman & Adler-Bell, 2017). We would like to see whether our data enables us to validate or invalidate this theory. It would also be extremely interesting, even though challenging, to see whether the installation of surveillance systems could potentially create even more pernicious issues such as crime displacements (Waples, Gill & Fisher, 2009).
+The goal of this project in the first phase is to investigate the crime deterrent potential of CCTVs in an US city. This potential will also be compared to the different types of crime that are committed in this area. In the second phase, the dispersion of CCTVs within the city will be investigated. Indeed, according to some researches, mass surveillance has a stronger impact on communities already disadvantaged by their poverty, race, religion, ethnicity, or immigration status (Gellman & Adler-Bell, 2017). We would like to see whether our data enables us to validate or invalidate this theory. It would also be extremely interesting, even though challenging, to see whether the installation of surveillance systems could potentially create even more pernicious issues such as crime displacements (Waples, Gill & Fisher, 2009).
 
 In sum we argue that, in a world where CCTVs and other surveillance systems are flourishing, it might be beneficial to take a step back and question both the efficacy and the implementation design of such technologies, since they are often portrayed by different stakeholders as miraculous solutions to very complex issues.
 
@@ -74,12 +73,16 @@ In sum we argue that, in a world where CCTVs and other surveillance systems are 
 1)    Does the presence of CCTVs in a given area actually deter crime?
 2)    What types of crimes may be deterred by surveillance cameras?
 3)    Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
-4)    Are there more public cameras in lower income/higher unemployment areas compared to higher income areas? (Does the government respect privacy issues depending on your income level?) 
+4)    Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (Does the government respect privacy issues depending on your income level?) 
 5)    Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
 
 # Data source (Augustin, Daniel, Marine)
 
-All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found datasets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found datasets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics such as income level, employment status and ethnicity. We quickly realised that, for feasibility reasons in terms of the scope of the project, we should focus on one city only. As the neighbourhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer to compare the CCTV locations of Buffalo and Baltimore, we found out that the CCTV dataset for Baltimore was more complete. Furthermore, by simply looking at the map we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+All data sets were retrieved on local government open data portals (https://data.baltimorecity.gov / https://data.buffalony.gov / https://opendata.dc.gov). We initially found datasets regarding 3 different cities in the United States: Baltimore (MD), Buffalo (NY) and Washington (DC). For each city we found datasets on crimes committed in these respective areas, CCTV locations and neighbourhood metrics such as income level, employment status and ethnicity. We quickly realised that, for feasibility reasons in terms of the scope of the project, we should focus on one city only. As the neighborhood metrics we found about Washington seemed less complete, we quickly ruled out this option. Using a KML file visualizer to compare the CCTV locations of Buffalo and Baltimore, we found out that the CCTV dataset for Baltimore was more complete. Furthermore, by simply looking at the map we found some seemingly intriguing patterns (cf: two screenshots attached). Thus, we finally decided to opt for Baltimore. On Baltimore open data portal, we found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+
+Screenshot 1: 
+
+Screenshot 2: 
 
 # Data description (Daniel, Augustin, Marine)
 
@@ -103,7 +106,7 @@ Post = Number corresponding to the Police Post concerned. A map with correspondi
 
 District = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.
 
-Neighborhood = Name of the Neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.
+Neighborhood = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.
 
 Latitude = Latitude, Coordinate system: EPSG:4326 WGS 84
 
@@ -121,7 +124,7 @@ Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
 OBJECTID = ID of of the camera, 837 in total
 
-CAM_NUM = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore
+CAM_NUM = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore [What about the many zeros?]
 
 LOCATION = Textual information on where the camera is located
 
@@ -131,7 +134,12 @@ XCCORD = Longitude, Coordinate system: EPSG:4326 WGS 84
 
 YCOORD = Latitude, Coordinate system: EPSG:4326 WGS 84
 
-Data set about neighbourhood metrics: This dataset provides information about the percent of Family Households Living Below the Poverty Line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
+[Comment DW: What about the installment date? DO we have this information somewhere?]
+
+Data set about neighbourhood metrics: 
+This dataset provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. 
+
+Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
 CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
@@ -139,7 +147,8 @@ hhpov15 - hhpov19 = each these five column contains the percent of Family Househ
 
 Shape__Area - Shape__Length = standard fields to determine the area and the perimeter of a polygon
 
-Data set about Community Statistical Areas: This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
+Data set about Community Statistical Areas: 
+This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
 
 community = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
