@@ -124,7 +124,7 @@ Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
 OBJECTID = ID of of the camera, 837 in total
 
-CAM_NUM = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore [What about the many zeros?]
+CAM_NUM = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore. Here at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn't relate to anything. So we are still in the process of figuring out the exact meaning of that.
 
 LOCATION = Textual information on where the camera is located
 
@@ -133,8 +133,6 @@ PROJ = Name of the area in which the camera is located. It does not always match
 XCCORD = Longitude, Coordinate system: EPSG:4326 WGS 84
 
 YCOORD = Latitude, Coordinate system: EPSG:4326 WGS 84
-
-[Comment DW: What about the installment date? DO we have this information somewhere?]
 
 Data set about neighbourhood metrics: 
 This dataset provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. 
