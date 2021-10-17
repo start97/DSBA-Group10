@@ -34,6 +34,8 @@ output: html_document
 
 # Background and motivation (Marine, Augustin, Daniel)
 
+Title: Investigative research of the impact of CCTV installations on crime rates in Baltimore.
+
 Backgrounds :
 
 Augustin : Augustin obtained a degree in Business Administration at the University of St-Gallen where he had the opportunity to develop a strong interest in digital business ethics. He wrote his bachelor’s thesis on the privacy implications of the use of fear appeals in home surveillance devices’ marketing strategy.
