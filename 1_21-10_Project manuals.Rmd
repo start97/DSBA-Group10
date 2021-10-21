@@ -63,6 +63,8 @@ Research objective
 * Goal:
 * Communicate goal: 
 * Steps: 
+- Create clusters with concentration of cctvs in each of the 55 area
+- Compare to poverty rate in each of the 55 areas
 * Needed packages: 
 * Things to consider: 
 
