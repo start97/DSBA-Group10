@@ -27,8 +27,8 @@ Research objective
 
 1)  Does the presence of CCTVs in a given area actually deter crime?
 
-* Goal: Yes-or-no answer.Yes, if conditions x,y,z are met. No, if conditions x,y,z not met.What are the critical variables, when CCTS deter crime.  
-* Communicate goal: 
+* Goal: Yes-or-no answer.Yes, in neighborhoods x,y,z (if conditions x,y,z are met). No, in neighborhoods x,y,z (if conditions x,y,z not met). What are the differences (critical variables), when CCTS deter crime.  
+* Communicate goal: Show map of Baltimore with neighborhoods (graphical respresentation). Either completely red (no deterring of crime), or green (deterring of crime) or yellow (no effect).
 * Steps: 
 * Needed packages: 
 * Things to consider: 
@@ -36,8 +36,8 @@ Research objective
 
 2)  What types of crimes may be deterred by surveillance cameras?
 
-* Goal:
-* Communicate goal: 
+* Goal:Crime reduction by type. 
+* Communicate goal: Crime type overview. For each crime show reduction (effect of installation). Summarize on which three crimes it actually has most significant impact. 
 * Steps: 
 * Needed packages: 
 * Things to consider: 
@@ -46,8 +46,8 @@ Research objective
 3)  Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income
     neighborhoods?
     
-* Goal:
-* Communicate goal: 
+* Goal: Comparison impact on neighborhood + Root causes
+* Communicate goal: Show top 3 impacted neighborhoods, show top 3 less impacted neighborhoods, explain three reasons why difference (compenents x,y,z)
 * Steps: 
 * Needed packages: 
 * Things to consider: 
