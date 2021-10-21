@@ -9,9 +9,11 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #Import the data
 
+getwd()
+
 area_data <- read.csv("Community_Statistical_Areas__CSAs___Reference_Boundaries.csv")
 
-cctv_data <- read.csv("CCTV_Locations_Crime_Cameras.csv")
+cctv_data <- read.csv("Baltimore_CCTV_Locations_Crime_Cameras.csv")
 
 poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv")
 
