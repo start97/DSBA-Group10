@@ -30,6 +30,10 @@ Research objective
 * Goal: Yes-or-no answer.Yes, in neighborhoods x,y,z. No, in neighborhoods x,y,z. 
 * Communicate goal: Show map of Baltimore with neighborhoods (graphical respresentation). Either completely red (no deterring of crime), or green (deterring of crime) or yellow (no effect).
 * Steps: 
+- Create clusters with concentration of cctvs in each of the 55 area
+- Create clusters with crime rates in each of the 55 areas DONE (NOTE: maybe we should focus on crime committed in the past 10 years?)
+- Compare whether we have a tendency to have higher crime with higher cctv concentration (make a plot first)
+- Maybe: create a regression line ? Simple linear regression model ? To predict cctv concentration based on crime rate?
 * Needed packages: tidyverse, leaflet, 
 * Things to consider: 
 
@@ -39,12 +43,14 @@ Research objective
 * Goal: Crime reduction by type. 
 * Communicate goal: Crime type overview. For each crime show reduction (effect of installation). Summarize on which three crimes it actually has most significant impact. 
 * Steps: 
+- Create clusters with rates of certain types of crime (eg murder, robbery etc) for each of the 55 area
+- Use clusters with concentration of cctvs in each of the 55 areas
+- Again compare whether we have a tendency
 * Needed packages: 
 * Things to consider: 
 
 
-3)  Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income
-    neighborhoods?
+3)  Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
     
 * Goal: Comparison impact on neighborhood + Root causes
 * Communicate goal: Show top 3 impacted neighborhoods, show top 3 less impacted neighborhoods, explain three reasons why difference (compenents x,y,z)
