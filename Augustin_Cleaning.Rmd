@@ -10,6 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #Import the data
 
 getwd()
+setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
 
 area_data <- read.csv("Community_Statistical_Areas__CSAs___Reference_Boundaries.csv")
 
@@ -17,4 +18,55 @@ cctv_data <- read.csv("Baltimore_CCTV_Locations_Crime_Cameras.csv")
 
 poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv")
 
-crime_data <- read.csv("Balt_Part1_Crime_data.csv")
+crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
+
+
+#Explore the data 
+
+#Crime data
+View(crime_data)
+str(crime_data)
+summary(crime_data)
+unique(crime_data$Neighborhood)
+tolower(crime_data$Neighborhood)
+
+#Area data
+View(area_data)
+
+#Poverty data
+View(poverty_data)
+
+#CCTV data
+View(cctv_data)
+
+
+#Data manipulations
+
+library(tidyverse)
+
+crime_data <- mutate(crime_data,neighborhood=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
+
+area_data2 <- separate_rows(area_data, Neigh, sep = ", ") #Creation of a new dataset with eigh neighbourhood being assigned to an area
+
+area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters
+
+colnames(crime_data)[20] <- "neigh" #Change name to ensure it corresponds to the name we have in other dataset
+
+crime_data_with_areas <- crime_data %>% 
+  left_join(area_data2,by="neigh") 
+
+testNA <- is.na(crime_data_with_areas$neigh) #Check whether we have NAs
+
+which(is.na(crime_data_with_areas$neigh))
+testNA2 <- rep(FALSE,350294)
+
+identical(testNA,testNA2) #It seems that we have a perfect match !!!
+
+CrimeRatePerArea <- crime_data_with_areas %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea=n()/350294)
+  
+  sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 1, which is what we expect
+
+
+
