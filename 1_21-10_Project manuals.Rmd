@@ -60,7 +60,7 @@ Research objective
 
 4)  Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (Does the government         respect privacy issues depending on your income level?) 
 
-* Goal:
+* Goal:Yes or no, correlation 
 * Communicate goal: 
 * Steps: 
 - Create clusters with concentration of cctvs in each of the 55 area
