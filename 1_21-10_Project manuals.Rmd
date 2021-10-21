@@ -46,7 +46,7 @@ Research objective
 - Create clusters with rates of certain types of crime (eg murder, robbery etc) for each of the 55 area
 - Use clusters with concentration of cctvs in each of the 55 areas
 - Again compare whether we have a tendency
-* Needed packages: 
+* Needed packages: tidyverse, leaflet
 * Things to consider: 
 
 
