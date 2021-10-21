@@ -72,6 +72,10 @@ Research objective
 * Goal:
 * Communicate goal: 
 * Steps: 
+- Assumption: we have more and more cctvs / Crime is steady
+- Compute crime rates in 2010-2015 period VS crime rates 2015-2020 in region with most cameras
+- Compute crime rates in 2010-2015 period VS crime rates 2015-2020 in region with least cameras
+- Check whether we observe an inversion of the tendency
 * Needed packages: 
 * Things to consider: 
 
