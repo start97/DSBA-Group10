@@ -76,5 +76,3 @@ sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 1, which is what we exp
 
 
 
-
-
