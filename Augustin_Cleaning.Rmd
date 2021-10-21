@@ -7,7 +7,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-#Import the data
+#IMPORT THE DATA
 
 getwd()
 setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
@@ -21,7 +21,7 @@ poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_
 crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
 
 
-#Explore the data 
+#EXPLORE THE DATA
 
 #Crime data
 View(crime_data)
@@ -40,7 +40,7 @@ View(poverty_data)
 View(cctv_data)
 
 
-#Data manipulations
+#DATA MANIPULATIONS
 
 library(tidyverse)
 
