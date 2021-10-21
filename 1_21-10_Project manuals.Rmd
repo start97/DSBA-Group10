@@ -25,9 +25,9 @@ knitr::opts_chunk$set(echo = TRUE)
 
 Research objective
 
-1)  Does the presence of CCTVs in a given area actually deter crime?
+*1)  Does the presence of CCTVs in a given area actually deter crime?*
 
-* Goal: Yes-or-no answer.Yes, in neighborhoods x,y,z (if conditions x,y,z are met). No, in neighborhoods x,y,z (if conditions x,y,z not met). What are the differences (critical variables), when CCTS deter crime.  
+* *Goal*: Yes-or-no answer.Yes, in neighborhoods x,y,z (if conditions x,y,z are met). No, in neighborhoods x,y,z (if conditions x,y,z not met). What are the differences (critical variables), when CCTS deter crime.  
 * Communicate goal: Show map of Baltimore with neighborhoods (graphical respresentation). Either completely red (no deterring of crime), or green (deterring of crime) or yellow (no effect).
 * Steps: 
 * Needed packages: 
