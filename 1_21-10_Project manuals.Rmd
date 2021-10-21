@@ -23,4 +23,49 @@ source(here::here("setup.R"))
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+Research objective
+
+1)  Does the presence of CCTVs in a given area actually deter crime?
+
+* Goal: Yes-or-no answer.Yes, if conditions x,y,z are met. No, if conditions x,y,z not met.What are the critical variables, when CCTS deter crime.  
+* Communicate goal: 
+* Steps: 
+* Needed packages: 
+* Things to consider: 
+
+
+2)  What types of crimes may be deterred by surveillance cameras?
+
+* Goal:
+* Communicate goal: 
+* Steps: 
+* Needed packages: 
+* Things to consider: 
+
+
+3)  Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income
+    neighborhoods?
+    
+* Goal:
+* Communicate goal: 
+* Steps: 
+* Needed packages: 
+* Things to consider: 
+
+4)  Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (Does the government         respect privacy issues depending on your income level?) 
+
+* Goal:
+* Communicate goal: 
+* Steps: 
+* Needed packages: 
+* Things to consider: 
+
+
+5)  Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
+
+* Goal:
+* Communicate goal: 
+* Steps: 
+* Needed packages: 
+* Things to consider: 
 
