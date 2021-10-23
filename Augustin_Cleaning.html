@@ -168,7 +168,32 @@ pre code {
 </div>
 
 
-
+<p>#IMPORT THE DATA</p>
+<p>getwd() setwd(“/Users/Augustin/Documents/GitHub/DSBA-Group10/WD”)</p>
+<p>area_data &lt;- read.csv(&quot;Community_Statistical_Areas__CSAs___Reference_Boundaries.csv&quot;)</p>
+<p>cctv_data &lt;- read.csv(“Baltimore_CCTV_Locations_Crime_Cameras.csv”)</p>
+<p>poverty_data &lt;- read.csv(“Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv”)</p>
+<p>crime_data &lt;- read.csv(“Baltimore_Part1_Crime_data.csv”)</p>
+<p>#EXPLORE THE DATA</p>
+<p>#Crime data View(crime_data) str(crime_data) summary(crime_data) unique(crime_data<span class="math inline">\(Neighborhood) tolower(crime_data\)</span>Neighborhood)</p>
+<p>#Area data View(area_data)</p>
+<p>#Poverty data View(poverty_data)</p>
+<p>#CCTV data View(cctv_data)</p>
+<p>#DATA MANIPULATIONS</p>
+<p>library(tidyverse)</p>
+<p>#Joining of crime dataset and area dataset</p>
+<p>crime_data &lt;- mutate(crime_data,neighborhood=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters</p>
+<p>area_data2 &lt;- separate_rows(area_data, Neigh, sep = “,”) #Creation of a new dataset with eigh neighbourhood being assigned to an area</p>
+<p>area_data2 &lt;- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters</p>
+<p>colnames(crime_data)[20] &lt;- “neigh” #Change name to ensure it corresponds to the name we have in other dataset</p>
+<p>crime_data_with_areas &lt;- crime_data %&gt;% left_join(area_data2,by=“neigh”)</p>
+<p>testNA &lt;- is.na(crime_data_with_areas$neigh) #Check whether we have NAs</p>
+<p>which(is.na(crime_data_with_areas$neigh)) testNA2 &lt;- rep(FALSE,350294)</p>
+<p>identical(testNA,testNA2) #It seems that we have a perfect match !!!</p>
+<p>#Calculation of the crime rate per area</p>
+<p>CrimeRatePerArea &lt;- crime_data_with_areas %&gt;% group_by(Community) %&gt;% summarize(CrimeRatePerArea=n()/350294)</p>
+<p>sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 1, which is what we expect</p>
+<p>#Joining of CCTV dataset and area dataset</p>
 
 
 
