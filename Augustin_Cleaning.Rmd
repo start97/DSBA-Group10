@@ -156,6 +156,14 @@ baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community'
 library(tmap)
 qtm(baltimore, "CrimeRatePerArea")
 
+#MAPPING OF CCTVs
+
+baltimore$community %in% CCTV_per_area$Community
+
+baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
+
+qtm(baltimore, "density_perc")
+
 #STATISTICS OF CRIME BY TYPES OF CRIME
 
 
