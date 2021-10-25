@@ -20,7 +20,6 @@ poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_
 
 crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
 
-
 #EXPLORE THE DATA
 
 #Crime data
@@ -96,7 +95,7 @@ baltimore <-  readOGR(dsn = "./Community_Statistical_Area", layer = "Community_S
 proj4string(baltimore) <- crs.geo1
 
 #plot
-plot(baltimore)
+plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
 plot(balt_dat,pch=20, col="steelblue" , add=TRUE)
 
 #Perform the count
