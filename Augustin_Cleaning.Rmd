@@ -145,6 +145,17 @@ estimation <- x*range+y
 
 lines(range,estimation, col="blue")
 
+#MAPPING OF CRIMES
+
+baltimore$community %in% CrimeRatePerArea$Community
+
+CrimeRatePerArea$Community[56] <- "Unassigned -- Jail" #The previous line of code allowed to check whether we had a perfect match, so it is not the case, we assign a new value to the only outlier
+
+baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community' = 'Community'))
+
+library(tmap)
+qtm(baltimore, "CrimeRatePerArea")
+
 #STATISTICS OF CRIME BY TYPES OF CRIME
 
 
