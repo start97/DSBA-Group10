@@ -43,6 +43,10 @@ View(cctv_data)
 #DATA MANIPULATIONS
 
 library(tidyverse)
+library(data.table)
+library(sp)
+library(rgdal)
+library(ggplot2)
 
 #Joining of crime dataset and area dataset
 
@@ -64,7 +68,7 @@ testNA2 <- rep(FALSE,350294)
 
 identical(testNA,testNA2) #It seems that we have a perfect match !!!
 
-#Calculation of the crime rate per area
+#Calculation of the crime rate per community
 
 CrimeRatePerArea <- crime_data_with_areas %>% 
   group_by(Community) %>%
@@ -72,7 +76,48 @@ CrimeRatePerArea <- crime_data_with_areas %>%
   
 sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 1, which is what we expect
 
-#Joining of CCTV dataset and area dataset
+#Calculation of the density of CCTV per community
+
+#read in data table
+balt_dat <-  fread("Baltimore_CCTV_Locations_Crime_Cameras.csv")
+
+#convert to data table
+balt_dat <- as.data.table(balt_dat)
+
+#make data spatial
+coordinates(balt_dat) <-  c("X","Y")
+crs.geo1 <-  CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs")
+proj4string(balt_dat) <-  crs.geo1  
+
+plot(balt_dat, pch = 20, col = "steelblue")
+
+#read in shapefile of baltimore
+baltimore <-  readOGR(dsn = "./Community_Statistical_Area", layer = "Community_Statistical_Area") #name of file and object
+proj4string(baltimore) <- crs.geo1
+
+#plot
+plot(baltimore)
+plot(balt_dat,pch=20, col="steelblue" , add=TRUE)
+
+#Perform the count
+
+proj4string(balt_dat)
+proj4string(baltimore)
+
+res2 <- over(balt_dat,baltimore)
+counts <- table(res2$community)
+counts <- as.data.frame(counts)
+colnames(counts)[1] <- "Community"
+sum(counts$Freq)
+
+#Calculate the density for each community
+
+CCTV_per_area <- area_data[2] %>% 
+  left_join(counts,by="Community") #One must add the communities where there are no counts i.e no CCTV
+
+CCTV_per_area[is.na(CCTV_per_area)] <- 0
+
+CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCTV_per_area$Freq)))*100)
 
 
 
