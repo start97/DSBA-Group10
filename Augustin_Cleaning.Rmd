@@ -145,4 +145,7 @@ estimation <- x*range+y
 
 lines(range,estimation, col="blue")
 
+#STATISTICS OF CRIME BY TYPES OF CRIME
+
+
 #RESEARCH QUESTION 
