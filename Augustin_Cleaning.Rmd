@@ -192,4 +192,40 @@ qtm(baltimore, "CrimeRatePerAreaPerCrime", fill.title="Aggravated Assault")
 
 baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
 
+#Comparison of CCTV density vs wealth
+
+CCTV_per_area[-51,]$density_perc
+
+plot(CCTV_per_area[-51,]$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
+
+regression2 <- lm(poverty_data$hhpov19~CCTV_per_area[-51,]$density_perc)
+summary(regression2)
+
+y2<-regression2[["coefficients"]][["(Intercept)"]]
+x2<-regression2[["coefficients"]][["CCTV_per_area[-51, ]$density_perc"]]
+
+range2 <- seq(from=-5, to=12, by=0.2)
+
+estimation2 <- x2*range2+y2
+
+lines(range2,estimation2, col="blue")
+
+#Comparison of Crimes VS wealth
+
+CrimeRatePerArea[-56,]$CrimeRatePerArea
+
+plot(CrimeRatePerArea[-56,]$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
+
+regression3 <- lm(poverty_data$hhpov19~CrimeRatePerArea[-56,]$CrimeRatePerArea)
+summary(regression2)
+
+y3<-regression3[["coefficients"]][["(Intercept)"]]
+x3<-regression3[["coefficients"]][["CrimeRatePerArea[-56, ]$CrimeRatePerArea"]]
+
+range3 <- seq(from=0, to=4.5, by=0.1)
+
+estimation3 <- x3*range3+y3
+
+lines(range3,estimation3, col="blue")
+
 #RESEARCH QUESTION 
