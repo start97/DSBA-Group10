@@ -167,6 +167,10 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 
 #STATISTICS OF CRIME BY TYPES OF CRIME
 
+unique(crime_data_with_areas$Description)
+
+#Group: Homicide / Rape / Arson / Robbery(street, residence, carjacking, commercial) / Common assault / Agg. assault / Shooting
+
 CrimeRatePerTypePerArea <- crime_data_with_areas %>% 
   group_by(Community,Description) %>%
   summarize(CrimeRatePerAreaPerCrime=(n()/350294)*100)
