@@ -10,6 +10,20 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #IMPORT THE DATA
 
+```{r}
+getwd()
+setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
+
+area_data <- read.csv("Community_Statistical_Areas__CSAs___Reference_Boundaries.csv")
+
+cctv_data <- read.csv("Baltimore_CCTV_Locations_Crime_Cameras.csv")
+
+poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv")
+
+crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
+
+```
+
 #EXPLORE THE DATA
 
 ```{r}
