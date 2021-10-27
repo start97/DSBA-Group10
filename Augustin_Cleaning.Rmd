@@ -72,9 +72,9 @@ colnames(crime_data)[20] <- "neigh" #Change name to ensure it corresponds to the
 crime_data_with_areas <- crime_data %>% 
   left_join(area_data2,by="neigh") 
 
-testNA <- is.na(crime_data_with_areas$neigh) #Check whether we have NAs
+testNA <- is.na(crime_data_with_areas$Community) #Check whether we have NAs
 
-which(is.na(crime_data_with_areas$neigh))
+which(is.na(crime_data_with_areas$Community))
 testNA2 <- rep(FALSE,350294)
 
 identical(testNA,testNA2) #It seems that we have a perfect match !!!
