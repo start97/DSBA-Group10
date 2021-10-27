@@ -63,7 +63,7 @@ crime_data_NAs <- crime_data %>%
 
 unique(crime_data_NAs$neigh) #We see that we have very few unassigned names, we can change this by hand.
 
-#mount washington = Mt. Washington / carroll - camden industrial area = Caroll-Camden Industrial Area / patterson park neighborhood = Patterson Park / glenham-belhar = Glenham-Belford / mount winans = Mt. Winans / rosemont homeowners/tenants = Rosemont / boyd-booth = Booth-boyd
+#mount washington = Mt. Washington / carroll - camden industrial area = Caroll-Camden Industrial Area / patterson park neighborhood = Patterson Park / glenham-belhar = Glenham-Belford / new southwest/mount clare = Hollins Market / mount winans = Mt. Winans / rosemont homeowners/tenants = Rosemont / broening manor = O'Donnell Heights / boyd-booth = Booth-boyd / lower herring run park = Herring Run Park / mt pleasant park = Mt. Pleasant Park / 
 
 ```
 
