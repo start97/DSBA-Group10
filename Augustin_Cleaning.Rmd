@@ -10,22 +10,6 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #IMPORT THE DATA
 
-```{r}
-getwd()
-setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
-
-area_data <- read.csv("Community_Statistical_Areas__CSAs___Reference_Boundaries.csv")
-
-cctv_data <- read.csv("Baltimore_CCTV_Locations_Crime_Cameras.csv")
-
-poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv")
-
-crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
-
-
-```
-
-
 #EXPLORE THE DATA
 
 ```{r}
@@ -49,6 +33,7 @@ View(cctv_data)
 
 #DATA MANIPULATIONS
 
+
 ```{r}
 library(tidyverse)
 library(data.table)
@@ -57,9 +42,9 @@ library(rgdal)
 library(ggplot2)
 ```
 
+#Joining of crime dataset and area dataset
 
 ```{r}
-#Joining of crime dataset and area dataset
 
 crime_data <- mutate(crime_data,neighborhood=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
 
@@ -133,8 +118,11 @@ counts <- table(res2$community)
 counts <- as.data.frame(counts)
 colnames(counts)[1] <- "Community"
 sum(counts$Freq)
+```
 
 #Calculate the density for each community
+
+```{r}
 
 CCTV_per_area <- area_data[2] %>% 
   left_join(counts,by="Community") #One must add the communities where there are no counts i.e no CCTV
@@ -149,6 +137,7 @@ View(CCTV_per_area)
 #EXPLORATION
 
 #CCTV against crimes
+
 ```{r}
 CCTV_VS_crimes <- CCTV_per_area %>% 
   left_join(CrimeRatePerArea,by="Community")
@@ -196,6 +185,7 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 ```
 
 #STATISTICS OF CRIME BY TYPES OF CRIME
+
 ```{r}
 unique(crime_data_with_areas$Description)
 
@@ -209,6 +199,7 @@ sum(CrimeRatePerTypePerArea$CrimeRatePerAreaPerCrime)
 ```
 
 #MAPPING OF AGGRAVATED ASSAULT
+
 ```{r}
 Aggravated_assault <-filter(CrimeRatePerTypePerArea,Description=="AGG. ASSAULT")
 
@@ -225,6 +216,7 @@ baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we se
 ```
 
 #Comparison of CCTV density vs wealth
+
 ```{r}
 CCTV_per_area[-51,]$density_perc
 
@@ -242,8 +234,9 @@ estimation2 <- x2*range2+y2
 
 lines(range2,estimation2, col="blue")
 ```
-#Comparison of Crimes VS wealth
 
+#Comparison of Crimes VS wealth
+```{r}
 CrimeRatePerArea[-56,]$CrimeRatePerArea
 
 plot(CrimeRatePerArea[-56,]$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
@@ -253,13 +246,13 @@ summary(regression2)
 
 y3<-regression3[["coefficients"]][["(Intercept)"]]
 x3<-regression3[["coefficients"]][["CrimeRatePerArea[-56, ]$CrimeRatePerArea"]]
->>>>>>> a95c26867717946f086090519ec328f32d0dd381
 
 range3 <- seq(from=0, to=4.5, by=0.1)
 
 estimation3 <- x3*range3+y3
 
 lines(range3,estimation3, col="blue")
+```
 
 #RESEARCH QUESTION 
 Updated Daniel

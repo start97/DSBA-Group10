@@ -7,25 +7,79 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+#Importation des fichiers
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+getwd()
+setwd("/Users/renaudineaumarine/Documents/GitHub/DSBA-Group10/WD")
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+cctv_data <- read.csv("Baltimore_CCTV_Locations_Crime_Cameras.csv")
+area_data <- read.csv("Community_Statistical_Areas__CSAs___Reference_Boundaries.csv")
+poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv")
 
-```{r cars}
-summary(cars)
-```
+#Affichage des datasets
 
-## Including Plots
+View(cctv_data)
+View(area_data)
+View(poverty_data)
 
-You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
+#Packages et librairies
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+library(tidyverse)
+library(data.table)
+library(sp)
+library(rgdal)
+library(ggplot2)
 
+
+#Faire un tableau qui calcule le nombre de cameras selon les districts 
+
+#Calculation of the density of CCTV per community
+
+#read in data table
+balt_dat <-  fread("Baltimore_CCTV_Locations_Crime_Cameras.csv")
+
+#convert to data table
+balt_dat <- as.data.table(balt_dat)
+
+#make data spatial
+coordinates(balt_dat) <-  c("X","Y")
+crs.geo1 <-  CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs")
+proj4string(balt_dat) <-  crs.geo1  
+
+plot(balt_dat, pch = 20, col = "steelblue")
+
+#read in shapefile of baltimore
+baltimore <-  readOGR(dsn = "./Community_Statistical_Area", layer = "Community_Statistical_Area") #name of file and object
+proj4string(baltimore) <- crs.geo1
+
+#plot
+plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
+plot(balt_dat,pch=20, col="steelblue" , add=TRUE)
+
+#Perform the count
+
+proj4string(balt_dat)
+proj4string(baltimore)
+
+res2 <- over(balt_dat,baltimore)
+counts <- table(res2$community)
+counts <- as.data.frame(counts)
+colnames(counts)[1] <- "Community"
+sum(counts$Freq)
+
+#Calculate the density for each community
+
+CCTV_per_area <- area_data[2] %>% 
+  left_join(counts,by="Community") #One must add the communities where there are no counts i.e no CCTV
+
+CCTV_per_area[is.na(CCTV_per_area)] <- 0
+
+CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCTV_per_area$Freq)))*100)
+
+View(CCTV_per_area)
+
+
+# Créer un tableau comparatif avec : une colomne pour le nom des areas, une colonme pour le nbr de cameras, une colomne pour le taux de 'pauvreté' dans l'area. 
 
 
