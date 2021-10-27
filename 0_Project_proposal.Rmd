@@ -27,8 +27,7 @@ knitr::opts_chunk$set(echo = TRUE)
 #---
 title: "Data Science - Project Proposal"
 author: Marine Renaudineau, Daniel Welz & Augustin Oltramare
-date: "17/10/2021"
-output: html_document
+date: "17/10/2021"output: html_document
 ---
 
 
