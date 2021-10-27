@@ -166,6 +166,7 @@ lines(range,estimation, col="blue")
 
 #MAPPING OF CRIMES
 
+```{r}
 baltimore$community %in% CrimeRatePerArea$Community
 
 CrimeRatePerArea$Community[56] <- "Unassigned -- Jail" #The previous line of code allowed to check whether we had a perfect match, so it is not the case, we assign a new value to the only outlier
@@ -174,6 +175,7 @@ baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community'
 
 library(tmap)
 qtm(baltimore, "CrimeRatePerArea")
+```
 
 #MAPPING OF CCTVs
 
@@ -185,7 +187,7 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 
 
 #STATISTICS OF CRIME BY TYPES OF CRIME
-
+```{r}
 unique(crime_data_with_areas$Description)
 
 #Group: Homicide / Rape / Arson / Robbery(street, residence, carjacking, commercial) / Common assault / Agg. assault / Shooting
@@ -195,9 +197,10 @@ CrimeRatePerTypePerArea <- crime_data_with_areas %>%
   summarize(CrimeRatePerAreaPerCrime=(n()/350294)*100)
 
 sum(CrimeRatePerTypePerArea$CrimeRatePerAreaPerCrime)
+```
 
 #MAPPING OF AGGRAVATED ASSAULT
-
+```{r}
 Aggravated_assault <-filter(CrimeRatePerTypePerArea,Description=="AGG. ASSAULT")
 
 baltimore$community %in% Aggravated_assault$Community
@@ -210,9 +213,10 @@ library(tmap)
 qtm(baltimore, "CrimeRatePerAreaPerCrime", fill.title="Aggravated Assault")
 
 baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
+```
 
 #Comparison of CCTV density vs wealth
-
+```{r}
 CCTV_per_area[-51,]$density_perc
 
 plot(CCTV_per_area[-51,]$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
@@ -228,7 +232,7 @@ range2 <- seq(from=-5, to=12, by=0.2)
 estimation2 <- x2*range2+y2
 
 lines(range2,estimation2, col="blue")
-
+```
 #Comparison of Crimes VS wealth
 
 CrimeRatePerArea[-56,]$CrimeRatePerArea
