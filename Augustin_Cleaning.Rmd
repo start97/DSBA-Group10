@@ -42,9 +42,9 @@ library(rgdal)
 library(ggplot2)
 ```
 
+#Joining of crime dataset and area dataset
 
 ```{r}
-#Joining of crime dataset and area dataset
 
 crime_data <- mutate(crime_data,neighborhood=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
 
@@ -114,8 +114,11 @@ counts <- table(res2$community)
 counts <- as.data.frame(counts)
 colnames(counts)[1] <- "Community"
 sum(counts$Freq)
+```
 
 #Calculate the density for each community
+
+```{r}
 
 CCTV_per_area <- area_data[2] %>% 
   left_join(counts,by="Community") #One must add the communities where there are no counts i.e no CCTV
@@ -130,6 +133,7 @@ View(CCTV_per_area)
 #EXPLORATION
 
 #CCTV against crimes
+
 ```{r}
 CCTV_VS_crimes <- CCTV_per_area %>% 
   left_join(CrimeRatePerArea,by="Community")
@@ -177,6 +181,7 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 ```
 
 #STATISTICS OF CRIME BY TYPES OF CRIME
+
 ```{r}
 unique(crime_data_with_areas$Description)
 
