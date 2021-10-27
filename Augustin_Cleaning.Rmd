@@ -60,16 +60,14 @@ library(ggplot2)
 
 ```{r}
 
-crime_data <- mutate(crime_data,neighborhood=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
+crime_data <- mutate(crime_data,neigh=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
 
 area_data2 <- separate_rows(area_data, Neigh, sep = ", ") #Creation of a new dataset with eigh neighbourhood being assigned to an area
 
 area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters
 
-colnames(crime_data)[20] <- "neigh" #Change name to ensure it corresponds to the name we have in other dataset
-
 crime_data_with_areas <- crime_data %>% 
-  left_join(area_data2,by="neigh") 
+  left_join(area_data2,by="neigh")
 
 crime_data_NAs <- crime_data %>% 
   anti_join(area_data2,
@@ -77,7 +75,23 @@ crime_data_NAs <- crime_data %>%
 
 unique(crime_data_NAs$neigh) #We see that we have very few unassigned names, we can change this by hand.
 
-#mount washington = Mt. Washington / carroll - camden industrial area = Caroll-Camden Industrial Area / patterson park neighborhood = Patterson Park / glenham-belhar = Glenham-Belford / new southwest/mount clare = Hollins Market / mount winans = Mt. Winans / rosemont homeowners/tenants = Rosemont / broening manor = O'Donnell Heights / boyd-booth = Booth-boyd / lower herring run park = Herring Run Park / mt pleasant park = Mt. Pleasant Park / 
+crime_data["neigh"][crime_data["neigh"]=="mount washington"] <- "mt. washington"
+crime_data["neigh"][crime_data["neigh"]=="carroll - camden industrial area"] <- "caroll-camden industrial area"
+crime_data["neigh"][crime_data["neigh"]=="patterson park neighborhood"] <- "patterson park"
+crime_data["neigh"][crime_data["neigh"]=="glenham-belhar"] <- "glenham-belford"
+crime_data["neigh"][crime_data["neigh"]=="new southwest/mount clare"] <- "hollins market"
+crime_data["neigh"][crime_data["neigh"]=="mount winans"] <- "mt. winans"
+crime_data["neigh"][crime_data["neigh"]=="rosemont homeowners/tenants"] <- "rosemont"
+crime_data["neigh"][crime_data["neigh"]=="broening manor"] <- "o'donnell heights"
+crime_data["neigh"][crime_data["neigh"]=="boyd-booth"] <- "booth-boyd"
+crime_data["neigh"][crime_data["neigh"]=="lower herring run park"] <- "herring run park"
+crime_data["neigh"][crime_data["neigh"]=="mt pleasant park"] <- "mt. pleasant park"
+
+#mount washington = Mt. Washington / carroll - camden industrial area = Caroll-Camden Industrial Area / patterson park neighborhood = Patterson Park / glenham-belhar = Glenham-Belford / new southwest/mount clare = Hollins Market / mount winans = Mt. Winans / rosemont homeowners/tenants = Rosemont / broening manor = O'Donnell Heights / boyd-booth = Booth-boyd / lower herring run park = Herring Run Park / mt pleasant park = Mt. Pleasant Park / We got rid of the 764 remaining observations which had no information about neighbourhood
+
+crime_data_with_areas <- crime_data %>% 
+ semi_join(area_data2,by="neigh") %>% 
+  left_join(area_data2,by="neigh") #Here we have the final data frame with the community for each crime
 
 ```
 
@@ -87,11 +101,9 @@ unique(crime_data_NAs$neigh) #We see that we have very few unassigned names, we 
 ```{r}
 CrimeRatePerArea <- crime_data_with_areas %>% 
   group_by(Community) %>%
-  summarize(CrimeRatePerArea=(n()/350294)*100)
-  
+  summarize(CrimeRatePerArea=(n()/nrow(crime_data_with_areas))*100)
 
-sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 1, which is what we expect
-
+CrimeRatePerArea <- rbind(CrimeRatePerArea,list("Unassigned -- Jail",0))
 
 sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we expect
 ```
@@ -166,8 +178,6 @@ summary(regression)
 y<-regression[["coefficients"]][["(Intercept)"]]
 x<-regression[["coefficients"]][["CCTV_VS_crimes$CrimeRatePerArea"]]
 
-plot(regression)
-
 range <- seq(from=0, to=4.5, by=0.1)
 
 estimation <- x*range+y
@@ -178,9 +188,7 @@ lines(range,estimation, col="blue")
 #MAPPING OF CRIMES
 
 ```{r}
-baltimore$community %in% CrimeRatePerArea$Community
-
-CrimeRatePerArea$Community[56] <- "Unassigned -- Jail" #The previous line of code allowed to check whether we had a perfect match, so it is not the case, we assign a new value to the only outlier
+baltimore$community %in% CrimeRatePerArea$Community #We see that we have a perfect match
 
 baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community' = 'Community'))
 
@@ -232,15 +240,16 @@ baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we se
 #Comparison of CCTV density vs wealth
 
 ```{r}
-CCTV_per_area[-51,]$density_perc
 
-plot(CCTV_per_area[-51,]$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
+poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
 
-regression2 <- lm(poverty_data$hhpov19~CCTV_per_area[-51,]$density_perc)
+plot(CCTV_per_area$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
+
+regression2 <- lm(poverty_data$hhpov19~CCTV_per_area$density_perc)
 summary(regression2)
 
 y2<-regression2[["coefficients"]][["(Intercept)"]]
-x2<-regression2[["coefficients"]][["CCTV_per_area[-51, ]$density_perc"]]
+x2<-regression2[["coefficients"]][["CCTV_per_area$density_perc"]]
 
 range2 <- seq(from=-5, to=12, by=0.2)
 
