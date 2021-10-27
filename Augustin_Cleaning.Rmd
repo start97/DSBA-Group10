@@ -9,6 +9,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 #IMPORT THE DATA
 
+```{r}
 getwd()
 setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
 
@@ -20,9 +21,11 @@ poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_
 
 crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
 
+```
 
 #EXPLORE THE DATA
 
+```{r}
 #Crime data
 View(crime_data)
 str(crime_data)
@@ -38,10 +41,10 @@ View(poverty_data)
 
 #CCTV data
 View(cctv_data)
-
+```
 
 #DATA MANIPULATIONS
-
+```{r}
 library(tidyverse)
 
 #Joining of crime dataset and area dataset
@@ -71,6 +74,7 @@ CrimeRatePerArea <- crime_data_with_areas %>%
   summarize(CrimeRatePerArea=n()/350294)
   
 sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 1, which is what we expect
+```
 
 #Joining of CCTV dataset and area dataset
 
