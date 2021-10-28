@@ -218,6 +218,13 @@ CrimeRatePerTypePerArea <- crime_data_with_areas %>%
   summarize(CrimeRatePerAreaPerCrime=(n()/350294)*100)
 
 sum(CrimeRatePerTypePerArea$CrimeRatePerAreaPerCrime)
+
+#Infraction: 
+#Misdemeanor:LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
+#Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
+#Only use 2005 data
+
+
 ```
 
 #MAPPING OF AGGRAVATED ASSAULT
