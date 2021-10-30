@@ -54,7 +54,7 @@ Research objective
     
 * Goal: Comparison impact on neighborhood + Root causes
 * Communicate goal: Show top 3 impacted neighborhoods, show top 3 less impacted neighborhoods, explain three reasons why difference (compenents x,y,z)
-* Steps: 
+* Steps: Create a table
 * Needed packages: 
 * Things to consider: 
 
