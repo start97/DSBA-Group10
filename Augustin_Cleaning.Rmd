@@ -93,6 +93,11 @@ crime_data_with_areas <- crime_data %>%
  semi_join(area_data2,by="neigh") %>% 
   left_join(area_data2,by="neigh") #Here we have the final data frame with the community for each crime
 
+str(crime_data_with_areas)
+
+crime_data_with_areas <- crime_data_with_areas[startsWith(as.character(crime_data_with_areas$CrimeDateTime),"20"),] #We have 24 observations that dates back to before the year 2000 and 24 observation with no date
+
+
 ```
 
 
@@ -112,6 +117,11 @@ sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we e
 
 ```{r}
 setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
+
+which(is.na(cctv_data$X))
+which(is.na(cctv_data$Y))
+filter(cctv_data,X=="")
+filter(cctv_data,Y=="") #I don't know if it is the proper technique but by doing so I ensure that we have no NAs neihter empty values and so that our dataset is tidy
 
 #read in data table
 balt_dat <-  fread("Baltimore_CCTV_Locations_Crime_Cameras.csv")
@@ -204,6 +214,7 @@ baltimore$community %in% CCTV_per_area$Community
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
 qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fill.breaks=c(0,1,2,3,4,5,6,7,8,9,10,11))
+
 ```
 
 #STATISTICS OF CRIME BY TYPES OF CRIME
@@ -211,13 +222,29 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 ```{r}
 unique(crime_data_with_areas$Description)
 
-#Group: Homicide / Rape / Arson / Robbery(street, residence, carjacking, commercial) / Common assault / Agg. assault / Shooting
+#Misdemeanor:LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
+#Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
 
-CrimeRatePerTypePerArea <- crime_data_with_areas %>% 
-  group_by(Community,Description) %>%
-  summarize(CrimeRatePerAreaPerCrime=(n()/350294)*100)
+crime_cat <- separate_rows(crime_cat, Description, sep = ",")
 
-sum(CrimeRatePerTypePerArea$CrimeRatePerAreaPerCrime)
+crime_cat <- data.frame(Category=c("Misdemeanor","Felony"), Description=c(c("LARCENY FROM AUTO,COMMON ASSAULT,ROBBERY - COMMERCIAL,LARCENY"),c("RAPE,ARSON,HOMICIDE,BURGLARY,AUTO THEFT,ROBBERY - CARJACKING,AGG. ASSAULT,ROBBERY - STREET,ROBBERY - RESIDENCE,SHOOTING")))
+
+crime_cat <- separate_rows(crime_cat, Description, sep = ",")
+
+crime_cat$Description %in% unique(crime_data_with_areas$Description) #Ensure we have a perfect match
+
+crime_data_with_areas
+
+crime_data_with_areas <- crime_data_with_areas %>% 
+  left_join(crime_cat,by="Description") #We had a new varaible to our crime dataset
+
+CrimeRatePerCategoryPerArea <- crime_data_with_areas %>% 
+  group_by(Community,Category) %>%
+  summarize(CrimeRatePerCategoryPerArea=(n()/nrow(crime_data_with_areas))*100)
+
+sum(CrimeRatePerCategoryPerArea$CrimeRatePerCategoryPerArea)
+
+
 ```
 
 #MAPPING OF AGGRAVATED ASSAULT
@@ -260,9 +287,8 @@ lines(range2,estimation2, col="blue")
 
 #Comparison of Crimes VS wealth
 ```{r}
-CrimeRatePerArea[-56,]$CrimeRatePerArea
 
-plot(CrimeRatePerArea[-56,]$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
+plot(CrimeRatePerArea$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
 
 regression3 <- lm(poverty_data$hhpov19~CrimeRatePerArea[-56,]$CrimeRatePerArea)
 summary(regression2)
