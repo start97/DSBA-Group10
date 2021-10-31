@@ -122,7 +122,9 @@ library(ggplot2)
 
 #Joining of crime dataset and area dataset
 
-To combine the areas and the crime location in our datasets, we use firstly use the mutate()-function to create a new column with lower case letters in the crime dataset. In the meanwhile we needed a clean area file, in which we use the seperate()-function to create a dataset in which eight neighborhoods are assigned to an areas.
+To combine the areas and the crime location in our datasets, we use firstly use the mutate()-function to create a new neighboorhood-column with lower case letters in the crime dataset. Secondly, we needed a clean area file, in which we use the seperate()-function to create a dataset in which eight neighborhoods are assigned to an area. Thirdly, also in this area_data2-set we created a similar new column with lower case letters of the neighboorhood-column. Fourthly, having established two datasets with the same column, we used the left_join()-function to combine both and the anti_join to show the NA's. 
+
+We noticed at this step that we have very few unasssigned names and changed them by hand. Finally, using semi_join() and left_join() we get the new tibble for each crime and neighboorhood. 
 
 ```{r}
 
@@ -169,6 +171,8 @@ crime_data_with_areas <- crime_data_with_areas[startsWith(as.character(crime_dat
 
 #Calculation of the crime rate per community
 
+To calculate the crime rate per community, we needed to create the percentage per community. Here we reached that by summarizing and allocating the percentages to the accoring community with the summarize and group_by funtions. Moreover, the unassigned values in Jail were excluded. 
+
 ```{r}
 CrimeRatePerArea <- crime_data_with_areas %>% 
   group_by(Community) %>%
@@ -180,6 +184,8 @@ sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we e
 ```
 
 #Calculation of the density of CCTV per community
+
+Before calculating the density function of CCTV per community we first needed to identify and exclude the missing values from the dataset. Moreover, we needed to count the numbers in each community. TO achieve that we converted the included data from the Baltimore CCTV Location dataset and transformed it into a table. In the next setp this data was made spatial by using crs.geo1 and assigning the values accordingly. By taking proj4string and plotting we could perform the count for each community.  
 
 ```{r}
 setwd("~/GitHub/DSBA-Group10/WD")
@@ -224,6 +230,8 @@ sum(counts$Freq)
 
 #Calculate the density for each community
 
+To calculate the density we first needed to add the communities without counts (e.g no CCTVs). We have done this by assingnig 0 to the according term. Finally, by mutating CCTV_per_area with density_perc we gain the distribution in Plot x. 
+
 ```{r}
 
 CCTV_per_area <- area_data[2] %>% 
@@ -239,6 +247,8 @@ View(CCTV_per_area)
 #EXPLORATION
 
 #CCTV against crimes
+
+To understand if there is a realtionship of CCTV desity and crimes in a area, we combined both datasets and used the lm-function to understand the relationship. As seen in the Figure x, we see a positive relationship between the CCTV crime density per community and the crime rate per community. The higher the crime rate the higher also CCTV density. This is not surprising since CCTV are usually targeting these areas. 
 
 ```{r}
 CCTV_VS_crimes <- CCTV_per_area %>% 
@@ -263,6 +273,8 @@ lines(range,estimation, col="blue")
 
 #MAPPING OF CRIMES
 
+Mapping of crimes was easily done with the tmap. Figure X shows the results. What is interesing that three areas (x1,x2,x3) have a crime rate between 4 and 5. Moreover, four areas (x1,x2,x3,x4) have a rate between 3 and 4. 
+
 ```{r}
 baltimore$community %in% CrimeRatePerArea$Community #We see that we have a perfect match
 
@@ -274,6 +286,8 @@ qtm(baltimore, "CrimeRatePerArea")
 
 #MAPPING OF CCTVs
 
+Looking at the CCTV density map, we clearly see that CCTV are concentrated in the following 6 areas. (include areas here). Comparing this to the crime rates we might relate from the obvious look the interdependence in areas x,y,z. 
+
 ```{r}
 baltimore$community %in% CCTV_per_area$Community
 
@@ -284,6 +298,14 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 ```
 
 #STATISTICS OF CRIME BY TYPES OF CRIME
+
+In this section we wanted to understand the different crime types. From the date we had several crime types given. To help us order them better as a reader, we classified them according to (source) as following: 
+  + #Misdemeanor:LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
+  + #Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
+
+
+Again as before, we add this new variable to our tibble and group and summarize the numbers accordingly. 
+
 
 ```{r}
 unique(crime_data_with_areas$Description)
@@ -315,6 +337,8 @@ sum(CrimeRatePerCategoryPerArea$CrimeRatePerCategoryPerArea)
 
 #MAPPING OF AGGRAVATED ASSAULT
 
+
+
 ```{r}
 Aggravated_assault <-filter(CrimeRatePerTypePerArea,Description=="AGG. ASSAULT")
 
@@ -331,6 +355,8 @@ baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we se
 ```
 
 #Comparison of CCTV density vs wealth
+
+In this section we want to explore how wealth level interrelates with the CCTV density
 
 ```{r}
 
