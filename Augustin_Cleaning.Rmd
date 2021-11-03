@@ -240,21 +240,21 @@ CrimePerCategoryPerArea <- crime_data_with_areas %>%
 
 sum(CrimePerCategoryPerArea$RepartitionPerCategoryPerArea)
 
-CrimeCateogryRepartition <- CrimePerCategoryPerArea %>% 
+CrimeCategoryRepartition <- CrimePerCategoryPerArea %>% 
   group_by(Category) %>% 
   summarise(Repartition=sum(CrimePerCategoryPerArea)) #We observe that in Baltimore, the number of felony is close to the number of misdemeanor
 
 FelonyStats <- filter(CrimePerCategoryPerArea,Category=="Felony")
 
-FelonyStats <- mutate(FelonyStats,FelonyRatePerArea=FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100)
+FelonyRatePerArea <- FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100
 
 FelonyStats <- cbind(FelonyStats,FelonyRatePerArea=FelonyRatePerArea)
 
 sum(FelonyStats$FelonyRatePerArea)
 
-FelonyRatePerArea <- FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100
+MisdemeanorStats <- filter(CrimePerCategoryPerArea,Category=="Misdemeanor") %>% 
+  mutate(MisdemeanorStats,MisdemeanorRatePerArea=RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[2])
 
-FelonyStats <- mutate(FelonyStats, FelonyRatePerArea=(FelonyStats$RepartitionPerCategoryPerArea/(CrimeCateogryRepartition$Repartition[1]))*100)
 
 ```
 
