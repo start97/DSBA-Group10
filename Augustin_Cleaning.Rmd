@@ -242,43 +242,58 @@ sum(CrimePerCategoryPerArea$RepartitionPerCategoryPerArea)
 
 CrimeCategoryRepartition <- CrimePerCategoryPerArea %>% 
   group_by(Category) %>% 
-  summarise(Repartition=sum(CrimePerCategoryPerArea)) #We observe that in Baltimore, the number of felony is close to the number of misdemeanor
+  summarise(Repartition=sum(RepartitionPerCategoryPerArea)) #We observe that in Baltimore, the number of felony is close to the number of misdemeanor
 
-FelonyStats <- filter(CrimePerCategoryPerArea,Category=="Felony")
-
-FelonyRatePerArea <- FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100
-
-FelonyStats <- cbind(FelonyStats,FelonyRatePerArea=FelonyRatePerArea)
+FelonyStats <-  CrimePerCategoryPerArea %>% filter(Category=="Felony") %>% 
+  mutate(FelonyRatePerArea = (RepartitionPerCategoryPerArea/CrimeCategoryRepartition$Repartition[1])*100)
 
 sum(FelonyStats$FelonyRatePerArea)
 
-MisdemeanorStats <- filter(CrimePerCategoryPerArea,Category=="Misdemeanor") %>% 
-  mutate(MisdemeanorStats,MisdemeanorRatePerArea=RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[2])
+MisdemeanorStats <-  CrimePerCategoryPerArea %>% filter(Category=="Misdemeanor") %>% 
+  mutate(MisdemeanorRatePerArea = (RepartitionPerCategoryPerArea/CrimeCategoryRepartition$Repartition[2])*100)
 
+sum(MisdemeanorStats$MisdemeanorRatePerArea)
 
 ```
 
-#MAPPING OF AGGRAVATED ASSAULT
-
+#MAPPING OF FELONIES & MAPPING OF MISDEMEANORS 
 ```{r}
 
+baltimore$community %in% FelonyStats$Community
 
+FelonyStats[56,] <- list("Unassigned -- Jail","Felony",0,0) #The previous line of code allowed to check whether we had a perfect match, so it is not the case, we assign a new value to the only outlier
 
-
-
-
-Aggravated_assault <-filter(CrimeRatePerTypePerArea,Description=="AGG. ASSAULT")
-
-baltimore$community %in% Aggravated_assault$Community
-
-Aggravated_assault$Community[56] <- "Unassigned -- Jail" #The previous line of code allowed to check whether we had a perfect match, so it is not the case, we assign a new value to the only outlier
-
-baltimore@data <- left_join(baltimore@data, Aggravated_assault, by = c('community' = 'Community'))
+baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'Community'))
 
 library(tmap)
-qtm(baltimore, "CrimeRatePerAreaPerCrime", fill.title="Aggravated Assault")
+qtm(baltimore, "FelonyRatePerArea", fill.title="Felonies")
 
 baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
+
+baltimore$community %in% MisdemeanorStats$Community
+
+MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0) #The previous line of code allowed to check whether we had a perfect match, so it is not the case, we assign a new value to the only outlier
+
+baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
+
+qtm(baltimore, "MisdemeanorRatePerArea", fill.title="Misdemeanor")
+
+plot(FelonyStats$FelonyRatePerArea,MisdemeanorStats$MisdemeanorRatePerArea,main="Felony VS Misdemeanor", xlab="Felony",ylab="Misdemeanor") #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
+
+regression4 <- lm(FelonyStats$FelonyRatePerArea~MisdemeanorStats$MisdemeanorRatePerArea)
+summary(regression4)
+
+y4<-regression4[["coefficients"]][["(Intercept)"]]
+x4<-regression4[["coefficients"]][["MisdemeanorStats$MisdemeanorRatePerArea"]]
+
+range4 <- seq(from=-1, to=5, by=0.1)
+
+estimation4 <- x4*range4+y4
+
+lines(range4,estimation4, col="blue")
+
+#Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
+
 ```
 
 #Comparison of CCTV density vs wealth
@@ -308,7 +323,7 @@ lines(range2,estimation2, col="blue")
 plot(CrimeRatePerArea$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
 
 regression3 <- lm(poverty_data$hhpov19~CrimeRatePerArea$CrimeRatePerArea)
-summary(regression2)
+summary(regression3)
 
 y3<-regression3[["coefficients"]][["(Intercept)"]]
 x3<-regression3[["coefficients"]][["CrimeRatePerArea$CrimeRatePerArea"]]
