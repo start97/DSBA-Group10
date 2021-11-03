@@ -193,6 +193,39 @@ range <- seq(from=0, to=4.5, by=0.1)
 estimation <- x*range+y
 
 lines(range,estimation, col="blue")
+
+#______
+
+plot(FelonyStats$FelonyRatePerArea,CCTV_VS_crimes$density_perc, main="Felony Rate per Community VS CCTV Density per Community",xlab="FelonyRatePerCommunity",ylab="CCTVDensityPerCommunity")
+
+regression5 <- lm(CCTV_VS_crimes$density_perc~FelonyStats$FelonyRatePerArea)
+summary(regression5) #There is a very poor correlation 
+
+y5<-regression5[["coefficients"]][["(Intercept)"]]
+x5<-regression5[["coefficients"]][["FelonyStats$FelonyRatePerArea"]]
+
+range5 <- seq(from=-1, to=5, by=0.1)
+
+estimation5 <- x5*range5+y5
+
+lines(range5,estimation5, col="blue") 
+
+#______
+
+plot(MisdemeanorStats$MisdemeanorRatePerArea,CCTV_VS_crimes$density_perc, main="Misdemeanor Rate per Community VS CCTV Density per Community",xlab="MisdemeanorRatePerCommunity",ylab="CCTVDensityPerCommunity")
+
+regression6 <- lm(CCTV_VS_crimes$density_perc~MisdemeanorStats$MisdemeanorRatePerArea)
+summary(regression6) #There is a very poor correlation 
+
+y6<-regression6[["coefficients"]][["(Intercept)"]]
+x6<-regression6[["coefficients"]][["MisdemeanorStats$MisdemeanorRatePerArea"]]
+
+range6 <- seq(from=-1, to=6, by=0.1)
+
+estimation6 <- x6*range6+y6
+
+lines(range6,estimation6, col="blue")
+
 ```
 
 #MAPPING OF CRIMES
