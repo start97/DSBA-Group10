@@ -225,15 +225,11 @@ unique(crime_data_with_areas$Description)
 #Misdemeanor:LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
 #Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
 
-crime_cat <- separate_rows(crime_cat, Description, sep = ",")
-
 crime_cat <- data.frame(Category=c("Misdemeanor","Felony"), Description=c(c("LARCENY FROM AUTO,COMMON ASSAULT,ROBBERY - COMMERCIAL,LARCENY"),c("RAPE,ARSON,HOMICIDE,BURGLARY,AUTO THEFT,ROBBERY - CARJACKING,AGG. ASSAULT,ROBBERY - STREET,ROBBERY - RESIDENCE,SHOOTING")))
 
 crime_cat <- separate_rows(crime_cat, Description, sep = ",")
 
 crime_cat$Description %in% unique(crime_data_with_areas$Description) #Ensure we have a perfect match
-
-crime_data_with_areas
 
 crime_data_with_areas <- crime_data_with_areas %>% 
   left_join(crime_cat,by="Description") #We had a new varaible to our crime dataset
@@ -290,13 +286,13 @@ lines(range2,estimation2, col="blue")
 
 plot(CrimeRatePerArea$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
 
-regression3 <- lm(poverty_data$hhpov19~CrimeRatePerArea[-56,]$CrimeRatePerArea)
+regression3 <- lm(poverty_data$hhpov19~CrimeRatePerArea$CrimeRatePerArea)
 summary(regression2)
 
 y3<-regression3[["coefficients"]][["(Intercept)"]]
-x3<-regression3[["coefficients"]][["CrimeRatePerArea[-56, ]$CrimeRatePerArea"]]
+x3<-regression3[["coefficients"]][["CrimeRatePerArea$CrimeRatePerArea"]]
 
-range3 <- seq(from=0, to=4.5, by=0.1)
+range3 <- seq(from=-2, to=4.5, by=0.1)
 
 estimation3 <- x3*range3+y3
 
