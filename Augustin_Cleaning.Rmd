@@ -370,3 +370,14 @@ lines(range3,estimation3, col="blue")
 
 #RESEARCH QUESTION 
 Updated Daniel
+
+#ATTEMPT TO MAKE INTERACTIVE MAPS
+```{r}
+
+library(leaflet)
+leaflet() %>% addTiles()
+
+
+```
+
+
