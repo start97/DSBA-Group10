@@ -244,9 +244,15 @@ CrimeCateogryRepartition <- CrimePerCategoryPerArea %>%
   group_by(Category) %>% 
   summarise(Repartition=sum(CrimePerCategoryPerArea)) #We observe that in Baltimore, the number of felony is close to the number of misdemeanor
 
-FelonyStats <- filter(CrimePerCategoryPerArea,Category=="Felony") 
+FelonyStats <- filter(CrimePerCategoryPerArea,Category=="Felony")
 
 FelonyStats <- mutate(FelonyStats,FelonyRatePerArea=FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100)
+
+FelonyStats <- cbind(FelonyStats,FelonyRatePerArea=FelonyRatePerArea)
+
+sum(FelonyStats$FelonyRatePerArea)
+
+FelonyRatePerArea <- FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100
 
 FelonyStats <- mutate(FelonyStats, FelonyRatePerArea=(FelonyStats$RepartitionPerCategoryPerArea/(CrimeCateogryRepartition$Repartition[1]))*100)
 
