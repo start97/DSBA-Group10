@@ -374,9 +374,11 @@ Updated Daniel
 #ATTEMPT TO MAKE INTERACTIVE MAPS
 ```{r}
 
-library(leaflet)
-leaflet() %>% addTiles()
+tm_shape(baltimore) +
+  tm_fill("blue") +
+  tm_borders() 
 
+tm_shape(baltimore) + tm_polygons()
 
 ```
 
