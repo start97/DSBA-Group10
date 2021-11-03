@@ -234,18 +234,33 @@ crime_cat$Description %in% unique(crime_data_with_areas$Description) #Ensure we 
 crime_data_with_areas <- crime_data_with_areas %>% 
   left_join(crime_cat,by="Description") #We had a new varaible to our crime dataset
 
-CrimeRatePerCategoryPerArea <- crime_data_with_areas %>% 
+CrimePerCategoryPerArea <- crime_data_with_areas %>% 
   group_by(Community,Category) %>%
-  summarize(CrimeRatePerCategoryPerArea=(n()/nrow(crime_data_with_areas))*100)
+  summarize(RepartitionPerCategoryPerArea=n())
 
-sum(CrimeRatePerCategoryPerArea$CrimeRatePerCategoryPerArea)
+sum(CrimePerCategoryPerArea$RepartitionPerCategoryPerArea)
 
+CrimeCateogryRepartition <- CrimePerCategoryPerArea %>% 
+  group_by(Category) %>% 
+  summarise(Repartition=sum(CrimePerCategoryPerArea)) #We observe that in Baltimore, the number of felony is close to the number of misdemeanor
+
+FelonyStats <- filter(CrimePerCategoryPerArea,Category=="Felony") 
+
+FelonyStats <- mutate(FelonyStats,FelonyRatePerArea=FelonyStats$RepartitionPerCategoryPerArea/CrimeCateogryRepartition$Repartition[1]*100)
+
+FelonyStats <- mutate(FelonyStats, FelonyRatePerArea=(FelonyStats$RepartitionPerCategoryPerArea/(CrimeCateogryRepartition$Repartition[1]))*100)
 
 ```
 
 #MAPPING OF AGGRAVATED ASSAULT
 
 ```{r}
+
+
+
+
+
+
 Aggravated_assault <-filter(CrimeRatePerTypePerArea,Description=="AGG. ASSAULT")
 
 baltimore$community %in% Aggravated_assault$Community
