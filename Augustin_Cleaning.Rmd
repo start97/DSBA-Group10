@@ -334,6 +334,8 @@ lines(range4,estimation4, col="blue")
 
 poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
 
+poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5],poverty_data[48,6]) %>% mean() #The poverty rate of South Baltimore in 19 was missing. This area's rate over the past years seems to be stable (always one of the richest area), that's why we compute the mean of the past 4 years to replace the missing value.
+
 plot(CCTV_per_area$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
 
 regression2 <- lm(poverty_data$hhpov19~CCTV_per_area$density_perc)
@@ -370,21 +372,38 @@ lines(range3,estimation3, col="blue")
 #RESEARCH QUESTION 
 Updated Daniel
 
-#ATTEMPT TO MAKE INTERACTIVE MAPS
+#ATTEMPT TO MAKE BETTER MAPS
 ```{r}
 
-tm_shape(baltimore) +
-  tm_fill("blue") +
-  tm_borders() 
+Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
 
-test_int1 <- tm_shape(baltimore) + tm_polygons()
+Felony_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %", style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
 
-test_int1 + tm_shape(balt_dat) + tm_dots(col="steelblue")
+Misdemeanor_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
 
-tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea") + tm_borders(col="black",alpha=0.3) +
-  tm_shape(balt_dat) + tm_dots(col="black")
+tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
+
+sort(baltimore@data[["CrimeRatePerArea"]])
+
+breaks1 <- c(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5) #Not sure what break to use, for the moment I decided to use the automatic break system with the "style" parameter
+
+library(spData)
+library(rgeos)
+
+test_small_map <-  st_bbox(c(xmin = -8529169.92, xmax = -8526465.97,
+                      ymin =4764196.55, ymax = 4765056.50),
+                    crs = st_crs(baltimore)) %>% st_as_sfc()
+ 
+Prison_map <- tm_shape(test_small_map) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Baltimore Prison",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
 
 
+Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(test_small_map) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+
+
+Prison_map
+print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
+
+tmap_mode("plot")
 
 
 ```
