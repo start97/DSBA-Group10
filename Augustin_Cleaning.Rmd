@@ -377,7 +377,15 @@ tm_shape(baltimore) +
   tm_fill("blue") +
   tm_borders() 
 
-tm_shape(baltimore) + tm_polygons()
+test_int1 <- tm_shape(baltimore) + tm_polygons()
+
+test_int1 + tm_shape(balt_dat) + tm_dots(col="steelblue")
+
+tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea") + tm_borders(col="black",alpha=0.3) +
+  tm_shape(balt_dat) + tm_dots(col="black")
+
+
+
 
 ```
 
