@@ -397,7 +397,7 @@ Prison_area <-  st_bbox(c(xmin = -8529169.92, xmax = -8526465.97,
 Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Baltimore Prison",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
 
 
-Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(test_small_map) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
 
 
 Prison_map
@@ -410,6 +410,14 @@ library(cartogram)
 
 Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.07) #This map distorts the size of each area depending on their respective crime rates. It is interesting as it enables one to see that higher crime rates tends to be concentrated in the city center.
 
+#___________
+
+baltimore$community %in% poverty_data$CSA2010 #We see that we have a perfect match
+
+
+baltimore@data <- left_join(baltimore@data, poverty_data, by = c('community' = 'CSA2010'))
+
+Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Poverty rate per Area",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black") #This visualization is particularly interesting. Indeed, while the regression between crime rates and CCTV density was not very conclusive (we obtained a very poor R squared suggesting a poor correlation between poverty and CCTV density), this map might actually explain why we obtained such result and give us interesting hints. Indeed, we see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the centre of Baltimore and that the poverty rates is very low in these two regions. This makes sense as centers of city are typically not the poorest areas. Yet, what we also see is that many of the least poor region in the "suburbs" often have very low CCTV densities. This might confirm the idea that there tends to be less CCTVs in richer neighbourhoof.
 
 
 ```
