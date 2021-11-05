@@ -458,6 +458,9 @@ crime_evolution <- CrimeRatePerArea2021 %>%
   left_join(CrimeRatePerArea2015,by="Community") %>% 
   left_join(CrimeRatePerArea2014,by="Community")
 
+#_____ Creation of an animated map
+
+library(gifski)
 
 
 ```
