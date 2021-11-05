@@ -421,5 +421,39 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Pove
 
 
 ```
+#ATTEMPT TO MAKE CRIMES COMMITTED IN AUGUST 2021 SPATIAL
+```{r}
+
+crime_spatial <- as.data.table(crime_data_with_areas[startsWith(as.character(crime_data_with_areas$CrimeDateTime),"2021/08"),])
+coordinates(crime_spatial) <-  c("Longitude","Latitude")
+proj4string(crime_spatial) <-  CRS("+init=epsg:4326")
+crime_spatial <- spTransform(crime_spatial,crs.geo1)
 
 
+August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crimes committed in August 2021 VS CCTV location",frame.lwd = 5)+ tm_shape(balt_dat) + tm_dots(col="black")+tm_shape(crime_spatial)+tm_dots(col="red",alpha=0.5)
+
+#It could be interesting to see where crime took place relative to CCTV locations in the area with the highest crime rate in August 2021
+
+CrimeRatePerAreaAugust2021 <- crime_data_with_areas[startsWith(as.character(crime_data_with_areas$CrimeDateTime),"2021/08"),] %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea=(n()/nrow(crime_data_with_areas[startsWith(as.character(crime_data_with_areas$CrimeDateTime),"2021/08"),]))*100) #We see that midtown is the area with the highest crime rate in August 2021, we might want to focus on that area and see whether there is crime that take place directly next to CCTVs
+
+sum(CrimeRatePerAreaAugust2021$CrimeRatePerArea)
+
+Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
+                      ymin =4763782.86, ymax = 4766467.70),
+                    crs = st_crs(baltimore)) %>% st_as_sfc()
+ 
+Midtown_map <- tm_shape(Midtown_area) + tm_borders(col="white")+ tm_shape(baltimore) + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Midtown Area",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_symbols(shape = 2, col = "black", size = 0.07)+tm_shape(crime_spatial)+tm_dots(col="red")
+
+Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Midtown_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+
+
+Midtown_map
+print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain the map with an additional overview
+
+
+
+
+
+```
