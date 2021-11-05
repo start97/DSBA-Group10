@@ -446,7 +446,7 @@ Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
  
 Midtown_map <- tm_shape(Midtown_area) + tm_borders(col="white")+ tm_shape(baltimore) + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Midtown Area",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_symbols(shape = 2, col = "black", size = 0.07)+tm_shape(crime_spatial)+tm_dots(col="red")
 
-Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Midtown_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Midtown_area) + tm_borders(lwd = 1.5,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
 
 
 Midtown_map
