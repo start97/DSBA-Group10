@@ -6,7 +6,9 @@ source(here::here("scripts/setup.R"))
 
 ### 4.1 Crime VS CCTVs - Does the presence of CCTV deter crime?
 
-```{r}
+First, we create a CCTV_VS_crimes dataset (which basically is a left joint). Next, we are able to plot visually compare the crime rate per area with the density percentage per area. Here we see that there seems to be a trend. 
+
+```{r echo=TRUE}
 
 CCTV_VS_crimes <- CCTV_per_area %>% 
   left_join(CrimeRatePerArea,by="Community")
@@ -14,7 +16,13 @@ CCTV_VS_crimes <- CCTV_per_area %>%
 View(CCTV_VS_crimes)
 
 plot(CCTV_VS_crimes$CrimeRatePerArea,CCTV_VS_crimes$density_perc, main="Crime Rate per Community VS CCTV Density per Community",xlab="CrimeRatePerCommunity",ylab="CCTVDensityPerCommunity")
+```
 
+In order to confirm that perform a regression with the lm-function and call for a summary of the function. Next, the x and y are computed, which are basically the coefficients. Next, we use a trick by creating a range from 0 to 4.5 (because the plot goes ~ from zero to 4.5.) and create a vector. This vector is called estimation. This vector is basically the linear function. So this is the coefficient multiplied by each value in the range plus the intercept. As a result we get the fitted value. The fitted value contains the estimation. After plotting the estimation.
+
+In the summary of the regression we see that R^2 (which is the estimator of the goodness of the fit) is pretty poor but still there seems to be a tendency. 
+
+```{r echo=TRUE}
 regression <- lm(CCTV_VS_crimes$density_perc~CCTV_VS_crimes$CrimeRatePerArea)
 summary(regression)
 
@@ -30,6 +38,8 @@ lines(range,estimation, col="blue")
 ```
 
 #### 4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
+
+In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the tmap-package. However, this time we have two different shapes in tm_shape(Baltimore) and tm_shape(balt_dat) which adds the maps togehter (as in ggplot) and over each other. If we take a look at this data we see that it gives an intuition about the data. It seems as if where crime rates are the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western CCTVs).
 
 ```{r}
 
