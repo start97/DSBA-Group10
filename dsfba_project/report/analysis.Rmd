@@ -78,6 +78,8 @@ tmap_mode("plot") #We go back to classic plotting
 
 #### 4.1.2 Analysis of where crime took place: August 2021
 
+We are trying to see whether the presence of CCTV can deter crime. Here we first try to answer the question where the crime took place (especially in August 2021). We choose AUgust 2021 because it is the latest full month which we have in our dataset. Taking the latest timepoints from the data assures us that most of the CCTVs presented in the dataset were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform).Again, mapping with tm_shape to get the results. The output shows where crime takes place compared to the CCTV location. 
+
 ```{r}
 
 crime_spatial <- as.data.table(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")))
@@ -88,13 +90,22 @@ crime_spatial <- spTransform(crime_spatial,crs.geo1)
 August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crimes committed in August 2021 VS CCTV location",frame.lwd = 5)+ tm_shape(balt_dat) + tm_dots(col="black")+tm_shape(crime_spatial)+tm_dots(col="red",alpha=0.5)
 
 #It could be interesting to see where crime took place relative to CCTV locations in the area with the highest crime rate in August 2021
+```
 
+Next, we decided to calculate the crimerate for AUgust per area to see where crime was highest. The results show that they are in midtown (are midtown). 
+So following this we will take a closer look at the Midtown area.
+
+```{r}
 CrimeRatePerAreaAugust2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")) %>% 
   group_by(Community) %>%
   summarize(CrimeRatePerArea=(n()/nrow(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31"))))*100) #We see that midtown is the area with the highest crime rate in August 2021, we might want to focus on that area and see whether there is crime that take place directly next to CCTVs
 
 sum(CrimeRatePerAreaAugust2021$CrimeRatePerArea) #We obtain 100, which is what we expect
+```
 
+By using the $st-bbox$ function with their values, which represent the most extreme values on the x-axis and y-axis we can continue with the analysis. So those four values are some geographical values based on coordinate system until we used now (Pseudomercator). And this function assigned that rectangle to be shape file in itself. Now, when we create the midtown map, we can use it as an argument in the tm_shape. THe output is a zoom and the bigger map with a rectangle over the area which we are looking at and analysing. 
+
+```{r}
 Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
                       ymin =4763782.86, ymax = 4766467.70),
                     crs = st_crs(baltimore)) %>% st_as_sfc()
@@ -110,6 +121,8 @@ print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By 
 ```
 
 #### 4.1.3 Anomaly #1 : Prison
+
+Similar to what we have done before, we first define of what the area of the prison is. It is interesting to analyse the prison and its sourrounding area, since we have many CCTVs around it but basically no crime around it (so it represents an outlier). 
 
 ```{r}
 tmap_mode("plot")
@@ -130,6 +143,9 @@ print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By ru
 ```
 
 ### 4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
+
+This is exactly the same what we have done for 4.1.. What we want to see whether there is a difference in terms of correlation between felony & misdemeanor and crime. The results shows a weak r^2, and the answer get even worse in terms of correlation graphically. Here, we do not see bigger impact on crime types of CCTV installation. 
+
 ```{r}
 
 #Felonies
@@ -168,6 +184,8 @@ lines(range6,estimation6, col="blue")
 
 ### 4.3 Comparison of CCTV density and wealth
 
+We went to see whether there is a correlation between CCTV density and wealth. So, similarily, we perform a regression. The results here are not so conclusive, since we have a poor adjusted r^2 and a poor r^2. Visually we can see intersting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only dependeny here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
+
 ```{r}
 
 plot(CCTV_per_area$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
@@ -188,6 +206,8 @@ lines(range2,estimation2, col="blue")
 
 #### 4.3.1 Mapping of CCTVs and wealth
 
+We see a tendency. There seems to be more crimes in poorer areas.
+
 ```{r}
 
 baltimore$community %in% poverty_data$CSA2010 #We see that we have a perfect match
@@ -200,6 +220,8 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Pove
 ```
 
 ### 4.4 Comparison of crimes and wealth
+
+The idea is to find areas which were impacted by a certain type of crime. We see that there was a mainly equal distribution between felony and misdemeanor. We seem to have a strong tendency in downtown - which is at the same time one of the richest areas in Baltimore. Here, we have not enough information to draw conclusions but it could be that there are less felony crimes in this area. 
 
 ```{r}
 
@@ -219,6 +241,7 @@ lines(range3,estimation3, col="blue")
 ```
 
 ### 4.5 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
+
 ```{r}
 
 plot(FelonyStats$FelonyRatePerArea,MisdemeanorStats$MisdemeanorRatePerArea,main="Felony VS Misdemeanor", xlab="Felony",ylab="Misdemeanor") #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
