@@ -175,62 +175,93 @@ pre code {
 </div>
 <div id="raw-data-sets" class="section level3">
 <h3>Raw Data sets</h3>
-<p><br></p>
-<p>##2.1 Crime Data set</p>
+</div>
+<div id="crime-data-set" class="section level3">
+<h3>2.1 Crime Data set</h3>
 <p>This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. This dataset contains 350’294 observations.</p>
-<p>RowID = ID of the row, 350’294 in total</p>
-<p>CrimeDateTime = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd</p>
-<p>CrimeCode = Code corresponding to the type of crime committed</p>
-<p>Location = Textual information on where the crime was committed</p>
-<p>Description = Textual description of the crime committed corresponding to a CrimeCode.</p>
-<p>Inside/Outside = Provides information on whether crime was committed inside or outside</p>
-<p>Weapon = Provides details on what weapon has been used, if any</p>
-<p>Post = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: <a href="http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl" class="uri">http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl</a></p>
-<p>District = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.</p>
-<p>Neighborhood = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.</p>
-<p>Latitude = Latitude, Coordinate system: EPSG:4326 WGS 84</p>
-<p>Longitude = Longitude, Coordinate system: EPSG:4326 WGS 84</p>
-<p>GeoLocation = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84</p>
-<p>Premise = Information on the premise where the crime was committed. One counts more than 120’000 observations in the streets.</p>
+<ul>
+<li><p><strong>RowID</strong> = ID of the row, 350’294 in total</p></li>
+<li><p><strong>CrimeDateTime</strong> = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd</p></li>
+<li><p><strong>CrimeCode</strong> = Code corresponding to the type of crime committed</p></li>
+<li><p><strong>Location</strong> = Textual information on where the crime was committed</p></li>
+<li><p><strong>Description</strong> = Textual description of the crime committed corresponding to a CrimeCode.</p></li>
+<li><p><strong>Inside/Outside</strong> = Provides information on whether crime was committed inside or outside</p></li>
+<li><p><strong>Weapon</strong> = Provides details on what weapon has been used, if any</p></li>
+<li><p><strong>Post</strong> = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: <a href="http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl" class="uri">http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl</a></p></li>
+<li><p><strong>District</strong> = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.</p></li>
+<li><p><strong>Neighborhood</strong> = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.</p></li>
+<li><p><strong>Latitude</strong> = Latitude, Coordinate system: EPSG:4326 WGS 84</p></li>
+<li><p><strong>Longitude</strong> = Longitude, Coordinate system: EPSG:4326 WGS 84</p></li>
+<li><p><strong>GeoLocation</strong> = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS</p></li>
+<li><p><strong>Premise</strong> = Information on the premise where the crime was committed. One counts more than 120’000 observations in the streets.</p></li>
+</ul>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/part1-crime-data/explore" class="uri">https://data.baltimorecity.gov/datasets/part1-crime-data/explore</a>]</p>
 </div>
 <div id="cctv-data-set" class="section level3">
 <h3>2.2 CCTV Data set</h3>
 <p>This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.</p>
-<p>X = Longitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p>
-<p>Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p>
-<p>OBJECTID = ID of of the camera, 837 in total</p>
-<p>CAM_NUM = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore. Here at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn’t relate to anything. So we are still in the process of figuring out the exact meaning of that.</p>
-<p>LOCATION = Textual information on where the camera is located</p>
-<p>PROJ = Name of the area in which the camera is located. It does not always match the name of the “standard” community statistical areas.</p>
-<p>XCCORD = Longitude, Coordinate system: EPSG:4326 WGS 84</p>
-<p>YCOORD = Latitude, Coordinate system: EPSG:4326 WGS 84</p>
+<ul>
+<li><p><strong>X = Longitude:</strong> Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p></li>
+<li><p><strong>Y = Latitude:</strong> Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p></li>
+<li><p><strong>OBJECTID</strong> = ID of of the camera, 837 in total</p></li>
+<li><p><strong>CAM_NUM</strong> = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore. Here at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn’t relate to anything. So we are still in the process of figuring out the exact meaning of that.</p></li>
+<li><p><strong>LOCATION</strong> = Textual information on where the camera is located</p></li>
+<li><p><strong>PROJ</strong> = Name of the area in which the camera is located. It does not always match the name of the “standard” community statistical areas.</p></li>
+<li><p><strong>XCCORD</strong> = Longitude, Coordinate system: EPSG:4326 WGS 84</p></li>
+<li><p><strong>YCOORD</strong> = Latitude, Coordinate system: EPSG:4326 WGS 84</p></li>
+</ul>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore" class="uri">https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore</a>]</p>
 </div>
 <div id="poverty-data-set" class="section level3">
 <h3>2.3 Poverty Data set</h3>
 <p>This dataset provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area.</p>
 <p>Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area. This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following:</p>
-<p>CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p>
-<p>hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.</p>
-<p>Shape__Area - Shape__Length = standard fields to determine the area and the perimeter of a polygon</p>
+<ul>
+<li><p><strong>CSA2010</strong> = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p></li>
+<li><p><strong>hhpov15 - hhpov19</strong> = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.</p></li>
+<li><p>**Shape__Area - Shape__Length** = standard fields to determine the area and the perimeter of a polygon</p></li>
+</ul>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/bniajfi" class="uri">https://data.baltimorecity.gov/datasets/bniajfi</a>::percent-of-family-households-living-below-the-poverty-line-community-statistical-area/explore]</p>
 </div>
 <div id="area-data-set" class="section level3">
 <h3>2.4 Area Data set</h3>
 <p>This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset’s observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:</p>
-<p>community = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p>
-<p>neigh = name of the neighbourhoods contained in the area.</p>
-<p>tracts = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (<a href="http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9" class="uri">http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9</a>).</p>
+<ul>
+<li><p><strong>community</strong> = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p></li>
+<li><p><strong>neigh</strong> = name of the neighbourhoods contained in the area.</p></li>
+<li><p><strong>tracts</strong> = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (<a href="http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pm" class="uri">http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pm</a> d_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).</p></li>
+</ul>
+<pre class="r"><code>area_data &lt;- read_csv(file = here::here(&quot;data/Community_Statistical_Areas__CSAs___Reference_Boundaries.csv&quot;))</code></pre>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26" class="uri">https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26</a>]</p>
 </div>
 <div id="data-wrangling" class="section level3">
 <h3>2.5 Data Wrangling</h3>
 <div id="data-wrangling-area" class="section level4">
 <h4>2.5.1 Data Wrangling: Area</h4>
+<p>Here main goal is the transformation of the area data into a new dataset, which contains one observation per names of neighborhoods. We achieve that by first creating a new dataset with each neighbourhood being assigned to an area and second establishing a new columns with lower case letter for later merge.</p>
+<pre class="r"><code>
+area_data2 &lt;- separate_rows(area_data, Neigh, sep = &quot;, &quot;) #Creation of a new dataset with each neighbourhood being assigned to an area
+
+area_data2 &lt;- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters</code></pre>
 </div>
 <div id="data-wrangling-crime" class="section level4">
 <h4>2.5.2 Data Wrangling: Crime</h4>
+<p>Since in the crime dataset the neighborhood names are written in lower case letters we again create a colums with lower case letters to join the two datasets. Next, we use the <span class="math inline">\(anti_join function\)</span> to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. These include using the names function:</p>
+<ul>
+<li>#mount washington -&gt; Mt. Washington</li>
+<li>carroll - camden industrial area -&gt; Caroll-Camden Industrial Area</li>
+<li>patterson park neighborhood -&gt; Patterson Park</li>
+<li>glenham-belhar -&gt; Glenham-Belford</li>
+<li>new southwest/mount clare -&gt; Hollins Market</li>
+<li>mount winans = Mt.Winans</li>
+<li>rosemont homeowners/tenants -&gt; Rosemont</li>
+<li>broening manor -&gt; O’Donnell Heights</li>
+<li>boyd-booth -&gt; Booth-boyd</li>
+<li>lower herring run park -&gt; Herring Run Park</li>
+<li>mt pleasant park -&gt; Mt. Pleasant Park</li>
+</ul>
+<p>We get rid of the 764 remaining observations which had no information about neighbourhood. Finally, we use the <span class="math inline">\(semi_join function\)</span> to create the final datasets which in total is basically the same dataset as the original one minus the 764 observations.</p>
+<p>To see the structure of the dataset we use the <span class="math inline">\(str function\)</span> and filter for the dates from</p>
 <pre><code>#&gt;  [1] &quot;mount washington&quot;                
 #&gt;  [2] &quot;carroll - camden industrial area&quot;
 #&gt;  [3] &quot;patterson park neighborhood&quot;     

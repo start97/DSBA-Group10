@@ -4,46 +4,45 @@
 source(here::here("scripts/setup.R"))
 ```
 
-
 ### Data source
 
 We have four raw data sets. All data sets were retrieved on baltimore government open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
 ### Raw Data sets
 
-<br>
-
 ### 2.1 Crime Data set
 
 This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. This dataset contains 350'294 observations.
 
-RowID = ID of the row, 350'294 in total
+   + **RowID** = ID of the row, 350'294 in total
+   
+   + **CrimeDateTime** = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd
+  
+   + **CrimeCode** = Code corresponding to the type of crime committed
+  
+   + **Location** = Textual information on where the crime was committed 
+  
+   + **Description** = Textual description of the crime committed corresponding to a CrimeCode.
+  
+   + **Inside/Outside** = Provides information on whether crime was committed inside or outside
+  
+   + **Weapon** = Provides details on what weapon has been used, if any
 
-CrimeDateTime = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd
+   + **Post** = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here:
+   http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl
 
-CrimeCode = Code corresponding to the type of crime committed
+   + **District** = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: 
+     North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.
 
-Location = Textual information on where the crime was committed 
+   + **Neighborhood** = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about       Community Statistical Areas.
 
-Description = Textual description of the crime committed corresponding to a CrimeCode.
-
-Inside/Outside = Provides information on whether crime was committed inside or outside
-
-Weapon = Provides details on what weapon has been used, if any
-
-Post = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl
-
-District = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.
-
-Neighborhood = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.
-
-Latitude = Latitude, Coordinate system: EPSG:4326 WGS 84
-
-Longitude = Longitude, Coordinate system: EPSG:4326 WGS 84
-
-GeoLocation = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84
-
-Premise = Information on the premise where the crime was committed. One counts more than 120'000 observations in the streets.
+   + **Latitude** = Latitude, Coordinate system: EPSG:4326 WGS 84
+  
+   + **Longitude** = Longitude, Coordinate system: EPSG:4326 WGS 84
+    
+   + **GeoLocation** = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 
+  
+   + **Premise** = Information on the premise where the crime was committed. One counts more than 120'000 observations in the streets.
 
 ```{r}
 
@@ -57,21 +56,21 @@ _Source of the data set:_ [https://data.baltimorecity.gov/datasets/part1-crime-d
 
 This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
 
-X = Longitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
+  + **X = Longitude:** Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
-Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
+  + **Y = Latitude:** Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
-OBJECTID = ID of of the camera, 837 in total
+  + **OBJECTID** = ID of of the camera, 837 in total
 
-CAM_NUM = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore. Here at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn't relate to anything. So we are still in the process of figuring out the exact meaning of that.
+  + **CAM_NUM** = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore. Here     at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn't relate to anything. So we are still in the process of          figuring out the exact meaning of that.
 
-LOCATION = Textual information on where the camera is located
+  + **LOCATION** = Textual information on where the camera is located
 
-PROJ = Name of the area in which the camera is located. It does not always match the name of the "standard" community statistical areas.
+  + **PROJ** = Name of the area in which the camera is located. It does not always match the name of the "standard" community statistical areas.
 
-XCCORD = Longitude, Coordinate system: EPSG:4326 WGS 84
+  + **XCCORD** = Longitude, Coordinate system: EPSG:4326 WGS 84
 
-YCOORD = Latitude, Coordinate system: EPSG:4326 WGS 84
+  + **YCOORD** = Latitude, Coordinate system: EPSG:4326 WGS 84
 
 ```{r}
 
@@ -88,11 +87,11 @@ This dataset provides information about the percent of family households living 
 
 Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
-CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore        into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are       used in social planning.
 
-hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.
+  + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to         2019.
 
-Shape__Area - Shape__Length = standard fields to determine the area and the perimeter of a polygon
+  + **Shape_Area - Shape_Length** = standard fields to determine the area and the perimeter of a polygon
 
 ```{r}
 
@@ -107,22 +106,26 @@ _Source of the data set:_ [https://data.baltimorecity.gov/datasets/bniajfi::perc
 
 This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
 
-community = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore       into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are       used in social planning.
 
-neigh = name of the neighbourhoods contained in the area. 
+  + **neigh** = name of the neighbourhoods contained in the area. 
 
-tracts = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
+  + **tracts** = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available            online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pm       d_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
 
-```{r}
+```{r echo=TRUE}
 area_data <- read_csv(file = here::here("data/Community_Statistical_Areas__CSAs___Reference_Boundaries.csv"))
-
 ```
 
 _Source of the data set:_ [https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26]
 
 ### 2.5 Data Wrangling
+
 #### 2.5.1 Data Wrangling: Area
-```{r}
+
+Here main goal is the transformation of the area data into a new dataset, which contains one observation per names of neighborhoods. We achieve that by first creating a new dataset with each neighbourhood being assigned to an area and second establishing a new columns with lower case letter for later merge.
+
+```{r echo=TRUE}
+
 area_data2 <- separate_rows(area_data, Neigh, sep = ", ") #Creation of a new dataset with each neighbourhood being assigned to an area
 
 area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters
@@ -130,7 +133,23 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 ```
 
 #### 2.5.2 Data Wrangling: Crime
+
+Since in the crime dataset the neighborhood names are written in lower case letters we again create a colums with lower case letters to join the two datasets. Next, we use the $anti_join function$ to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. These include using the names function:
+
+  + mount washington ->  Mt. Washington 
+  + carroll - camden industrial area -> Caroll-Camden Industrial Area 
+  + patterson park neighborhood -> Patterson Park 
+  + glenham-belhar -> Glenham-Belford 
+  + new southwest/mount clare -> Hollins Market 
+  + mount winans = Mt.Winans 
+  + rosemont homeowners/tenants -> Rosemont 
+  + broening manor -> O'Donnell Heights 
+  + boyd-booth -> Booth-boyd 
+  + lower herring run park -> Herring Run Park 
+  + mt pleasant park -> Mt. Pleasant Park 
+  
 ```{r}
+
 crime_data <- mutate(crime_data,neigh=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
 
 crime_data_with_areas <- crime_data %>% 
@@ -156,6 +175,14 @@ crime_data["neigh"][crime_data["neigh"]=="mt pleasant park"] <- "mt. pleasant pa
 
 #mount washington = Mt. Washington / carroll - camden industrial area = Caroll-Camden Industrial Area / patterson park neighborhood = Patterson Park / glenham-belhar = Glenham-Belford / new southwest/mount clare = Hollins Market / mount winans = Mt. Winans / rosemont homeowners/tenants = Rosemont / broening manor = O'Donnell Heights / boyd-booth = Booth-boyd / lower herring run park = Herring Run Park / mt pleasant park = Mt. Pleasant Park / We got rid of the 764 remaining observations which had no information about neighbourhood
 
+```
+  
+We get rid of the 764 remaining observations which had no information about neighbourhood. Finally, we use the $semi join function$ to create the final datasets which in total is basically the same dataset as the original one minus the 764 observations. 
+
+To see the structure of the dataset we use the $str function$ and filter for the dates from 2000 (since the Baltimore CCTV program started in the year 2000).
+
+```{r}
+
 crime_data_with_areas <- crime_data %>% 
  semi_join(area_data2,by="neigh") %>% 
   left_join(area_data2,by="neigh") #Here we have the final data frame with a community for each crime
@@ -169,6 +196,9 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 ```
 
 #### 2.5.3 Data Wrangling: Poverty
+
+In Baltimore there are 56 areas in the standard community statistical area. However, within these 56 statistical areas is also jail included. For the poverty data however, we obviously have only 55 statistical areas given, since we obviously do not have data about poverty in jail. To solve this dissonanz, we add a new line. Moreover we needed to fill a missing value for Baltimore in the year 2019: Here we took the average of the past years. 
+
 ```{r}
 poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
 
@@ -178,6 +208,7 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 #### 2.5.4 Data Wrangling: CCTV
 
+Here we need to make sure to not have any missing values in the CCTV dataset. 
 
 which(is.na(cctv_data$X))
 which(is.na(cctv_data$Y))
