@@ -8,7 +8,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 
-#IMPORT THE DATA
+#IMPORT THE DATA OK
 
 ```{r}
 getwd()
@@ -24,7 +24,7 @@ crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
 
 ```
 
-#EXPLORE THE DATA
+#EXPLORE THE DATA OK
 
 ```{r}
 #Crime data
@@ -45,7 +45,7 @@ View(cctv_data)
 ```
 
 
-#DATA MANIPULATIONS
+#DATA MANIPULATIONS OK
 
 
 ```{r}
@@ -56,15 +56,15 @@ library(rgdal)
 library(ggplot2)
 ```
 
-#Joining of crime dataset and area dataset
+#Joining of crime dataset and area dataset OK
 
 ```{r}
 
-crime_data <- mutate(crime_data,neigh=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
+crime_data <- mutate(crime_data,neigh=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters OK
 
-area_data2 <- separate_rows(area_data, Neigh, sep = ", ") #Creation of a new dataset with eigh neighbourhood being assigned to an area
+area_data2 <- separate_rows(area_data, Neigh, sep = ", ") #Creation of a new dataset with eigh neighbourhood being assigned to an area OK
 
-area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters
+area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters OK
 
 crime_data_with_areas <- crime_data %>% 
   left_join(area_data2,by="neigh")
@@ -101,7 +101,7 @@ crime_data_with_areas <- crime_data_with_areas[startsWith(as.character(crime_dat
 ```
 
 
-#Calculation of the crime rate per community
+#Calculation of the crime rate per community OK
 
 ```{r}
 CrimeRatePerArea <- crime_data_with_areas %>% 
@@ -113,7 +113,7 @@ CrimeRatePerArea <- rbind(CrimeRatePerArea,list("Unassigned -- Jail",0))
 sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we expect
 ```
 
-#Calculation of the density of CCTV per community
+#Calculation of the density of CCTV per community OK
 
 ```{r}
 setwd("/Users/Augustin/Documents/GitHub/DSBA-Group10/WD")
@@ -156,7 +156,7 @@ colnames(counts)[1] <- "Community"
 sum(counts$Freq)
 ```
 
-#Calculate the density for each community
+#Calculate the density for each community OK
 
 ```{r}
 
@@ -170,8 +170,8 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 View(CCTV_per_area)
 ```
 
-#EXPLORATION
-#STATISTICS OF CRIME BY TYPES OF CRIME
+#EXPLORATION OK
+#STATISTICS OF CRIME BY TYPES OF CRIME OK
 
 ```{r}
 unique(crime_data_with_areas$Description)
@@ -210,7 +210,7 @@ sum(MisdemeanorStats$MisdemeanorRatePerArea)
 
 ```
 
-#CCTV against crimes
+#CCTV against crimes OK
 
 ```{r}
 CCTV_VS_crimes <- CCTV_per_area %>% 
@@ -266,7 +266,7 @@ lines(range6,estimation6, col="blue")
 
 ```
 
-#MAPPING OF CRIMES
+#MAPPING OF CRIMES OK
 
 ```{r}
 baltimore$community %in% CrimeRatePerArea$Community #We see that we have a perfect match
@@ -277,7 +277,7 @@ library(tmap)
 qtm(baltimore, "CrimeRatePerArea")
 ```
 
-#MAPPING OF CCTVs
+#MAPPING OF CCTVs OK
 
 ```{r}
 baltimore$community %in% CCTV_per_area$Community
@@ -288,7 +288,7 @@ qtm(baltimore, "density_perc",fill.title="CCTV Density", fill.style="fixed", fil
 
 ```
 
-#MAPPING OF FELONIES & MAPPING OF MISDEMEANORS 
+#MAPPING OF FELONIES & MAPPING OF MISDEMEANORS OK 
 ```{r}
 
 baltimore$community %in% FelonyStats$Community
@@ -328,7 +328,7 @@ lines(range4,estimation4, col="blue")
 
 ```
 
-#Comparison of CCTV density vs wealth
+#Comparison of CCTV density vs wealth OK
 
 ```{r}
 
@@ -351,7 +351,7 @@ estimation2 <- x2*range2+y2
 lines(range2,estimation2, col="blue")
 ```
 
-#Comparison of Crimes VS wealth
+#Comparison of Crimes VS wealth OK
 ```{r}
 
 plot(CrimeRatePerArea$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
@@ -369,7 +369,7 @@ estimation3 <- x3*range3+y3
 lines(range3,estimation3, col="blue")
 ```
 
-#Evolution of crime
+#Evolution of crime OK
 ```{r}
 
 library(lubridate)
@@ -456,8 +456,10 @@ crime_evolution <- CrimeRatePerArea2021 %>%
   left_join(CrimeRatePerArea2015,by="Community") %>% 
   left_join(CrimeRatePerArea2014,by="Community")
 
-#_____ Creation of an animated map
 
+```
+#Attempt to create an animated map
+```{r}
 library(gifski)
 
 test <- baltimore
@@ -467,13 +469,11 @@ set
 test@data <- left_join(test@data, crime_evolution, by = c('community' = 'Community'))
 
 tmap_mode("plot") + tm_shape(test)
-
 ```
-
 #RESEARCH QUESTION 
 Updated Daniel
 
-#ATTEMPT TO MAKE BETTER MAPS
+#ATTEMPT TO MAKE BETTER MAPS OK
 ```{r}
 
 Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
@@ -552,9 +552,5 @@ Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Midtown_area) + 
 
 Midtown_map
 print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain the map with an additional overview
-
-
-
-
 
 ```
