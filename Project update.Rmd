@@ -7,7 +7,27 @@ output:
     theme: united
     highlight: tango
     toc: true
-    toc_float: true
     code_folding: hide
 runtime: shiny
 ---
+
+
+
+## IMPORT THE DATA
+
+Before our analysis regarding the research questions can be done, we first need to import the dataset. Here we set the working directory. Moreover, we use the read.csv function to import the datasets which we stored in our Github repository.  
+
+
+```{r}
+getwd()
+setwd("~/GitHub/DSBA-Group10/WD")
+
+area_data <- read.csv("Community_Statistical_Areas__CSAs___Reference_Boundaries.csv")
+
+cctv_data <- read.csv("Baltimore_CCTV_Locations_Crime_Cameras.csv")
+
+poverty_data <- read.csv("Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv")
+
+crime_data <- read.csv("Baltimore_Part1_Crime_data.csv")
+
+```
