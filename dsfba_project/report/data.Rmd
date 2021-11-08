@@ -177,16 +177,15 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 ```
 
 ###2.5.4 Data Wrangling: CCTV
-```{r}
+
 
 which(is.na(cctv_data$X))
 which(is.na(cctv_data$Y))
-filter(cctv_data,X=="")
-filter(cctv_data,Y=="") 
+filter(cctv_data, X=="")
+filter(cctv_data, =="") 
 
 #I don't know if it is the proper technique but by doing so I ensure that we have no NAs neihter empty values and so that our dataset is tidy
 
-```
 
 
 * Sources
