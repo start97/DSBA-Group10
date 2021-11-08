@@ -1,0 +1,234 @@
+# Analysis
+
+```{r, echo = FALSE, message = FALSE}
+source(here::here("scripts/setup.R"))
+```
+
+##4.1 Crime VS CCTVs - Does the presence of CCTV deter crime?
+
+```{r}
+
+CCTV_VS_crimes <- CCTV_per_area %>% 
+  left_join(CrimeRatePerArea,by="Community")
+  
+View(CCTV_VS_crimes)
+
+plot(CCTV_VS_crimes$CrimeRatePerArea,CCTV_VS_crimes$density_perc, main="Crime Rate per Community VS CCTV Density per Community",xlab="CrimeRatePerCommunity",ylab="CCTVDensityPerCommunity")
+
+regression <- lm(CCTV_VS_crimes$density_perc~CCTV_VS_crimes$CrimeRatePerArea)
+summary(regression)
+
+y<-regression[["coefficients"]][["(Intercept)"]]
+x<-regression[["coefficients"]][["CCTV_VS_crimes$CrimeRatePerArea"]]
+
+range <- seq(from=0, to=4.5, by=0.1)
+
+estimation <- x*range+y
+
+lines(range,estimation, col="blue")
+
+```
+
+###4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
+
+```{r}
+
+Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
+
+
+tmap_mode("view") #Use this command to have interactive maps
+baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
+Crime_and_CCTV_map
+
+Felony_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %", style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
+
+
+tmap_mode("view") #Use this command to have interactive maps
+Felony_and_CCTV_map
+
+Misdemeanor_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
+
+
+tmap_mode("view") #Use this command to have interactive maps
+Misdemeanor_and_CCTV_map
+
+tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
+
+sort(baltimore@data[["CrimeRatePerArea"]])
+
+breaks1 <- c(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5) #Not sure what break to use, for the moment I decided to use the automatic break system with the "quantile" parameter
+
+
+tmap_mode("plot") #We go back to classic plotting
+
+```
+
+###4.1.2 Analysis of where crime took place: August 2021
+
+```{r}
+
+crime_spatial <- as.data.table(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")))
+coordinates(crime_spatial) <-  c("Longitude","Latitude")
+proj4string(crime_spatial) <-  CRS("+init=epsg:4326")
+crime_spatial <- spTransform(crime_spatial,crs.geo1)
+
+August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crimes committed in August 2021 VS CCTV location",frame.lwd = 5)+ tm_shape(balt_dat) + tm_dots(col="black")+tm_shape(crime_spatial)+tm_dots(col="red",alpha=0.5)
+
+#It could be interesting to see where crime took place relative to CCTV locations in the area with the highest crime rate in August 2021
+
+CrimeRatePerAreaAugust2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")) %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea=(n()/nrow(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31"))))*100) #We see that midtown is the area with the highest crime rate in August 2021, we might want to focus on that area and see whether there is crime that take place directly next to CCTVs
+
+sum(CrimeRatePerAreaAugust2021$CrimeRatePerArea) #We obtain 100, which is what we expect
+
+Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
+                      ymin =4763782.86, ymax = 4766467.70),
+                    crs = st_crs(baltimore)) %>% st_as_sfc()
+ 
+Midtown_map <- tm_shape(Midtown_area) + tm_borders(col="white")+ tm_shape(baltimore) + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Midtown Area",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_symbols(shape = 2, col = "black", size = 0.07)+tm_shape(crime_spatial)+tm_dots(col="red")
+
+Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Midtown_area) + tm_borders(lwd = 1.5,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+
+
+Midtown_map
+print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain the map with an additional overview
+
+```
+
+###4.1.3 Anomaly #1 : Prison
+
+```{r}
+tmap_mode("plot")
+
+Prison_area <-  st_bbox(c(xmin = -8529169.92, xmax = -8526465.97,
+                      ymin =4764196.55, ymax = 4765056.50),
+                    crs = st_crs(baltimore)) %>% st_as_sfc()
+ 
+Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Baltimore Prison",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
+
+
+Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+
+
+Prison_map
+print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
+
+```
+
+##4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
+```{r}
+
+#Felonies
+
+plot(FelonyStats$FelonyRatePerArea,CCTV_VS_crimes$density_perc, main="Felony Rate per Community VS CCTV Density per Community",xlab="FelonyRatePerCommunity",ylab="CCTVDensityPerCommunity")
+
+regression5 <- lm(CCTV_VS_crimes$density_perc~FelonyStats$FelonyRatePerArea)
+summary(regression5) #There is a very poor correlation 
+
+y5<-regression5[["coefficients"]][["(Intercept)"]]
+x5<-regression5[["coefficients"]][["FelonyStats$FelonyRatePerArea"]]
+
+range5 <- seq(from=-1, to=5, by=0.1)
+
+estimation5 <- x5*range5+y5
+
+lines(range5,estimation5, col="blue") 
+
+#Misdemeanors
+
+plot(MisdemeanorStats$MisdemeanorRatePerArea,CCTV_VS_crimes$density_perc, main="Misdemeanor Rate per Community VS CCTV Density per Community",xlab="MisdemeanorRatePerCommunity",ylab="CCTVDensityPerCommunity")
+
+regression6 <- lm(CCTV_VS_crimes$density_perc~MisdemeanorStats$MisdemeanorRatePerArea)
+summary(regression6) #There is a very poor correlation 
+
+y6<-regression6[["coefficients"]][["(Intercept)"]]
+x6<-regression6[["coefficients"]][["MisdemeanorStats$MisdemeanorRatePerArea"]]
+
+range6 <- seq(from=-1, to=6, by=0.1)
+
+estimation6 <- x6*range6+y6
+
+lines(range6,estimation6, col="blue")
+
+```
+
+##4.3 Comparison of CCTV density and wealth
+
+```{r}
+
+plot(CCTV_per_area$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
+
+regression2 <- lm(poverty_data$hhpov19~CCTV_per_area$density_perc)
+summary(regression2)
+
+y2<-regression2[["coefficients"]][["(Intercept)"]]
+x2<-regression2[["coefficients"]][["CCTV_per_area$density_perc"]]
+
+range2 <- seq(from=-5, to=12, by=0.2)
+
+estimation2 <- x2*range2+y2
+
+lines(range2,estimation2, col="blue")
+
+```
+
+###4.3.1 Mapping of CCTVs and wealth
+
+```{r}
+
+baltimore$community %in% poverty_data$CSA2010 #We see that we have a perfect match
+
+baltimore@data <- left_join(baltimore@data, poverty_data, by = c('community' = 'CSA2010'))
+
+Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Poverty rate per Area",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black") #This visualization is particularly interesting. Indeed, while the regression between crime rates and CCTV density was not very conclusive (we obtained a very poor R squared suggesting a poor correlation between poverty and CCTV density), this map might actually explain why we obtained such result and give us interesting hints. Indeed, we see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the centre of Baltimore and that the poverty rates is very low in these two regions. This makes sense as centers of city are typically not the poorest areas. Yet, what we also see is that many of the least poor region in the "suburbs" often have very low CCTV densities. This might confirm the idea that there tends to be less CCTVs in richer neighbourhoof.
+
+
+```
+
+##4.4 Comparison of crimes and wealth
+
+```{r}
+
+plot(CrimeRatePerArea$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
+
+regression3 <- lm(poverty_data$hhpov19~CrimeRatePerArea$CrimeRatePerArea)
+summary(regression3)
+
+y3<-regression3[["coefficients"]][["(Intercept)"]]
+x3<-regression3[["coefficients"]][["CrimeRatePerArea$CrimeRatePerArea"]]
+
+range3 <- seq(from=-2, to=4.5, by=0.1)
+
+estimation3 <- x3*range3+y3
+
+lines(range3,estimation3, col="blue")
+```
+
+##4.5 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
+```{r}
+
+plot(FelonyStats$FelonyRatePerArea,MisdemeanorStats$MisdemeanorRatePerArea,main="Felony VS Misdemeanor", xlab="Felony",ylab="Misdemeanor") #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
+
+regression4 <- lm(FelonyStats$FelonyRatePerArea~MisdemeanorStats$MisdemeanorRatePerArea)
+summary(regression4)
+
+y4<-regression4[["coefficients"]][["(Intercept)"]]
+x4<-regression4[["coefficients"]][["MisdemeanorStats$MisdemeanorRatePerArea"]]
+
+range4 <- seq(from=-1, to=5, by=0.1)
+
+estimation4 <- x4*range4+y4
+
+lines(range4,estimation4, col="blue")
+
+#Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
+
+```
+
+jgg
+##4.6
+* Answers to the research questions
+* Different methods considered
+* Competing approaches
+* Justifications

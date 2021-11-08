@@ -1,0 +1,249 @@
+# Exploratory data analysis
+
+```{r, echo = FALSE, message = FALSE}
+source(here::here("scripts/setup.R"))
+```
+
+##3.1 Calculation of the density of CCTV per community
+
+```{r}
+
+#read in data table
+balt_dat <-  fread(file = here::here("data/Baltimore_CCTV_Locations_Crime_Cameras.csv"))
+
+#convert to data table
+balt_dat <- as.data.table(balt_dat)
+
+#make data spatial
+coordinates(balt_dat) <-  c("X","Y")
+crs.geo1 <-  CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_0=0 +k=1 +units=m +nadgrids=@null +wktext +no_defs +type=crs")
+proj4string(balt_dat) <-  crs.geo1  
+
+plot(balt_dat, pch = 20, col = "steelblue") #We can use the plot function to quickly plot the SpatialPointDataFrame that we created. We see a bunch of points which represent the CCTV location in Baltimore.
+
+#read in shapefile of baltimore
+baltimore <-  readOGR(dsn = here::here("data/Community_Statistical_Area"), layer = "Community_Statistical_Area") #name of file and object
+proj4string(baltimore) <- crs.geo1
+
+#plot
+plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
+plot(balt_dat,pch=20, col="steelblue" , add=TRUE) #If we plot these two lines together, what we obtain is a map od baltimore, we the 56 community statistical areas and the CCTVs on top of the map.
+
+#Perform the count
+
+proj4string(balt_dat)
+proj4string(baltimore) #To be able to perform the count, we must ensure that the two spatial files have a similar CRS. This is the case as we attributed these two files "crs.geo1" 
+
+res2 <- over(balt_dat,baltimore) #This function tells you to which community each CCTV belongs to
+counts <- table(res2$community)
+counts <- as.data.frame(counts)
+colnames(counts)[1] <- "Community"
+sum(counts$Freq) #We see that we have 836 observation in total, this is a good sign as our initial CCTV data set contained 836 obesrvations
+
+CCTV_per_area <- area_data[2] %>% 
+  left_join(counts,by="Community") #One must add the communities where there are no counts i.e no CCTV
+
+CCTV_per_area[is.na(CCTV_per_area)] <- 0
+
+CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCTV_per_area$Freq)))*100)
+
+```
+
+###3.1.1 Mapping of CCTV density
+
+```{r}
+library(tmap)
+
+baltimore$community %in% CCTV_per_area$Community
+
+baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
+
+CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density per Area in %",breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+```
+
+##3.2 Calculation of the crime rate per community
+
+```{r}
+CrimeRatePerArea <- crime_data_with_areas %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea=(n()/nrow(crime_data_with_areas))*100)
+
+CrimeRatePerArea <- rbind(CrimeRatePerArea,list("Unassigned -- Jail",0)) #We have no information about crimes committed in jail, yet, the community statistical area encompass 56 area, including jail. In order to ensure consistency, we must add a 56th observation in this data frame.
+
+sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we expect
+```
+
+###3.2.1 Mapping of crime rates
+
+```{r}
+library(tmap)
+
+baltimore$community %in% CrimeRatePerArea$Community #We see that we have a perfect match
+
+baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community' = 'Community'))
+
+Crime_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+```
+
+###3.2.2 Creation of a distorted map
+
+```{r}
+
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.07) #This map distorts the size of each area depending on their respective crime rates. It is interesting as it enables one to see that higher crime rates tends to be concentrated in the city center.
+
+```
+
+##3.3 Calculation of crime rates by type of crime
+
+```{r}
+unique(crime_data_with_areas$Description)
+
+#We see that we have 14 types of crime. We want to observe crimes by types, therefore we want to make new classifications.The law consists of three basic classifications of criminal offenses including infractions, misdemeanors, and felonies. In our data set, we have infractions.
+
+#Misdemeanor:LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
+#Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
+
+crime_cat <- data.frame(Category=c("Misdemeanor","Felony"), Description=c(c("LARCENY FROM AUTO,COMMON ASSAULT,ROBBERY - COMMERCIAL,LARCENY"),c("RAPE,ARSON,HOMICIDE,BURGLARY,AUTO THEFT,ROBBERY - CARJACKING,AGG. ASSAULT,ROBBERY - STREET,ROBBERY - RESIDENCE,SHOOTING")))
+
+crime_cat <- separate_rows(crime_cat, Description, sep = ",")
+
+crime_cat$Description %in% unique(crime_data_with_areas$Description) #Ensure we have a perfect match
+
+crime_data_with_areas <- crime_data_with_areas %>% 
+  left_join(crime_cat,by="Description") #We had a new varaible to our crime dataset
+
+CrimePerCategoryPerArea <- crime_data_with_areas %>% 
+  group_by(Community,Category) %>%
+  summarize(RepartitionPerCategoryPerArea=n())
+
+sum(CrimePerCategoryPerArea$RepartitionPerCategoryPerArea) #Again, we check that we indeed have 349482 observations
+
+CrimeCategoryRepartition <- CrimePerCategoryPerArea %>% 
+  group_by(Category) %>% 
+  summarise(Repartition=sum(RepartitionPerCategoryPerArea)) #We observe that in Baltimore, the number of felony is close to the number of misdemeanor
+
+FelonyStats <-  CrimePerCategoryPerArea %>% filter(Category=="Felony") %>% 
+  mutate(FelonyRatePerArea = (RepartitionPerCategoryPerArea/CrimeCategoryRepartition$Repartition[1])*100)
+
+FelonyStats[56,] <- list("Unassigned -- Jail","Felony",0,0)
+
+MisdemeanorStats <-  CrimePerCategoryPerArea %>% filter(Category=="Misdemeanor") %>% 
+  mutate(MisdemeanorRatePerArea = (RepartitionPerCategoryPerArea/CrimeCategoryRepartition$Repartition[2])*100)
+
+MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0)
+
+```
+
+###3.3.1 Mapping of felonies and Misdemeanors
+```{r}
+
+#Felony
+
+baltimore$community %in% FelonyStats$Community
+
+baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'Community'))
+
+Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+#Misdemeanor
+
+baltimore$community %in% MisdemeanorStats$Community
+
+baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
+
+Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+```
+
+##3.4 Calculation of crime evolution
+```{r}
+
+Crime_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31"))
+
+Crime_in_2020 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2020-01-01") & CrimeDateTime <= as.Date("2020-12-31"))
+
+Crime_in_2019 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2019-01-01") & CrimeDateTime <= as.Date("2019-12-31"))
+
+Crime_in_2018 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2018-01-01") & CrimeDateTime <= as.Date("2018-12-31"))
+
+Crime_in_2017 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2017-01-01") & CrimeDateTime <= as.Date("2017-12-31"))
+
+Crime_in_2016 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2016-01-01") & CrimeDateTime <= as.Date("2016-12-31"))
+
+Crime_in_2015 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2015-01-01") & CrimeDateTime <= as.Date("2015-12-31"))
+
+Crime_in_2014 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2014-01-01") & CrimeDateTime <= as.Date("2014-12-31"))
+
+crime_data_with_areas %>%  filter(CrimeDateTime < as.Date("2014-01-01")) #We see that we have very few (76) observations before 2014, thus we do not consider them
+
+#_____ Calculations of the crime rates
+
+CrimeRatePerArea2021 <- Crime_in_2021 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2021=(n()/nrow(Crime_in_2021))*100)
+
+CrimeRatePerArea2021 <- rbind(CrimeRatePerArea2021,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2020 <- Crime_in_2020 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2020=(n()/nrow(Crime_in_2020))*100)
+
+CrimeRatePerArea2020 <- rbind(CrimeRatePerArea2020,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2019 <- Crime_in_2019 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2019=(n()/nrow(Crime_in_2019))*100)
+
+CrimeRatePerArea2019 <- rbind(CrimeRatePerArea2019,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2018 <- Crime_in_2018 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2018=(n()/nrow(Crime_in_2018))*100)
+
+CrimeRatePerArea2018 <- rbind(CrimeRatePerArea2018,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2017 <- Crime_in_2017 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2017=(n()/nrow(Crime_in_2017))*100)
+
+CrimeRatePerArea2017 <- rbind(CrimeRatePerArea2017,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2016 <- Crime_in_2016 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2016=(n()/nrow(Crime_in_2016))*100)
+
+CrimeRatePerArea2016 <- rbind(CrimeRatePerArea2016,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2015 <- Crime_in_2015 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2015=(n()/nrow(Crime_in_2015))*100)
+
+CrimeRatePerArea2015 <- rbind(CrimeRatePerArea2015,list("Unassigned -- Jail",0))
+
+CrimeRatePerArea2014 <- Crime_in_2014 %>% 
+  group_by(Community) %>%
+  summarize(CrimeRatePerArea2014=(n()/nrow(Crime_in_2014))*100)
+
+CrimeRatePerArea2014 <- rbind(CrimeRatePerArea2014,list("Unassigned -- Jail",0))
+
+
+crime_evolution <- CrimeRatePerArea2021 %>% 
+  left_join(CrimeRatePerArea2020,by="Community") %>% 
+  left_join(CrimeRatePerArea2019,by="Community") %>%
+  left_join(CrimeRatePerArea2018,by="Community") %>%
+  left_join(CrimeRatePerArea2017,by="Community") %>% 
+  left_join(CrimeRatePerArea2016,by="Community") %>% 
+  left_join(CrimeRatePerArea2015,by="Community") %>% 
+  left_join(CrimeRatePerArea2014,by="Community")
+
+```
+
+
+
+* Mapping out the underlying structure
+* Identifying the most important variables
+* Univariate visualizations
+* Multivariate visualizations
+* Summary tables

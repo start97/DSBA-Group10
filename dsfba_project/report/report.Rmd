@@ -1,0 +1,9 @@
+---
+title: "Investigative research of the impact of CCTV installations on crime rates in Baltimore"
+author: "Renaudineau Marine, Welz Daniel and Oltramare Augustin"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: html_document
+---
+
+```{r child = c('intro.Rmd', 'data.Rmd', 'eda.Rmd', 'analysis.Rmd', 'concl.Rmd')}
+```
