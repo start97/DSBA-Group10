@@ -4,7 +4,7 @@
 
 
 
-install.packages("here", "tidyverse", "lubridate","data.table","lubridate", 
+packages <- c("here", "tidyverse", "lubridate","data.table","lubridate", 
                  "ggrepel", "gghighlight", "patchwork", "maps", "scales",
                  "sp","rgdal","cartogram","tmap","grid","sf", "knitr",
                  "kableExtra", "bookdown", "rmarkdown")
