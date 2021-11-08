@@ -16,13 +16,7 @@ CCTV_VS_crimes <- CCTV_per_area %>%
 View(CCTV_VS_crimes)
 
 plot(CCTV_VS_crimes$CrimeRatePerArea,CCTV_VS_crimes$density_perc, main="Crime Rate per Community VS CCTV Density per Community",xlab="CrimeRatePerCommunity",ylab="CCTVDensityPerCommunity")
-```
 
-In order to confirm that perform a regression with the lm-function and call for a summary of the function. Next, the x and y are computed, which are basically the coefficients. Next, we use a trick by creating a range from 0 to 4.5 (because the plot goes ~ from zero to 4.5.) and create a vector. This vector is called estimation. This vector is basically the linear function. So this is the coefficient multiplied by each value in the range plus the intercept. As a result we get the fitted value. The fitted value contains the estimation. After plotting the estimation.
-
-In the summary of the regression we see that R^2 (which is the estimator of the goodness of the fit) is pretty poor but still there seems to be a tendency. 
-
-```{r echo=TRUE}
 regression <- lm(CCTV_VS_crimes$density_perc~CCTV_VS_crimes$CrimeRatePerArea)
 summary(regression)
 
@@ -34,8 +28,15 @@ range <- seq(from=0, to=4.5, by=0.1)
 estimation <- x*range+y
 
 lines(range,estimation, col="blue")
-
 ```
+
+In order to confirm that perform a regression with the lm-function and call for a summary of the function. Next, the x and y are computed, which are basically the coefficients. Next, we use a trick by creating a range from 0 to 4.5 (because the plot goes ~ from zero to 4.5.) and create a vector. This vector is called estimation. This vector is basically the linear function. So this is the coefficient multiplied by each value in the range plus the intercept. As a result we get the fitted value. The fitted value contains the estimation. After taht we plot the estimation.
+
+In the summary of the regression we see that R^2 (which is the estimator of the goodness of the fit) is pretty poor but still there seems to be a tendency. 
+
+
+
+
 
 #### 4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
 
