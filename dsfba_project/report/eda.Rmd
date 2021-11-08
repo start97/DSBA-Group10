@@ -92,6 +92,8 @@ CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCT
 
 ### 3.2 Calculation of the crime rate per community
 
+What we create is the crime_rate_per_area. To achieve that we grouo and summarize the crime data per community which enables us to compute the crime rate per area for each area. Again, we added one more row in the calculations because we have no values for the prison. Again, we ensured us by adding up everything to that it equates 100, which seems to help us go further confidently. 
+
 ```{r}
 CrimeRatePerArea <- crime_data_with_areas %>% 
   group_by(Community) %>%
@@ -104,7 +106,9 @@ sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we e
 
 #### 3.2.1 Mapping of crime rates
 
-```{r}
+Again, we map the crimes similarily to the section of mapping the CCTVs.
+
+```{r echo=TRUE}
 library(tmap)
 
 baltimore$community %in% CrimeRatePerArea$Community #We see that we have a perfect match
@@ -117,6 +121,8 @@ Crime_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Cri
 
 #### 3.2.2 Creation of a distorted map
 
+Again, we use the $tm - package$ together with the $carogram - ncont$ function which basically distort the map to show our results. Concretely, we want to show that the crime rate is higher in the city center. This can be shown quite neatly graphically. 
+
 ```{r}
 
 Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.07) #This map distorts the size of each area depending on their respective crime rates. It is interesting as it enables one to see that higher crime rates tends to be concentrated in the city center.
@@ -125,6 +131,12 @@ Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+
 
 ### 3.3 Calculation of crime rates by type of crime
 
+First thing we do here is to compute the unique values of the description column of the crime date with the area-dataset. We see that we have 14 types of crime. We want to observe crimes by types, therefore we want to make new classifications. The law consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies**. 
+In our data set, we have no (?) infractions.
+
+  + **Misdemeanor:** LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
+  + **Felony:** RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
+  
 ```{r}
 unique(crime_data_with_areas$Description)
 
@@ -132,7 +144,11 @@ unique(crime_data_with_areas$Description)
 
 #Misdemeanor:LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
 #Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
+```
 
+Next we create a dataset which is called crime_cat and basically tells you which recorded crime type belongs to which crime category. This dataset will be used later to make a left joint with the crime_data_per_area. Finally, we are left with the crime datasets with the area dataset with a new colums which concerns whether the crime was a felony or a misdemeanor. 
+
+```{r}
 crime_cat <- data.frame(Category=c("Misdemeanor","Felony"), Description=c(c("LARCENY FROM AUTO,COMMON ASSAULT,ROBBERY - COMMERCIAL,LARCENY"),c("RAPE,ARSON,HOMICIDE,BURGLARY,AUTO THEFT,ROBBERY - CARJACKING,AGG. ASSAULT,ROBBERY - STREET,ROBBERY - RESIDENCE,SHOOTING")))
 
 crime_cat <- separate_rows(crime_cat, Description, sep = ",")
@@ -140,8 +156,12 @@ crime_cat <- separate_rows(crime_cat, Description, sep = ",")
 crime_cat$Description %in% unique(crime_data_with_areas$Description) #Ensure we have a perfect match
 
 crime_data_with_areas <- crime_data_with_areas %>% 
-  left_join(crime_cat,by="Description") #We had a new varaible to our crime dataset
+  left_join(crime_cat,by="Description") #We had a new variable to our crime data set
+```
 
+Next, we compute the Crime_PerCategory_PerArea. Here we use the piping operator and this time we group_by the community and category and obtain the results. Again, we check that we indeed have 349482 observations. Moreover, from that we compute some felonystats and misdemeanorstats by (again) adding the prison line into the dataset.  
+
+```{r echo=TRUE}
 CrimePerCategoryPerArea <- crime_data_with_areas %>% 
   group_by(Community,Category) %>%
   summarize(RepartitionPerCategoryPerArea=n())
@@ -165,7 +185,10 @@ MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0)
 ```
 
 #### 3.3.1 Mapping of felonies and Misdemeanors
-```{r}
+
+After ensuring that we have a perfect match we perform a left joint and for felony and misdemeanor and map everything. 
+
+```{r echo=TRUE}
 
 #Felony
 
@@ -186,7 +209,11 @@ Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea",
 ```
 
 ### 3.4 Calculation of crime evolution
-```{r}
+
+The idea is that we want the information about how crime evolved. Here we could have done a loop, however we have created a dataset for each year.
+The results are interesting. If we compare how many observations we have in each crime-per year datasets, we see that we have ~40.000ish cases a year exept from 2020 (which is due to COVID) and the year 2021 (which is not finished. We dont make any datasets for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
+
+```{r echo=TRUE}
 
 Crime_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31"))
 
@@ -205,7 +232,11 @@ Crime_in_2015 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("201
 Crime_in_2014 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2014-01-01") & CrimeDateTime <= as.Date("2014-12-31"))
 
 crime_data_with_areas %>%  filter(CrimeDateTime < as.Date("2014-01-01")) #We see that we have very few (76) observations before 2014, thus we do not consider them
+```
 
+Next, we calculate the crime rates for each year with the piping operator, grouping by community and summarize the rates. In the end we create the crime evolution datasets which is a combination of all the data. 
+
+```{r echo=TRUE}
 #_____ Calculations of the crime rates
 
 CrimeRatePerArea2021 <- Crime_in_2021 %>% 
