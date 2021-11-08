@@ -39,7 +39,7 @@ lines(range,estimation, col="blue")
 
 #### 4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
 
-In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the tmap-package. However, this time we have two different shapes in tm_shape(Baltimore) and tm_shape(balt_dat) which adds the maps togehter (as in ggplot) and over each other. If we take a look at this data we see that it gives an intuition about the data. It seems as if where crime rates are the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western CCTVs).
+In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the tmap-package. However, this time we have two different shapes in tm_shape(Baltimore) and tm_shape(balt_dat) which adds the maps togehter (as in ggplot) and over each other. If we take a look at this data we see that it gives an intuition about the data. It seems as if where crime rates are the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western CCTVs). There seems to be a correlation between the dark red areas and the CCTV density per area.   
 
 ```{r}
 
@@ -63,7 +63,10 @@ tmap_mode("view") #Use this command to have interactive maps
 Misdemeanor_and_CCTV_map
 
 tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
+```
+Here we sorted the crime rate per area to find out that the range was. Either using breaks or the automatic style with the quantiles. 
 
+```{r}
 sort(baltimore@data[["CrimeRatePerArea"]])
 
 breaks1 <- c(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5) #Not sure what break to use, for the moment I decided to use the automatic break system with the "quantile" parameter
