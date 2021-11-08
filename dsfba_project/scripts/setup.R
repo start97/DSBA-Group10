@@ -2,14 +2,6 @@
 ## The following loads the needed packages ##
 #############################################
 
-
-
-packages <- c("here", "tidyverse", "lubridate","data.table","lubridate", 
-                 "ggrepel", "gghighlight", "patchwork", "maps", "scales",
-                 "sp","rgdal","cartogram","tmap","grid","sf", "knitr",
-                 "kableExtra", "bookdown", "rmarkdown")
-
-
 # load the required packages
 packages <- c(
   "here", # for the project's organization
