@@ -7,8 +7,7 @@ output:
     theme: united
     highlight: tango
     toc: true
-    code_folding: hide
-runtime: shiny
+    
 ---
 
 
