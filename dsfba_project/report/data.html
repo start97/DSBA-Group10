@@ -167,11 +167,14 @@ pre code {
 </div>
 
 
-<div id="data" class="section level1">
-<h1>Data</h1>
-<p>##Data source</p>
+<div id="data" class="section level1 tabset">
+<h1 class="tabset">Data</h1>
+<div id="data-source" class="section level3">
+<h3>Data source</h3>
 <p>We have four raw data sets. All data sets were retrieved on baltimore government open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set’s observations together.</p>
-<p>##Raw Data sets</p>
+</div>
+<div id="raw-data-sets" class="section level3">
+<h3>Raw Data sets</h3>
 <p><br></p>
 <p>##2.1 Crime Data set</p>
 <p>This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. This dataset contains 350’294 observations.</p>
@@ -190,7 +193,9 @@ pre code {
 <p>GeoLocation = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84</p>
 <p>Premise = Information on the premise where the crime was committed. One counts more than 120’000 observations in the streets.</p>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/part1-crime-data/explore" class="uri">https://data.baltimorecity.gov/datasets/part1-crime-data/explore</a>]</p>
-<p>##2.2 CCTV Data set</p>
+</div>
+<div id="cctv-data-set" class="section level3">
+<h3>2.2 CCTV Data set</h3>
 <p>This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.</p>
 <p>X = Longitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p>
 <p>Y = Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p>
@@ -201,21 +206,31 @@ pre code {
 <p>XCCORD = Longitude, Coordinate system: EPSG:4326 WGS 84</p>
 <p>YCOORD = Latitude, Coordinate system: EPSG:4326 WGS 84</p>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore" class="uri">https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore</a>]</p>
-<p>##2.3 Poverty Data set</p>
+</div>
+<div id="poverty-data-set" class="section level3">
+<h3>2.3 Poverty Data set</h3>
 <p>This dataset provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area.</p>
 <p>Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area. This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following:</p>
 <p>CSA2010 = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p>
 <p>hhpov15 - hhpov19 = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.</p>
 <p>Shape__Area - Shape__Length = standard fields to determine the area and the perimeter of a polygon</p>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/bniajfi" class="uri">https://data.baltimorecity.gov/datasets/bniajfi</a>::percent-of-family-households-living-below-the-poverty-line-community-statistical-area/explore]</p>
-<p>##2.4 Area Data set</p>
+</div>
+<div id="area-data-set" class="section level3">
+<h3>2.4 Area Data set</h3>
 <p>This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset’s observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:</p>
 <p>community = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p>
 <p>neigh = name of the neighbourhoods contained in the area.</p>
 <p>tracts = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (<a href="http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9" class="uri">http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9</a>).</p>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26" class="uri">https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26</a>]</p>
-<p>##2.5 Data Wrangling ###2.5.1 Data Wrangling: Area</p>
-<p>###2.5.2 Data Wrangling: Crime</p>
+</div>
+<div id="data-wrangling" class="section level3">
+<h3>2.5 Data Wrangling</h3>
+<div id="data-wrangling-area" class="section level4">
+<h4>2.5.1 Data Wrangling: Area</h4>
+</div>
+<div id="data-wrangling-crime" class="section level4">
+<h4>2.5.2 Data Wrangling: Crime</h4>
 <pre><code>#&gt;  [1] &quot;mount washington&quot;                
 #&gt;  [2] &quot;carroll - camden industrial area&quot;
 #&gt;  [3] &quot;patterson park neighborhood&quot;     
@@ -229,7 +244,7 @@ pre code {
 #&gt; [11] &quot;lower herring run park&quot;          
 #&gt; [12] &quot;mt pleasant park&quot;
 #&gt; &#39;data.frame&#39;:    349530 obs. of  25 variables:
-#&gt;  $ X              : num  1421661 1428630 1429982 1433589 1421304 ...
+#&gt;  $ ï..X           : num  1421661 1428630 1429982 1433589 1421304 ...
 #&gt;  $ Y              : num  593584 592267 593694 590797 591033 ...
 #&gt;  $ RowID          : int  1 2 3 4 5 6 7 8 9 10 ...
 #&gt;  $ CrimeDateTime  : chr  &quot;2021/09/24 08:00:00+00&quot; &quot;2021/09/23 02:0&quot;..
@@ -254,22 +269,14 @@ pre code {
 #&gt;  $ Neigh          : chr  &quot;Mount Vernon&quot; &quot;Butcher&#39;s Hill&quot; &quot;McElderr&quot;..
 #&gt;  $ Tracts         : chr  &quot;110100, 110200, 140100, 120500&quot; &quot;020200,&quot;..
 #&gt;  $ Link           : chr  &quot;http://bniajfi.org/community/Midtown/&quot; &quot;&quot;..</code></pre>
-<p>###2.5.3 Data Wrangling: Poverty</p>
-<p>###2.5.4 Data Wrangling: CCTV</p>
-<pre><code>#&gt; integer(0)
-#&gt; integer(0)
-#&gt;  [1] X                Y                OBJECTID        
-#&gt;  [4] CAM_NUM          NOTES            LOCATION        
-#&gt;  [7] PROJ             XCOORD           YCOORD          
-#&gt; [10] created_user     created_date     last_edited_user
-#&gt; [13] last_edited_date
-#&gt; &lt;0 rows&gt; (or 0-length row.names)
-#&gt;  [1] X                Y                OBJECTID        
-#&gt;  [4] CAM_NUM          NOTES            LOCATION        
-#&gt;  [7] PROJ             XCOORD           YCOORD          
-#&gt; [10] created_user     created_date     last_edited_user
-#&gt; [13] last_edited_date
-#&gt; &lt;0 rows&gt; (or 0-length row.names)</code></pre>
+</div>
+<div id="data-wrangling-poverty" class="section level4">
+<h4>2.5.3 Data Wrangling: Poverty</h4>
+</div>
+<div id="data-wrangling-cctv" class="section level4">
+<h4>2.5.4 Data Wrangling: CCTV</h4>
+<p>which(is.na(cctv_data<span class="math inline">\(X)) which(is.na(cctv_data\)</span>Y)) filter(cctv_data, X==&quot;“) filter(cctv_data, ==”&quot;)</p>
+<p>#I don’t know if it is the proper technique but by doing so I ensure that we have no NAs neihter empty values and so that our dataset is tidy</p>
 <ul>
 <li>Sources</li>
 <li>Description</li>
@@ -277,6 +284,8 @@ pre code {
 <li>Spotting mistakes and missing data (could be part of EDA too)</li>
 <li>Listing anomalies and outliers (could be part of EDA too)</li>
 </ul>
+</div>
+</div>
 </div>
 
 

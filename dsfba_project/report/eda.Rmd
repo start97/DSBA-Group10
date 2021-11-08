@@ -1,10 +1,10 @@
-# Exploratory data analysis
+# Exploratory data analysis {.tabset}
 
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
 
-##3.1 Calculation of the density of CCTV per community
+### 3.1 Calculation of the density of CCTV per community
 
 ```{r}
 
@@ -49,7 +49,7 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 
 ```
 
-###3.1.1 Mapping of CCTV density
+#### 3.1.1 Mapping of CCTV density
 
 ```{r}
 library(tmap)
@@ -62,7 +62,7 @@ CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCT
 
 ```
 
-##3.2 Calculation of the crime rate per community
+### 3.2 Calculation of the crime rate per community
 
 ```{r}
 CrimeRatePerArea <- crime_data_with_areas %>% 
@@ -74,7 +74,7 @@ CrimeRatePerArea <- rbind(CrimeRatePerArea,list("Unassigned -- Jail",0)) #We hav
 sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we expect
 ```
 
-###3.2.1 Mapping of crime rates
+#### 3.2.1 Mapping of crime rates
 
 ```{r}
 library(tmap)
@@ -87,7 +87,7 @@ Crime_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Cri
 
 ```
 
-###3.2.2 Creation of a distorted map
+#### 3.2.2 Creation of a distorted map
 
 ```{r}
 
@@ -95,7 +95,7 @@ Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+
 
 ```
 
-##3.3 Calculation of crime rates by type of crime
+### 3.3 Calculation of crime rates by type of crime
 
 ```{r}
 unique(crime_data_with_areas$Description)
@@ -136,7 +136,7 @@ MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0)
 
 ```
 
-###3.3.1 Mapping of felonies and Misdemeanors
+#### 3.3.1 Mapping of felonies and Misdemeanors
 ```{r}
 
 #Felony
@@ -157,7 +157,7 @@ Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea",
 
 ```
 
-##3.4 Calculation of crime evolution
+### 3.4 Calculation of crime evolution
 ```{r}
 
 Crime_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31"))

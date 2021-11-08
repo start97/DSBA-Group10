@@ -1,10 +1,10 @@
-# Analysis
+# Analysis {.tabset}
 
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
 
-##4.1 Crime VS CCTVs - Does the presence of CCTV deter crime?
+### 4.1 Crime VS CCTVs - Does the presence of CCTV deter crime?
 
 ```{r}
 
@@ -29,7 +29,7 @@ lines(range,estimation, col="blue")
 
 ```
 
-###4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
+#### 4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
 
 ```{r}
 
@@ -63,7 +63,7 @@ tmap_mode("plot") #We go back to classic plotting
 
 ```
 
-###4.1.2 Analysis of where crime took place: August 2021
+#### 4.1.2 Analysis of where crime took place: August 2021
 
 ```{r}
 
@@ -96,7 +96,7 @@ print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By 
 
 ```
 
-###4.1.3 Anomaly #1 : Prison
+#### 4.1.3 Anomaly #1 : Prison
 
 ```{r}
 tmap_mode("plot")
@@ -116,7 +116,7 @@ print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By ru
 
 ```
 
-##4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
+### 4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
 ```{r}
 
 #Felonies
@@ -153,7 +153,7 @@ lines(range6,estimation6, col="blue")
 
 ```
 
-##4.3 Comparison of CCTV density and wealth
+### 4.3 Comparison of CCTV density and wealth
 
 ```{r}
 
@@ -173,7 +173,7 @@ lines(range2,estimation2, col="blue")
 
 ```
 
-###4.3.1 Mapping of CCTVs and wealth
+#### 4.3.1 Mapping of CCTVs and wealth
 
 ```{r}
 
@@ -186,7 +186,7 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Pove
 
 ```
 
-##4.4 Comparison of crimes and wealth
+### 4.4 Comparison of crimes and wealth
 
 ```{r}
 
@@ -205,7 +205,7 @@ estimation3 <- x3*range3+y3
 lines(range3,estimation3, col="blue")
 ```
 
-##4.5 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
+### 4.5 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
 ```{r}
 
 plot(FelonyStats$FelonyRatePerArea,MisdemeanorStats$MisdemeanorRatePerArea,main="Felony VS Misdemeanor", xlab="Felony",ylab="Misdemeanor") #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
@@ -227,7 +227,7 @@ lines(range4,estimation4, col="blue")
 ```
 
 jgg
-##4.6
+### 4.6
 * Answers to the research questions
 * Different methods considered
 * Competing approaches

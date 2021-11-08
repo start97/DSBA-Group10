@@ -1,19 +1,19 @@
-# Data
+# Data {.tabset}
 
 ```{r, echo = FALSE, message = FALSE}
 source(here::here("scripts/setup.R"))
 ```
 
 
-##Data source
+### Data source
 
 We have four raw data sets. All data sets were retrieved on baltimore government open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
-##Raw Data sets
+### Raw Data sets
 
 <br>
 
-##2.1 Crime Data set
+### 2.1 Crime Data set
 
 This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. This dataset contains 350'294 observations.
 
@@ -53,7 +53,7 @@ crime_data <- read.csv(file = here::here("data/Baltimore_Part1_Crime_data.csv"))
 
 _Source of the data set:_ [https://data.baltimorecity.gov/datasets/part1-crime-data/explore]
 
-##2.2 CCTV Data set
+### 2.2 CCTV Data set
 
 This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
 
@@ -82,7 +82,7 @@ cctv_data <- read.csv(file = here::here("data/Baltimore_CCTV_Locations_Crime_Cam
 
 _Source of the data set:_ [https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore]
 
-##2.3 Poverty Data set
+### 2.3 Poverty Data set
 
 This dataset provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. 
 
@@ -103,7 +103,7 @@ poverty_data <- read.csv(file = here::here("data/Percent_of_Family_Households_Li
 
 _Source of the data set:_ [https://data.baltimorecity.gov/datasets/bniajfi::percent-of-family-households-living-below-the-poverty-line-community-statistical-area/explore]
 
-##2.4 Area Data set
+### 2.4 Area Data set
 
 This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
 
@@ -120,8 +120,8 @@ area_data <- read_csv(file = here::here("data/Community_Statistical_Areas__CSAs_
 
 _Source of the data set:_ [https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26]
 
-##2.5 Data Wrangling
-###2.5.1 Data Wrangling: Area
+### 2.5 Data Wrangling
+#### 2.5.1 Data Wrangling: Area
 ```{r}
 area_data2 <- separate_rows(area_data, Neigh, sep = ", ") #Creation of a new dataset with each neighbourhood being assigned to an area
 
@@ -129,7 +129,7 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 ```
 
-###2.5.2 Data Wrangling: Crime
+#### 2.5.2 Data Wrangling: Crime
 ```{r}
 crime_data <- mutate(crime_data,neigh=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
 
@@ -168,7 +168,7 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 
 ```
 
-###2.5.3 Data Wrangling: Poverty
+#### 2.5.3 Data Wrangling: Poverty
 ```{r}
 poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
 
@@ -176,7 +176,7 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 ```
 
-###2.5.4 Data Wrangling: CCTV
+#### 2.5.4 Data Wrangling: CCTV
 
 
 which(is.na(cctv_data$X))
