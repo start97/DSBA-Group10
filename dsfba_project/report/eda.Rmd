@@ -9,7 +9,7 @@ source(here::here("scripts/setup.R"))
 The original CCTV dataset which we observed had a slight challenge. Although it contained the neighborhood names were not matching the standard neighborhood names. Concludingly, to solve that we involved geospatial counting. 
 
 Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates in the datasets. Here we have several types of coordinates, and we use x and Y. Those coordinates files have an special object included called crs. Crs is basically the coordinate system which is used. 
-We continue by defining an object $crs.geo1$ as being the coordinate system which is being used for all our files. Next, we have the $proj4string$ function, to which we assign this crs.geo1 data.
+We continue by defining an object `crs.geo1` as being the coordinate system which is being used for all our files. Next, we have the `proj4string` function, to which we assign this crs.geo1 data.
 
 ```{r echo=TRUE}
 #read in data table
@@ -47,7 +47,7 @@ plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
 plot(balt_dat,pch=20, col="steelblue" , add=TRUE) #If we plot these two lines together, what we obtain is a map od baltimore, we the 56 community statistical areas and the CCTVs on top of the map.
 ```
 
-To illustrate these results verbally, we need R to count for us how many CCTV belongs to which area. Here, the function $over$ counts how many CCTVs are layed over a certain polygon frame. Next, we create a new object calles **counts**, make it into a dataframe (so that it is easier for us to work with it) and using the $sum(countsFreq)$ to ensure that we have 56 observations in total. From the results we see that we have 41 observations, so  there are only 41 out of 56 areas where there are some CCTV. 
+To illustrate these results verbally, we need R to count for us how many CCTV belongs to which area. Here, the function `over` counts how many CCTVs are layed over a certain polygon frame. Next, we create a new object called `counts`, make it into a dataframe (so that it is easier for us to work with it) and using the `sum(countsFreq)` to ensure that we have 56 observations in total. From the results we see that we have 41 observations, so  there are only 41 out of 56 areas where there are some CCTV. 
 
 ```{r echo=TRUE}
 #Perform the count
@@ -61,7 +61,7 @@ colnames(counts)[1] <- "Community"
 sum(counts$Freq) #We see that we have 836 observation in total, this is a good sign as our initial CCTV data set contained 836 obesrvations
 ```
 
-To make that workable, we need to create a new CCTV file, from which we just add 0 to each N.A.-location. Lastly, we create a new column with the $mutate$-function to calculate the CCTV-density which shows the amount of CCTV per area divided by the total amount of CCTV. 
+To make that workable, we need to create a new CCTV file, from which we just add 0 to each N.A.-location. Lastly, we create a new column with the `mutate` function to calculate the CCTV-density which shows the amount of CCTV per area divided by the total amount of CCTV. 
 
 ```{r echo=TRUE}
 CCTV_per_area <- area_data[2] %>% 
@@ -81,7 +81,7 @@ library(tmap)
 baltimore$community %in% CCTV_per_area$Community
 ```
 
-Next, we perform a $left join$ between the Baltimore dataset and the CCTV per are. To hedge against the different writing styles (one time it is written with a capital letter and one time with a small letter), we use the vector in the end. Finally, we create the map with the $tmap package$. The $tmap$ package works as the $ggplot2$ package: First, we need to define an element, it always starts with the tm_shape argument, and then you can add with the plus operator the as many argument as you wish. We used the Baltimore-datasets, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
+Next, we perform a `left_join` between the Baltimore dataset and the CCTV per are. To hedge against the different writing styles (one time it is written with a capital letter and one time with a small letter), we use the vector in the end. Finally, we create the map with the `tmap` package. The `tmap` package somehoe works as the `ggplot2` package: First, we need to define an element, it always starts with the tm_shape argument, and then you can add with the plus operator the as many argument as you wish. We used the Baltimore-datasets, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
 
 ```{r}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
@@ -123,7 +123,7 @@ Crime_map
 
 #### 3.2.2 Creation of a distorted map
 
-Again, we use the $tm - package$ together with the $carogram - ncont$ function which basically distort the map to show our results. Concretely, we want to show that the crime rate is higher in the city center. This can be shown quite neatly graphically. 
+Again, we use the `tmap` package together with the `cartogram` `ncont` function which basically distort the map to show our results. Concretely, we want to show that the crime rate is higher in the city center. This can be shown quite neatly graphically. 
 
 ```{r}
 

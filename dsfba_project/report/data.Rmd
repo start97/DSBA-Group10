@@ -134,7 +134,7 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 #### 2.5.2 Data Wrangling: Crime
 
-Since in the crime dataset the neighborhood names are written in lower case letters we again create a colums with lower case letters to join the two datasets. Next, we use the $anti_join function$ to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. These include using the names function:
+Since in the crime dataset the neighborhood names are written in lower case letters we again create a colums with lower case letters to join the two datasets. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. These include using the names function:
 
   + mount washington ->  Mt. Washington 
   + carroll - camden industrial area -> Caroll-Camden Industrial Area 
@@ -177,9 +177,9 @@ crime_data["neigh"][crime_data["neigh"]=="mt pleasant park"] <- "mt. pleasant pa
 
 ```
   
-We get rid of the 764 remaining observations which had no information about neighbourhood. Finally, we use the $semi join function$ to create the final datasets which in total is basically the same dataset as the original one minus the 764 observations. 
+We get rid of the 764 remaining observations which had no information about neighbourhood. Finally, we use the `semi join` function to create the final datasets which in total is basically the same dataset as the original one minus the 764 observations. 
 
-To see the structure of the dataset we use the $str function$ and filter for the dates from 2000 (since the Baltimore CCTV program started in the year 2000).
+To see the structure of the dataset we use the `str` function and filter for the dates from 2000 (since the Baltimore CCTV program started in the year 2000).
 
 ```{r}
 

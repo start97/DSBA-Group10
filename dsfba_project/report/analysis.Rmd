@@ -32,7 +32,7 @@ lines(range,estimation, col="blue")
 
 In order to confirm that perform a regression with the lm-function and call for a summary of the function. Next, the x and y are computed, which are basically the coefficients. Next, we use a trick by creating a range from 0 to 4.5 (because the plot goes ~ from zero to 4.5.) and create a vector. This vector is called estimation. This vector is basically the linear function. So this is the coefficient multiplied by each value in the range plus the intercept. As a result we get the fitted value. The fitted value contains the estimation. After taht we plot the estimation.
 
-In the summary of the regression we see that R^2 (which is the estimator of the goodness of the fit) is pretty poor but still there seems to be a tendency. 
+In the summary of the regression we see that $R^2$ (which is the estimator of the goodness of the fit) is pretty poor but still there seems to be a tendency. 
 
 
 
@@ -51,9 +51,9 @@ Felony_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", 
 Misdemeanor_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
 
 
-baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
-
 tmap_mode("view") #Use this command to have interactive maps
+
+baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
 
 tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
 ```
@@ -94,7 +94,7 @@ August21Crimes_VS_CCTV
 
 ```
 
-Next, we decided to calculate the crimerate for AUgust per area to see where crime was highest. The results show that they are in midtown (are midtown). 
+Next, we decided to calculate the crime rate for August per area to see where crime was highest. The results show that they are in midtown (are midtown). 
 So following this we will take a closer look at the Midtown area.
 
 ```{r}
@@ -105,7 +105,7 @@ CrimeRatePerAreaAugust2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >=
 sum(CrimeRatePerAreaAugust2021$CrimeRatePerArea) #We obtain 100, which is what we expect
 ```
 
-By using the $st-bbox$ function with their values, which represent the most extreme values on the x-axis and y-axis we can continue with the analysis. So those four values are some geographical values based on coordinate system until we used now (Pseudomercator). And this function assigned that rectangle to be shape file in itself. Now, when we create the midtown map, we can use it as an argument in the tm_shape. THe output is a zoom and the bigger map with a rectangle over the area which we are looking at and analysing. 
+By using the `st-bbox` function with their values, which represent the most extreme values on the x-axis and y-axis we can continue with the analysis. So those four values are some geographical values based on coordinate system until we used now (Pseudomercator). And this function assigned that rectangle to be shape file in itself. Now, when we create the midtown map, we can use it as an argument in the tm_shape. THe output is a zoom and the bigger map with a rectangle over the area which we are looking at and analysing. 
 
 ```{r}
 Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
@@ -146,7 +146,7 @@ print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By ru
 
 ### 4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
 
-This is exactly the same what we have done for 4.1.. What we want to see whether there is a difference in terms of correlation between felony & misdemeanor and crime. The results shows a weak r^2, and the answer get even worse in terms of correlation graphically. Here, we do not see bigger impact on crime types of CCTV installation. 
+This is exactly the same what we have done for 4.1.. What we want to see whether there is a difference in terms of correlation between felony & misdemeanor and crime. The results shows a weak $R^2$, and the answer get even worse in terms of correlation graphically. Here, we do not see bigger impact on crime types of CCTV installation. 
 
 ```{r}
 
@@ -186,7 +186,7 @@ lines(range6,estimation6, col="blue")
 
 ### 4.3 Comparison of CCTV density and wealth
 
-We went to see whether there is a correlation between CCTV density and wealth. So, similarily, we perform a regression. The results here are not so conclusive, since we have a poor adjusted r^2 and a poor r^2. Visually we can see intersting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only dependeny here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
+We went to see whether there is a correlation between CCTV density and wealth. So, similarily, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. Visually we can see intersting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only dependeny here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
 
 ```{r}
 
@@ -266,7 +266,7 @@ lines(range4,estimation4, col="blue")
 
 ```
 
-jgg
+
 ### 4.6
 * Answers to the research questions
 * Different methods considered
