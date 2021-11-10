@@ -117,6 +117,8 @@ baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community'
 
 Crime_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
 
+Crime_map
+
 ```
 
 #### 3.2.2 Creation of a distorted map
@@ -126,6 +128,8 @@ Again, we use the $tm - package$ together with the $carogram - ncont$ function w
 ```{r}
 
 Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.07) #This map distorts the size of each area depending on their respective crime rates. It is interesting as it enables one to see that higher crime rates tends to be concentrated in the city center.
+
+Distorted_Crime_map
 
 ```
 
