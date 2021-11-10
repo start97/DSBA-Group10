@@ -2,7 +2,7 @@
 
 ### Overview and motivation
 
-```{r, echo = FALSE, message = FALSE}
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
 source(here::here("scripts/setup.R"))
 ```
 
