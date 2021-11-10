@@ -10,7 +10,6 @@ packages <- c(
   "knitr", "kableExtra", "bookdown", "rmarkdown" # for the report
 )
 purrr::walk(packages, library, character.only = TRUE)
-
 ######################################################
 ## The following sets a few option for nice reports ##
 ######################################################
@@ -40,6 +39,7 @@ opts_chunk$set(
   fig.asp = 0.618,
   fig.show = "hold",
   message = FALSE,
-  echo = FALSE
+  echo = FALSE,
+  warning = FALSE
 )
 
