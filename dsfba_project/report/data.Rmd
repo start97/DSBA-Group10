@@ -141,7 +141,7 @@ Since in the crime dataset the neighborhood names are written in lower case lett
   + patterson park neighborhood -> Patterson Park 
   + glenham-belhar -> Glenham-Belford 
   + new southwest/mount clare -> Hollins Market 
-  + mount winans = Mt.Winans 
+  + mount winans -> Mt.Winans 
   + rosemont homeowners/tenants -> Rosemont 
   + broening manor -> O'Donnell Heights 
   + boyd-booth -> Booth-boyd 
@@ -173,7 +173,7 @@ crime_data["neigh"][crime_data["neigh"]=="boyd-booth"] <- "booth-boyd"
 crime_data["neigh"][crime_data["neigh"]=="lower herring run park"] <- "herring run park"
 crime_data["neigh"][crime_data["neigh"]=="mt pleasant park"] <- "mt. pleasant park"
 
-#mount washington = Mt. Washington / carroll - camden industrial area = Caroll-Camden Industrial Area / patterson park neighborhood = Patterson Park / glenham-belhar = Glenham-Belford / new southwest/mount clare = Hollins Market / mount winans = Mt. Winans / rosemont homeowners/tenants = Rosemont / broening manor = O'Donnell Heights / boyd-booth = Booth-boyd / lower herring run park = Herring Run Park / mt pleasant park = Mt. Pleasant Park / We got rid of the 764 remaining observations which had no information about neighbourhood
+#We got rid of the 764 remaining observations which had no information about neighbourhood
 
 ```
   
