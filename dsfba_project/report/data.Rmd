@@ -191,7 +191,7 @@ str(crime_data_with_areas) # We see that the crime CrimeDateTime column is not a
 
 crime_data_with_areas$CrimeDateTime <-  as.Date(crime_data_with_areas$CrimeDateTime)
 
-crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2000-01-01")) #We had 24 observations that dates back to before the year 2000 and 24 observation with no date. We only select crime committed after 2000 as the CCTV programm in baltimore started in 2000.
+crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2000-01-01")) #We had 24 observations that dates back to before the year 2000 and 24 observation with no date. We only select crime committed after 2000 as the CCTV program in baltimore started in 2000.
 
 ```
 
@@ -210,13 +210,16 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 Here we need to make sure to not have any missing values in the CCTV dataset. 
 
+```{r}
+
 which(is.na(cctv_data$X))
 which(is.na(cctv_data$Y))
 filter(cctv_data, X=="")
-filter(cctv_data, =="") 
+filter(cctv_data, Y=="") 
 
-#I don't know if it is the proper technique but by doing so I ensure that we have no NAs neihter empty values and so that our dataset is tidy
+#We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
 
+```
 
 
 * Sources
