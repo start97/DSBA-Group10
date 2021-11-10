@@ -40,6 +40,7 @@ opts_chunk$set(
   fig.show = "hold",
   message = FALSE,
   echo = TRUE,
-  warning = FALSE
+  warning = FALSE,
+  results = "hide"
 )
 
