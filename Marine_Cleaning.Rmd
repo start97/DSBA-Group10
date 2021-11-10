@@ -7,6 +7,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+#Research question : n°4 : Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (Does the government respect privacy issues depending on your income level?).
+
+#Steps : Create clusters with concentration of cctvs in each of the 55 area / Compare to poverty rate in each of the 55 areas.
+
+
 #Importation des fichiers
 
 getwd()
@@ -32,12 +37,12 @@ library(rgdal)
 library(ggplot2)
 
 
-#Faire un tableau qui calcule le nombre de cameras selon les districts 
+#Faire un tableau qui calcule le nombre de cameras selon les districts (fait par Augustin)
 
 #Calculation of the density of CCTV per community
 
 #read in data table
-balt_dat <-  fread("Baltimore_CCTV_Locations_Crime_Cameras.csv")
+balt_dat <- fread("Baltimore_CCTV_Locations_Crime_Cameras.csv")
 
 #convert to data table
 balt_dat <- as.data.table(balt_dat)
@@ -68,7 +73,7 @@ counts <- as.data.frame(counts)
 colnames(counts)[1] <- "Community"
 sum(counts$Freq)
 
-#Calculate the density for each community
+#Calculate the density for each community 
 
 CCTV_per_area <- area_data[2] %>% 
   left_join(counts,by="Community") #One must add the communities where there are no counts i.e no CCTV
@@ -80,6 +85,29 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 View(CCTV_per_area)
 
 
-# Créer un tableau comparatif avec : une colomne pour le nom des areas, une colonme pour le nbr de cameras, une colomne pour le taux de 'pauvreté' dans l'area. 
+#Comparison of CCTV density vs wealth
+
+```{r}
+
+poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
+
+plot(CCTV_per_area$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
+
+regression2 <- lm(poverty_data$hhpov19~CCTV_per_area$density_perc)
+summary(regression2)
+
+y2<-regression2[["coefficients"]][["(Intercept)"]]
+x2<-regression2[["coefficients"]][["CCTV_per_area$density_perc"]]
+
+range2 <- seq(from=-5, to=12, by=0.2)
+
+estimation2 <- x2*range2+y2
+
+lines(range2,estimation2, col="blue")
+```
+
+
+# Créer un tableau comparatif avec : une colonne pour le nom des areas, une colonne pour le nbr de cameras, une colonne pour le taux de 'pauvreté' dans l'area. 
+
 
 
