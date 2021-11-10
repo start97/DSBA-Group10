@@ -9,7 +9,6 @@ packages <- c(
   "ggrepel", "gghighlight", "patchwork", "maps", "scales","sp","rgdal","cartogram","tmap","grid","sf", # for plotting
   "knitr", "kableExtra", "bookdown", "rmarkdown" # for the report
 )
-purrr::walk(packages, install.packages, character.only = TRUE)
 purrr::walk(packages, library, character.only = TRUE)
 ######################################################
 ## The following sets a few option for nice reports ##
