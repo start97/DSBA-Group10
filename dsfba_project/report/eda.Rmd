@@ -202,6 +202,8 @@ baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'C
 
 Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
 
+Felony_map
+
 #Misdemeanor
 
 baltimore$community %in% MisdemeanorStats$Community
@@ -209,6 +211,8 @@ baltimore$community %in% MisdemeanorStats$Community
 baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
 
 Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+Misdemeanor_map
 
 ```
 

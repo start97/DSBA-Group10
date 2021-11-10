@@ -42,28 +42,21 @@ In the summary of the regression we see that R^2 (which is the estimator of the 
 
 In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the tmap-package. However, this time we have two different shapes in tm_shape(Baltimore) and tm_shape(balt_dat) which adds the maps togehter (as in ggplot) and over each other. If we take a look at this data we see that it gives an intuition about the data. It seems as if where crime rates are the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western CCTVs). There seems to be a correlation between the dark red areas and the CCTV density per area.   
 
-```{r}
+```{r results='markup'}
 
 Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
 
-
-tmap_mode("view") #Use this command to have interactive maps
-baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
-Crime_and_CCTV_map
-
 Felony_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %", style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
-
-
-tmap_mode("view") #Use this command to have interactive maps
-Felony_and_CCTV_map
 
 Misdemeanor_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
 
 
+baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
+
 tmap_mode("view") #Use this command to have interactive maps
-Misdemeanor_and_CCTV_map
 
 tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
+
 ```
 Here we sorted the crime rate per area to find out that the range was. Either using breaks or the automatic style with the quantiles. 
 
@@ -81,7 +74,7 @@ tmap_mode("plot") #We go back to classic plotting
 
 We are trying to see whether the presence of CCTV can deter crime. Here we first try to answer the question where the crime took place (especially in August 2021). We choose AUgust 2021 because it is the latest full month which we have in our dataset. Taking the latest timepoints from the data assures us that most of the CCTVs presented in the dataset were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform).Again, mapping with tm_shape to get the results. The output shows where crime takes place compared to the CCTV location. 
 
-```{r}
+```{r results='markup'}
 
 crime_spatial <- as.data.table(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")))
 coordinates(crime_spatial) <-  c("Longitude","Latitude")
@@ -91,6 +84,10 @@ crime_spatial <- spTransform(crime_spatial,crs.geo1)
 August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crimes committed in August 2021 VS CCTV location",frame.lwd = 5)+ tm_shape(balt_dat) + tm_dots(col="black")+tm_shape(crime_spatial)+tm_dots(col="red",alpha=0.5)
 
 #It could be interesting to see where crime took place relative to CCTV locations in the area with the highest crime rate in August 2021
+
+tmap_mode("view") #Use this command to have interactive maps
+August21Crimes_VS_CCTV
+
 ```
 
 Next, we decided to calculate the crimerate for AUgust per area to see where crime was highest. The results show that they are in midtown (are midtown). 
@@ -209,7 +206,7 @@ lines(range2,estimation2, col="blue")
 
 We see a tendency. There seems to be more crimes in poorer areas.
 
-```{r}
+```{r results='markup'}
 
 baltimore$community %in% poverty_data$CSA2010 #We see that we have a perfect match
 
@@ -217,6 +214,8 @@ baltimore@data <- left_join(baltimore@data, poverty_data, by = c('community' = '
 
 Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Poverty rate per Area",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black") #This visualization is particularly interesting. Indeed, while the regression between crime rates and CCTV density was not very conclusive (we obtained a very poor R squared suggesting a poor correlation between poverty and CCTV density), this map might actually explain why we obtained such result and give us interesting hints. Indeed, we see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the centre of Baltimore and that the poverty rates is very low in these two regions. This makes sense as centers of city are typically not the poorest areas. Yet, what we also see is that many of the least poor region in the "suburbs" often have very low CCTV densities. This might confirm the idea that there tends to be less CCTVs in richer neighbourhoof.
 
+tmap_mode("view")
+Wealth_and_CCTV_map
 
 ```
 
