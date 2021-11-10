@@ -100,7 +100,7 @@ poverty_data <- read.csv(file = here::here("data/Percent_of_Family_Households_Li
 
 ```
 
-_Source of the data set:_ [https://data.baltimorecity.gov/datasets/bniajfi::percent-of-family-households-living-below-the-poverty-line-community-statistical-area/explore]
+_Source of the data set:_ [https://arcg.is/1qOrnH]
 
 ### 2.4 Area Data set
 
@@ -110,7 +110,7 @@ This dataset provides information about the Community Statistical Area geographi
 
   + **neigh** = name of the neighbourhoods contained in the area. 
 
-  + **tracts** = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available            online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pm       d_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
+  + **tracts** = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available            online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
 
 ```{r echo=TRUE}
 area_data <- read_csv(file = here::here("data/Community_Statistical_Areas__CSAs___Reference_Boundaries.csv"))
