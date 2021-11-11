@@ -8,7 +8,7 @@ source(here::here("scripts/setup.R"))
 
 First, we create a CCTV_VS_crimes dataset (which basically is a left joint). Next, we are able to plot visually compare the crime rate per area with the density percentage per area. Here we see that there seems to be a trend. 
 
-```{r echo=TRUE}
+```{r echo=FALSE, results = 'markup'}
 
 CCTV_VS_crimes <- CCTV_per_area %>% 
   left_join(CrimeRatePerArea,by="Community")
@@ -19,6 +19,7 @@ plot(CCTV_VS_crimes$CrimeRatePerArea,CCTV_VS_crimes$density_perc, main="Crime Ra
 
 regression <- lm(CCTV_VS_crimes$density_perc~CCTV_VS_crimes$CrimeRatePerArea)
 summary(regression)
+
 
 y<-regression[["coefficients"]][["(Intercept)"]]
 x<-regression[["coefficients"]][["CCTV_VS_crimes$CrimeRatePerArea"]]
@@ -147,7 +148,7 @@ print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By ru
 
 This is exactly the same what we have done for 4.1.. What we want to see whether there is a difference in terms of correlation between felony & misdemeanor and crime. The results shows a weak $R^2$, and the answer get even worse in terms of correlation graphically. Here, we do not see bigger impact on crime types of CCTV installation. 
 
-```{r}
+```{r echo=FALSE, results = 'markup'}
 
 #Felonies
 
@@ -187,7 +188,7 @@ lines(range6,estimation6, col="blue")
 
 We went to see whether there is a correlation between CCTV density and wealth. So, similarily, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. Visually we can see intersting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only dependeny here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
 
-```{r}
+```{r echo=FALSE, results = 'markup'}
 
 plot(CCTV_per_area$density_perc,poverty_data$hhpov19, main="CCTV density VS poverty rate",xlab="CCTV Density",ylab="Poverty rate")
 
@@ -209,7 +210,7 @@ lines(range2,estimation2, col="blue")
 
 We see a tendency. There seems to be more crimes in poorer areas.
 
-```{r results='markup'}
+```{r echo=FALSE, results = 'markup'}
 
 baltimore$community %in% poverty_data$CSA2010 #We see that we have a perfect match
 
@@ -226,7 +227,7 @@ Wealth_and_CCTV_map
 
 The idea is to find areas which were impacted by a certain type of crime. We see that there was a mainly equal distribution between felony and misdemeanor. We seem to have a strong tendency in downtown - which is at the same time one of the richest areas in Baltimore. Here, we have not enough information to draw conclusions but it could be that there are less felony crimes in this area. 
 
-```{r}
+```{r echo=FALSE, results = 'markup'}
 
 plot(CrimeRatePerArea$CrimeRatePerArea,poverty_data$hhpov19, main="Crime Rate VS poverty rate",xlab="Crime rate",ylab="Poverty rate")
 
@@ -245,7 +246,7 @@ lines(range3,estimation3, col="blue")
 
 ### 4.5 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
 
-```{r}
+```{r echo=FALSE, results = 'markup'}
 
 plot(FelonyStats$FelonyRatePerArea,MisdemeanorStats$MisdemeanorRatePerArea,main="Felony VS Misdemeanor", xlab="Felony",ylab="Misdemeanor") #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
 
