@@ -252,7 +252,7 @@ Crime_Monthly_evolution_map
 
 ```
 
-Next, we calculate the crime rates for each year with the piping operator, grouping by community and summarize the rates. In the end we create the crime evolution datasets which is a combination of all the data. 
+Next, we calculate the crime rates for each year with the piping operator, grouping by community and summarize the rates. In the end we create the crime evolution data sets which is a combination of all the data. 
 
 ```{r echo=TRUE}
 #_____ Calculations of the crime rates
