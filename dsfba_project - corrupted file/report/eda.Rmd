@@ -6,9 +6,10 @@ source(here::here("scripts/setup.R"))
 
 ### 3.1 Calculation of the density of CCTV per community
 
-The original CCTV data set which we observed had a slight challenge. Although it contained some neighborhood names, most of them were not matching the "standard neighborhood" names. There, to solve that we involved geospatial counting. 
+The original CCTV dataset which we observed had a slight challenge. Although it contained the neighborhood names were not matching the standard neighborhood names. Concludingly, to solve that we involved geospatial counting. 
 
-Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates of the newly created spatial file. Here we have several types of coordinates, we use X and Y which use the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Spatial files must have coordinate systems assigned to them, in the case at hand, we will work with the above mentioned EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system for all the spatial files that we are going to use, therefore, to ensure consistency, we create a crs object called `crs.geo1` that is going to be assigned to all the spatial files we will use. In order to assign a known crs to spatial data, we use the `proj4string` function, to which we assign `crs.geo1`.
+Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates in the datasets. Here we have several types of coordinates, and we use x and Y. Those coordinates files have an special object included called crs. Crs is basically the coordinate system which is used. 
+We continue by defining an object $crs.geo1$ as being the coordinate system which is being used for all our files. Next, we have the $proj4string$ function, to which we assign this crs.geo1 data.
 
 ```{r echo=TRUE}
 #read in data table
@@ -30,7 +31,7 @@ Then we plot to see the output (as cloud of points which represent all the CCTVs
 plot(balt_dat, pch = 20, col = "steelblue") #We can use the plot function to quickly plot the SpatialPointDataFrame that we created. We see a bunch of points which represent the CCTV location in Baltimore.
 ```
 
-Next, we have to work with the shapefile which is another special type of file. Basically it is a set of polygons which represent different areas of the city Baltimore. We downloaded this file on the Open Baltimore Portal. We read it in and assign this file again to our crs.geo1 coordinate system. In this way we have assured that our files have the same coordinate system.
+Next, we have to work with the shapefile which is another special file. Basically it is a set of polygons which represent different areas of the city Baltimore. We downloaded this file on the Open Baltimore Portal, read it in and assign this file again to our crs.geo1 coordinate system. In this way we have assured that our files have the same coordinate system.
 
 ```{r echo=TRUE}
 #read in shapefile of baltimore
@@ -38,15 +39,15 @@ baltimore <-  readOGR(dsn = here::here("data/Community_Statistical_Area"), layer
 proj4string(baltimore) <- crs.geo1
 ```
 
-We can now plot these two spatial files together to see the spread of CCTVs over the 56 community statistical areas.
+Again we plot the results. 
 
 ```{r echo=TRUE}
 #plot
 plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
-plot(balt_dat,pch=20, col="steelblue" , add=TRUE) #If we plot these two lines together, what we obtain is a map of baltimore, we have the 56 community statistical areas and the CCTVs on top of the map.
+plot(balt_dat,pch=20, col="steelblue" , add=TRUE) #If we plot these two lines together, what we obtain is a map od baltimore, we the 56 community statistical areas and the CCTVs on top of the map.
 ```
 
-To illustrate these results numerically, we need R to count for us how many CCTV belongs to which area. Here, the function `over` counts how many CCTVs are layed over a certain polygon frame. Next, we create a new object called `counts` and  make it into a data frame (so that it is easier for us to work with it). We use  `sum` to ensure that we well and truly have 836 observations which were counted. This is the case so we are happy. Still we notice that we only have 41 rows, meaning there here are only 41 out of 56 areas where there are some CCTV. 
+To illustrate these results verbally, we need R to count for us how many CCTV belongs to which area. Here, the function $over$ counts how many CCTVs are layed over a certain polygon frame. Next, we create a new object calles **counts**, make it into a dataframe (so that it is easier for us to work with it) and using the $sum(countsFreq)$ to ensure that we have 56 observations in total. From the results we see that we have 41 observations, so  there are only 41 out of 56 areas where there are some CCTV. 
 
 ```{r echo=TRUE}
 #Perform the count
@@ -60,7 +61,7 @@ colnames(counts)[1] <- "Community"
 sum(counts$Freq) #We see that we have 836 observation in total, this is a good sign as our initial CCTV data set contained 836 obesrvations
 ```
 
-To make that workable, we need to create a new CCTV file, from which we just add 0 to each N.A.-location. Lastly, we create a new column with the `mutate` function to calculate the CCTV-density which shows the amount of CCTV per area divided by the total amount of CCTV. 
+To make that workable, we need to create a new CCTV file, from which we just add 0 to each N.A.-location. Lastly, we create a new column with the $mutate$-function to calculate the CCTV-density which shows the amount of CCTV per area divided by the total amount of CCTV. 
 
 ```{r echo=TRUE}
 CCTV_per_area <- area_data[2] %>% 
@@ -73,27 +74,25 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 
 #### 3.1.1 Mapping of CCTV density
 
-We now want to mape CCTV density on the Baltimore map. We first have to use the piping operator to ensure that the community that we have in the Baltimore data set are the same as the one we are having in the CCTV per are data set. As this only returns true values that means that it works and is good for further analysis. 
+Here we use the piping operator to ensure that the community that we have in the Baltimore dataset are the same as the one we are having in the CCTV per are dataset. As this only returns true values that means that it works and is good for further analysis. 
 
 ```{r}
 library(tmap)
 baltimore$community %in% CCTV_per_area$Community
 ```
 
-Next, we perform a `left_join` between the Baltimore shape file and the CCTV per area data set. To hedge against the different writing styles (one time it is written with a capital letter and one time with a small letter), we use the vector in the end. Finally, we create the map with the `tmap` package. The `tmap` package somehow works as the `ggplot2` package: First, we need to define an element, it always starts with the `tm_shape` argument, and then you can add with the plus operator  as many arguments as you wish. We used the Baltimore shape file, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
+Next, we perform a $left join$ between the Baltimore dataset and the CCTV per are. To hedge against the different writing styles (one time it is written with a capital letter and one time with a small letter), we use the vector in the end. Finally, we create the map with the $tmap package$. The $tmap$ package works as the $ggplot2$ package: First, we need to define an element, it always starts with the tm_shape argument, and then you can add with the plus operator the as many argument as you wish. We used the Baltimore-datasets, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
 
-```{r results='markup'}
+```{r}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
 CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density per Area in %", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
 
-tmap_mode("plot")
-CCTV_dens_map
 ```
 
 ### 3.2 Calculation of the crime rate per community
 
-What we create is the `CrimeRatePerArea`. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime rate per area for each area. Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeRatePerArea column to see whether it equals to 100. This is the case. We can therefore go further confidently.
+What we create is the crime_rate_per_area. To achieve that we grouo and summarize the crime data per community which enables us to compute the crime rate per area for each area. Again, we added one more row in the calculations because we have no values for the prison. Again, we ensured us by adding up everything to that it equates 100, which seems to help us go further confidently. 
 
 ```{r}
 CrimeRatePerArea <- crime_data_with_areas %>% 
@@ -107,7 +106,7 @@ sum(CrimeRatePerArea$CrimeRatePerArea) #The total sum is 100, which is what we e
 
 #### 3.2.1 Mapping of crime rates
 
-We want to map  crimes rates per community. The methodology is the same as we did for CCTV density. This time, we use the "quantile" method to create category breaks.
+Again, we map the crimes similarily to the section of mapping the CCTVs.
 
 ```{r echo=TRUE}
 library(tmap)
@@ -118,20 +117,16 @@ baltimore@data <- left_join(baltimore@data, CrimeRatePerArea, by = c('community'
 
 Crime_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
 
-tmap_mode("plot")
-Crime_map
 ```
 
 #### 3.2.2 Creation of a distorted map
 
-To observe crime rates reparatiton in Baltimore visually, we decided to use a distorted map. Again, we use the `tmap` package together with the `cartogram_ncont` function which basically distort the map based on intensity of crime rates in each community. Concretely, we want to show that the crime rate is higher in the city center, comapared to the suburban areas. This can be shown quite neatly graphically. 
+Again, we use the $tm - package$ together with the $carogram - ncont$ function which basically distort the map to show our results. Concretely, we want to show that the crime rate is higher in the city center. This can be shown quite neatly graphically. 
 
 ```{r}
 
 Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimeRatePerArea"))+tm_fill(col = "CrimeRatePerArea", title ="Crime rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.07) #This map distorts the size of each area depending on their respective crime rates. It is interesting as it enables one to see that higher crime rates tends to be concentrated in the city center.
 
-tmap_mode("plot")
-Distorted_Crime_map
 ```
 
 ### 3.3 Calculation of crime rates by type of crime
@@ -203,8 +198,6 @@ baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'C
 
 Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
 
-Felony_map
-
 #Misdemeanor
 
 baltimore$community %in% MisdemeanorStats$Community
@@ -212,8 +205,6 @@ baltimore$community %in% MisdemeanorStats$Community
 baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
 
 Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
-
-Misdemeanor_map
 
 ```
 
