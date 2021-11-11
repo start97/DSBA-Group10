@@ -74,8 +74,8 @@ tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
 ```
 
-Next, we decided to calculate the crime rate for August per area to see where crime was highest. The results show that they are in Midtown. 
-So following this we will take a closer look at the Midtown area.
+To further prove that point we decided to focus on one specific area. We artbitrarily decided to focus on the area which had the highest crime incidence in August. Thus, we needed to calculate the crime rate for August per area to see where crime was highest. The results show that they are in Midtown. 
+So following this we take a closer look at the Midtown area.
 
 ```{r}
 CrimeRatePerAreaAugust2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")) %>% 
@@ -85,7 +85,8 @@ CrimeRatePerAreaAugust2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >=
 sum(CrimeRatePerAreaAugust2021$CrimeRatePerArea) #We obtain 100, which is what we expect
 ```
 
-By using the `st-bbox` function with their values, which represent the most extreme values on the x-axis and y-axis we can continue with the analysis. So those four values are some geographical values based on coordinate system until we used now (Pseudomercator). And this function assigned that rectangle to be shape file in itself. Now, when we create the midtown map, we can use it as an argument in the tm_shape. The output is a zoom and the bigger map with a rectangle over the area which we are looking at and analysing. 
+
+In order to create a "sub-map", we create a smaller area using the `st-bbox` function. The values indicated in the function represent the most extreme values on the x-axis and y-axis of a map using the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Then, using `tm_shape` with the new spatial file called `Midtown_are`as argument, we create a map in the same way as we have done before. As we want to be able to locate this smaller area in the picture map of baltimore, we must also create a Baltimore map with a rectangle representing the newly created "sub-area". In order to combine these two maps together, we run the two last lines together and use the `viewport` function. The output is a zoom on the desired area combined with the bigger map having a rectangle over the area which we are looking at and analyzing. In Midtown, we quite clearly see that some crimes are committed right next to some CCTVs.
 
 ```{r}
 Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
@@ -103,7 +104,7 @@ print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By 
 
 #### 4.1.3 Anomaly #1 : Prison
 
-Similar to what we have done before, we first define of what the area of the prison is. It is interesting to analyse the prison and its sourrounding area, since we have many CCTVs around it but basically no crime around it (so it represents an outlier). 
+At the moment, we did not have enough time to focus on all the elements that seems to be outliers. Still, we had time to focus on Baltimore's prison, which seems to be interesting. The methodology to create this map is the same as described above. It is interesting to analyse the prison and its surrounding area, since we have many CCTVs around it (which intuitively make sense), high crime rates around (as in most central areas) but basically no crime inside it as we have no data about it.
 
 ```{r}
 tmap_mode("plot")
@@ -124,7 +125,7 @@ print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By ru
 
 ### 4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
 
-This is exactly the same what we have done for 4.1.. What we want to see whether there is a difference in terms of correlation between felony & misdemeanor and crime. The results shows a weak $R^2$, and the answer get even worse in terms of correlation graphically. Here, we do not see bigger impact on crime types of CCTV installation. 
+The logic here is the same as in section 4.1, except that here,we want to see whether the presence of CCTV can deter a certain type of crime. The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors and felonies. It therefore does not seem like the presence of CCTV has a particularly strong impact on a certain type of crime. 
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -163,7 +164,7 @@ lines(range6,estimation6, col="blue")
 
 ### 4.3 Comparison of CCTV density and wealth
 
-We went to see whether there is a correlation between CCTV density and wealth. So, similarily, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. Visually we can see intersting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only dependeny here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
+We went to see whether there is a correlation between CCTV density and wealth. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. Still, on the map we can see interesting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only influent factor here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -200,7 +201,7 @@ Wealth_and_CCTV_map
 
 ### 4.4 Comparison of crimes and wealth
 
-The idea is to find areas which were impacted by a certain type of crime. We see that there was a mainly equal distribution between felony and misdemeanor. We seem to have a strong tendency in downtown - which is at the same time one of the richest areas in Baltimore. Here, we have not enough information to draw conclusions but it could be that there are less felony crimes in this area. 
+We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -220,6 +221,8 @@ lines(range3,estimation3, col="blue")
 ```
 
 ### 4.5 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
+
+It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor rate is much larger than the felony rate. We don't whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore. This might **suggest** the idea that richer areas are more impacted by less severe crimes.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -243,6 +246,7 @@ lines(range4,estimation4, col="blue")
 ### 4.6 Next steps after feedback on project update
 
 + Adjust accroding to the feedback 
++ Create new models (potentially multiple linear regression ?)
 + Finalise interpetations and answer research questions
 + Compare results to other researches 
 + Create some more visualisations (if useful and needed)
