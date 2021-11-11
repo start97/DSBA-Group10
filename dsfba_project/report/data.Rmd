@@ -214,8 +214,8 @@ This data set seems rather tidy, we will mostly use the first two columns which 
 
 which(is.na(cctv_data$X))
 which(is.na(cctv_data$Y))
-filter(cctv_data, X=="")
-filter(cctv_data, Y=="") 
+filter(cctv_data, cctv_data$X=="")
+filter(cctv_data, cctv_data$Y=="") 
 
 #We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
 
