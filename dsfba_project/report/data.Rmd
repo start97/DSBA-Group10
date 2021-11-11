@@ -62,7 +62,7 @@ This dataset represents closed circuit camera locations capturing activity withi
 
   + **OBJECTID** = ID of of the camera, 837 in total
 
-  + **CAM_NUM** = Unique number attributed to the camera. This might suggest that the data set does not show the location of every camera in Baltimore. Here at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn't relate to anything. So we are still in the process of figuring out the exact meaning of that.
+  + **CAM_NUM** = Unique number attributed to the camera. This might suggest that the data set does not show the location of every camera in Baltimore.
 
   + **LOCATION** = Textual information on where the camera is located
 
@@ -122,7 +122,7 @@ _Source of the data set:_ [https://data.baltimorecity.gov/datasets/community-sta
 
 #### 2.5.1 Data Wrangling: Area
 
-Here, the main goal is the transformation of the area data set into a new data set, which contains one observation **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge.To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to lowercase string.
+Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge.To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to a lowercase string.
 
 ```{r echo=TRUE}
 
@@ -134,19 +134,19 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 #### 2.5.2 Data Wrangling: Crime
 
-As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issus mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
+As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
 
-  + mount washington ->  Mt. Washington 
-  + carroll - camden industrial area -> Caroll-Camden Industrial Area 
-  + patterson park neighborhood -> Patterson Park 
-  + glenham-belhar -> Glenham-Belford 
-  + new southwest/mount clare -> Hollins Market 
-  + mount winans -> Mt.Winans 
-  + rosemont homeowners/tenants -> Rosemont 
-  + broening manor -> O'Donnell Heights 
-  + boyd-booth -> Booth-boyd 
-  + lower herring run park -> Herring Run Park 
-  + mt pleasant park -> Mt. Pleasant Park 
+  + mount washington $→$ Mt. Washington 
+  + carroll - camden industrial area $→$ Caroll-Camden Industrial Area 
+  + patterson park neighborhood $→$ Patterson Park 
+  + glenham-belhar $→$ Glenham-Belford 
+  + new southwest/mount clare $→$ Hollins Market 
+  + mount winans $→$ Mt.Winans 
+  + rosemont homeowners/tenants $→$ Rosemont 
+  + broening manor $→$ O'Donnell Heights 
+  + boyd-booth $→$ Booth-boyd 
+  + lower herring run park $→$ Herring Run Park 
+  + mt pleasant park $→$ Mt. Pleasant Park 
   
 ```{r}
 
@@ -220,10 +220,3 @@ filter(cctv_data, cctv_data$Y=="")
 #We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
 
 ```
-
-
-* Sources
-* Description
-* Wrangling/cleaning
-* Spotting mistakes and missing data (could be part of EDA too)
-* Listing anomalies and outliers (could be part of EDA too)

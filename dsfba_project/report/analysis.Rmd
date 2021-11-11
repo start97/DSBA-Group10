@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### 4.1 Crime VS CCTVs - Does the presence of CCTV deter crime?
 
-First, we create a CCTV_VS_crimes data set (which basically is a left joint). Next, we are able to plot visually compare the crime rate per area with the density percentage per area. Here we see that there seems to be a trend. 
+The idea here is to see whether there is any relationship between crime rates and CCTV density. To do so, we first create a simple linear regression model. We create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The linear regression indicates a rather weak correlation between higher crime rates and higher CCTV density. The $R2$ is at 35%. Still, plotting the observations enables one to see a tendency. The blue line represent the regression line.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -20,20 +20,11 @@ ggplot(data=CCTV_VS_crimes,mapping= aes(x=CrimeRatePerArea,y=density_perc)) +
   labs(title = "Crime Rate per Community VS CCTV Density per Community", x="CrimeRatePerCommunity",y="CCTVDensityPerCommunity")+
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
-
 ```
-
-In order to confirm that perform a regression with the lm-function and call for a summary of the function. Next, the x and y are computed, which are basically the coefficients. Next, we use a trick by creating a range from 0 to 4.5 (because the plot goes ~ from zero to 4.5.) and create a vector. This vector is called estimation. This vector is basically the linear function. So this is the coefficient multiplied by each value in the range plus the intercept. As a result we get the fitted value. The fitted value contains the estimation. After taht we plot the estimation.
-
-In the summary of the regression we see that $R^2$ (which is the estimator of the goodness of the fit) is pretty poor but still there seems to be a tendency. 
-
-
-
-
 
 #### 4.1.1 Mapping of CCTVs and crime, felony and misdemeanor rates
 
-In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the tmap-package. However, this time we have two different shapes in tm_shape(Baltimore) and tm_shape(balt_dat) which adds the maps togehter (as in ggplot) and over each other. If we take a look at this data we see that it gives an intuition about the data. It seems as if where crime rates are the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western CCTVs). There seems to be a correlation between the dark red areas and the CCTV density per area.   
+In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the `tmap` package. However, this time we have two different shapes: `tm_shape(baltimore)` which constitutes the base map and `tm_shape(balt_dat)` which adds a layer containing points. If we take a look at this map we see that it gives an intuition about the phenomenon we illustrated before. It seems as if where crime rates are the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western areas). There seems to be a correlation between the dark red areas and the CCTV per area.   
 
 ```{r results='markup'}
 
@@ -42,7 +33,6 @@ Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimeRatePerArea", ti
 Felony_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "FelonyRatePerArea", title ="Felony rate per Area in %", style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
 
 Misdemeanor_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorRatePerArea", title ="Misdemeanor rate per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
-
 
 tmap_mode("view") #Use this command to have interactive maps
 
@@ -54,7 +44,7 @@ tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
-Here we sorted the crime rate per area to find out that the range was. Either using breaks or the automatic style with the quantiles. 
+We are still not sure whether we should use the automatic breaking feature of `tmap` of whether we should set personalized map breaks. The following chunk illustrates how we could create personalized break arguments.
 
 
 ```{r}
@@ -63,12 +53,11 @@ sort(baltimore@data[["CrimeRatePerArea"]])
 breaks1 <- c(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5) #Not sure what break to use, for the moment I decided to use the automatic break system with the "quantile" parameter
 
 tmap_mode("plot") #We go back to classic plotting
-
 ```
 
 #### 4.1.2 Analysis of where crime took place: August 2021
 
-We are trying to see whether the presence of CCTV can deter crime. Here we first try to answer the question where the crime took place (especially in August 2021). We choose AUgust 2021 because it is the latest full month which we have in our dataset. Taking the latest timepoints from the data assures us that most of the CCTVs presented in the dataset were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform).Again, mapping with tm_shape to get the results. The output shows where crime takes place compared to the CCTV location. 
+We are still trying to see whether the presence of CCTV can deter crime. One thing that could be interesting is to spatially locate crime and compare it to CCTV location. We know that CCTCs capture activities within 256ft (~2 blocks). We will only select crime committed in August 2021 to have intereprtable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time points from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place compared to the CCTV location. By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
 
 ```{r results='markup'}
 
@@ -83,10 +72,9 @@ August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3
 
 tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
-
 ```
 
-Next, we decided to calculate the crime rate for August per area to see where crime was highest. The results show that they are in midtown (are midtown). 
+Next, we decided to calculate the crime rate for August per area to see where crime was highest. The results show that they are in Midtown. 
 So following this we will take a closer look at the Midtown area.
 
 ```{r}
@@ -97,7 +85,7 @@ CrimeRatePerAreaAugust2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >=
 sum(CrimeRatePerAreaAugust2021$CrimeRatePerArea) #We obtain 100, which is what we expect
 ```
 
-By using the `st-bbox` function with their values, which represent the most extreme values on the x-axis and y-axis we can continue with the analysis. So those four values are some geographical values based on coordinate system until we used now (Pseudomercator). And this function assigned that rectangle to be shape file in itself. Now, when we create the midtown map, we can use it as an argument in the tm_shape. THe output is a zoom and the bigger map with a rectangle over the area which we are looking at and analysing. 
+By using the `st-bbox` function with their values, which represent the most extreme values on the x-axis and y-axis we can continue with the analysis. So those four values are some geographical values based on coordinate system until we used now (Pseudomercator). And this function assigned that rectangle to be shape file in itself. Now, when we create the midtown map, we can use it as an argument in the tm_shape. The output is a zoom and the bigger map with a rectangle over the area which we are looking at and analysing. 
 
 ```{r}
 Midtown_area <-  st_bbox(c(xmin = -8531200.16, xmax = -8527039.15,
@@ -111,7 +99,6 @@ Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Midtown_area) + 
 tmap_mode("plot")
 Midtown_map
 print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain the map with an additional overview
-
 ```
 
 #### 4.1.3 Anomaly #1 : Prison
@@ -133,7 +120,6 @@ Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_
 
 Prison_map
 print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
-
 ```
 
 ### 4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
@@ -173,7 +159,6 @@ range6 <- seq(from=-1, to=6, by=0.1)
 estimation6 <- x6*range6+y6
 
 lines(range6,estimation6, col="blue")
-
 ```
 
 ### 4.3 Comparison of CCTV density and wealth
@@ -195,7 +180,6 @@ range2 <- seq(from=-5, to=12, by=0.2)
 estimation2 <- x2*range2+y2
 
 lines(range2,estimation2, col="blue")
-
 ```
 
 #### 4.3.1 Mapping of CCTVs and wealth
@@ -212,7 +196,6 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Pove
 
 tmap_mode("view")
 Wealth_and_CCTV_map
-
 ```
 
 ### 4.4 Comparison of crimes and wealth
@@ -255,12 +238,14 @@ estimation4 <- x4*range4+y4
 lines(range4,estimation4, col="blue")
 
 #Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
-
 ```
 
+### 4.6 Next steps after feedback on project update
 
-### 4.6
-* Answers to the research questions
-* Different methods considered
-* Competing approaches
-* Justifications
++ Adjust accroding to the feedback 
++ Finalise interpetations and answer research questions
++ Compare results to other researches 
++ Create some more visualisations (if useful and needed)
++ Include Executive summary at the beginning
++ Add additional data if needed
++ Create bibliography

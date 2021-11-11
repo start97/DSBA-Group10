@@ -6,4 +6,7 @@ source(here::here("scripts/setup.R"))
 
 * Take home message
 * Limitations
+
++ the "CAM_NUM" column in the CCTV dataset suggests that not all CCTVS are included in our data set.
+
 * Future work?
