@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### 4.1 Crime VS CCTVs - Does the presence of CCTV deter crime?
 
-The idea here is to see whether there is any relationship between crime rates and CCTV density. To do so, we first create a simple linear regression model. We create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The linear regression indicates a rather weak correlation between higher crime rates and higher CCTV density. The $R2$ is at 35%. Still, plotting the observations enables one to see a tendency. The blue line represent the regression line.
+The idea here is to see whether there is any relationship between crime rates and CCTV density. To do so, we first create a simple linear regression model. We create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The linear regression indicates a rather weak correlation between higher crime rates and higher CCTV density. The $R^2$ is at 35%. Still, plotting the observations enables one to see a tendency. The blue line represent the regression line.
 
 ```{r echo=FALSE, results = 'markup'}
 
