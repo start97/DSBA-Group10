@@ -69,7 +69,6 @@ sort(baltimore@data[["CrimeRatePerArea"]])
 
 breaks1 <- c(0,0.5,1,1.5,2,2.5,3,3.5,4,4.5) #Not sure what break to use, for the moment I decided to use the automatic break system with the "quantile" parameter
 
-
 tmap_mode("plot") #We go back to classic plotting
 
 ```
