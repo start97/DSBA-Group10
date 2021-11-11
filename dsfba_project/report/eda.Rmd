@@ -191,7 +191,7 @@ MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0)
 
 #### 3.3.1 Mapping of felonies and Misdemeanors
 
-After ensuring that we have a perfect match we perform a left joint and for felony and misdemeanor and map everything. 
+After ensuring that we have a perfect match we perform a left joint  for felony and misdemeanor and map everything. 
 
 ```{r echo=TRUE}
 

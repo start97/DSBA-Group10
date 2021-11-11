@@ -164,7 +164,7 @@ lines(range6,estimation6, col="blue")
 
 ### 4.3 Comparison of CCTV density and wealth
 
-We went to see whether there is a correlation between CCTV density and wealth. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. Still, on the map we can see interesting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only influent factor here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
+We went to see whether there is a correlation between CCTV density and wealth. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. The next sub-section illustrates this in a map.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -185,7 +185,7 @@ lines(range2,estimation2, col="blue")
 
 #### 4.3.1 Mapping of CCTVs and wealth
 
-We see a tendency. There seems to be more crimes in poorer areas.
+The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only influential factor here, thus we think it is rather correlated to the crime rate in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
 
 ```{r echo=FALSE, results = 'markup'}
 
