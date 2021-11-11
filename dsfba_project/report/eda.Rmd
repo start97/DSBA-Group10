@@ -219,7 +219,7 @@ Misdemeanor_map
 
 ### 3.4 Calculation of crime evolution
 
-The idea is that we want the information about how crime evolved. Here we could have done a loop, but could not yet find a way to properly do it. We have created a data set for each year.
+The idea is that we want to get information about how crime evolved. Here we could have done a loop, but could not yet find a way to properly do it. We have created a data set for each year.
 The results are interesting. If we compare how many observations we have in each crime-per year datasets, we see that we have ~40.000ish cases a year except from 2020 (which is due to COVID) and the year 2021 (which is not finished. We don't make any datasets for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
 
 ```{r echo=TRUE}
