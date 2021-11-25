@@ -44,6 +44,16 @@ tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
 
 <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
+This map shows quite well that CCTV placement seems to follow the areas where crime per capita is the highest. Looking at the north-western and south-western areas of the map, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous.
+
+```{r}
+Crime_per_capita_VS_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black") 
+
+tmap_mode("plot")
+Crime_per_capita_VS_CCTV_map
+
+```
+
 We are still not sure whether we should use the automatic breaking feature of `tmap` of whether we should set personalized map breaks. The following chunk illustrates how we could create personalized break arguments.
 
 
@@ -231,7 +241,73 @@ ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=Misdem
 #Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
 ```
 
-### 4.6 Next steps after feedback on project update
+### 4.6 Attempt to create a more accurate model: Multiple Regression
+
+```{r echo=FALSE, results = 'markup'}
+
+Community_data <- CrimeStatsPerArea[,-2] %>% 
+  left_join(CCTV_per_area,by="Community") %>% 
+  left_join(crime_evolution,by="Community") %>% 
+  left_join(FelonyStats[,-c(2:3)],by="Community") %>%
+  left_join(MisdemeanorStats[,-c(2:3)],by="Community") %>%
+  left_join(poverty_data[,c(2,7)],by=c("Community"="CSA2010"))
+
+MultipleRegression1 <- lm(Community_data$CrimePer1000inhabitants~Community_data$density_perc+Community_data$hhpov19)
+summary(MultipleRegression1)
+
+#Test the model
+
+#We formulate the null hypothesis:
+
+#H0: β1 = β2 = 0
+#h1: At least one βi ≠ 0
+
+anova(MultipleRegression1)
+
+SSE1 <- sum((fitted(MultipleRegression1)-Community_data$CrimePer1000inhabitants)^2)
+
+SST1 <- sum((Community_data$CrimePer1000inhabitants-mean(Community_data$CrimePer1000inhabitants))^2)
+
+SSR1 <- SST1-SSE1
+
+df1 <- 2
+
+df2 <- nrow(Community_data)-2-1
+
+MSE1 <- SSE1/df2
+
+MSR1 <- SSR1/df1
+
+Fstat1 <- MSR1/MSE1
+
+Fborder1 <- qf(0.05,df1,df2, lower.tail=FALSE)
+
+Fstat1>Fborder1 #As it returns TRUE, we know that it falls in the rejection area, that we can reject the null hypothesis and that the overall regression  is significant
+
+#Rsquared and Adjusted Rsquared
+
+summary(MultipleRegression1)$r.squared 
+summary(MultipleRegression1)$adj.r.squared 
+
+#We have a decent results
+
+#From the summary of the regression we see that the regression coefficient for poverty is not significant.
+
+#One further way to discuss about the model quality is associated to the standard error of the estimate:
+
+MultipleRegression1$fitted.values
+Community_data$CrimePer1000inhabitants
+
+sqrt(MSE1)
+
+#Multcollinearity
+
+library(car)
+vif(MultipleRegression1) #The VIF is low, indicating a rather low multicollinearity, which is what we expect
+
+```
+
+### 4.67 Next steps after feedback on project update
 
 + Adjust accroding to the feedback 
 + Create new models (potentially multiple linear regression ?)
