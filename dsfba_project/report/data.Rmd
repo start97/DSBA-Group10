@@ -106,7 +106,7 @@ _Source of the data set:_ [https://arcg.is/1qOrnH]
 
 This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
 
-  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore       into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are       used in social planning.
+  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **neigh** = name of the neighbourhoods contained in the area. 
 
@@ -118,9 +118,22 @@ area_data <- read_csv(file = here::here("data/Community_Statistical_Areas__CSAs_
 
 _Source of the data set:_ [https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26]
 
-### 2.5 Data Wrangling
+### 2.5 Population Data set
 
-#### 2.5.1 Data Wrangling: Area
+This data set provides information about the population in each Community Statistical Area. Information about the total population in 2010 and 2020 are provided. It will be useful to calculate values per capita in each community.The most relevant variables are the following:
+
+  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+
+  + **tpop20** = total population in for each Community Statistical Area in 2020
+
+
+```{r echo=TRUE}
+population_data <- read.csv(file = here::here("data/Total_Population.csv"))
+```
+
+### 2.6 Data Wrangling
+
+#### 2.6.1 Data Wrangling: Area
 
 Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge.To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to a lowercase string.
 
@@ -132,7 +145,7 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 ```
 
-#### 2.5.2 Data Wrangling: Crime
+#### 2.6.2 Data Wrangling: Crime
 
 As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
 
@@ -195,7 +208,7 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 
 ```
 
-#### 2.5.3 Data Wrangling: Poverty
+#### 2.6.3 Data Wrangling: Poverty
 
 56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we obviously have only 55 statistical areas provided, since we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for Baltimore in the year 2019: Here we took the average of the past years. 
 
@@ -206,7 +219,7 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 ```
 
-#### 2.5.4 Data Wrangling: CCTV
+#### 2.6.4 Data Wrangling: CCTV
 
 This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore,we still need to make sure to not have any missing values in these two columns. We do so by combination the `which`and the `is.na`function and by filtering for potential empty observations.
 
