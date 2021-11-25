@@ -262,65 +262,65 @@ Next, we calculate the crime per capita for each year with the piping operator, 
 
 CrimePerCapitaPerArea2021 <- Crime_in_2021 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency21=n())
 
-CrimePerCapitaPerArea2021 <-  mutate(CrimePerCapitaPerArea2021,CrimePer1000inhabitants=((CrimePerCapitaPerArea2021$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2021 <-  mutate(CrimePerCapitaPerArea2021,CrimePer1000inhabitants21=((CrimePerCapitaPerArea2021$CrimeFrequency21/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2021 <- rbind(CrimePerCapitaPerArea2021,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2020 <- Crime_in_2020 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency20=n())
 
-CrimePerCapitaPerArea2020 <-  mutate(CrimePerCapitaPerArea2020,CrimePer1000inhabitants=((CrimePerCapitaPerArea2020$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2020 <-  mutate(CrimePerCapitaPerArea2020,CrimePer1000inhabitants20=((CrimePerCapitaPerArea2020$CrimeFrequency20/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2020 <- rbind(CrimePerCapitaPerArea2020,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2019 <- Crime_in_2019 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency19=n())
 
-CrimePerCapitaPerArea2019 <-  mutate(CrimePerCapitaPerArea2019,CrimePer1000inhabitants=((CrimePerCapitaPerArea2019$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2019 <-  mutate(CrimePerCapitaPerArea2019,CrimePer1000inhabitants19=((CrimePerCapitaPerArea2019$CrimeFrequency19/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2019 <- rbind(CrimePerCapitaPerArea2019,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2018 <- Crime_in_2018 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency18=n())
 
-CrimePerCapitaPerArea2018 <-  mutate(CrimePerCapitaPerArea2018,CrimePer1000inhabitants=((CrimePerCapitaPerArea2018$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2018 <-  mutate(CrimePerCapitaPerArea2018,CrimePer1000inhabitants18=((CrimePerCapitaPerArea2018$CrimeFrequency18/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2018 <- rbind(CrimePerCapitaPerArea2018,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2017 <- Crime_in_2017 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency17=n())
 
-CrimePerCapitaPerArea2017 <-  mutate(CrimePerCapitaPerArea2017,CrimePer1000inhabitants=((CrimePerCapitaPerArea2017$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2017 <-  mutate(CrimePerCapitaPerArea2017,CrimePer1000inhabitants17=((CrimePerCapitaPerArea2017$CrimeFrequency17/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2017 <- rbind(CrimePerCapitaPerArea2017,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2016 <- Crime_in_2016 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency16=n())
 
-CrimePerCapitaPerArea2016 <-  mutate(CrimePerCapitaPerArea2016,CrimePer1000inhabitants=((CrimePerCapitaPerArea2016$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2016 <-  mutate(CrimePerCapitaPerArea2016,CrimePer1000inhabitants16=((CrimePerCapitaPerArea2016$CrimeFrequency16/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2016 <- rbind(CrimePerCapitaPerArea2016,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2015 <- Crime_in_2015 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency15=n())
 
-CrimePerCapitaPerArea2015 <-  mutate(CrimePerCapitaPerArea2015,CrimePer1000inhabitants=((CrimePerCapitaPerArea2015$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2015 <-  mutate(CrimePerCapitaPerArea2015,CrimePer1000inhabitants15=((CrimePerCapitaPerArea2015$CrimeFrequency15/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2015 <- rbind(CrimePerCapitaPerArea2015,list("Unassigned -- Jail",0,0))
 
 CrimePerCapitaPerArea2014 <- Crime_in_2014 %>% 
   group_by(Community) %>%
-  summarize(CrimeFrequency=n())
+  summarize(CrimeFrequency14=n())
 
-CrimePerCapitaPerArea2014 <-  mutate(CrimePerCapitaPerArea2014,CrimePer1000inhabitants=((CrimePerCapitaPerArea2014$CrimeFrequency/population_data$tpop20)*1000))
+CrimePerCapitaPerArea2014 <-  mutate(CrimePerCapitaPerArea2014,CrimePer1000inhabitants14=((CrimePerCapitaPerArea2014$CrimeFrequency14/population_data$tpop20)*1000))
 
 CrimePerCapitaPerArea2014 <- rbind(CrimePerCapitaPerArea2014,list("Unassigned -- Jail",0,0))
 
