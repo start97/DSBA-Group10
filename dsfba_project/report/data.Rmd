@@ -140,9 +140,9 @@ Percent_of_Households_with_No_Internet_at_Home <- read_csv("data/Percent_of_Hous
 
 
 
-### 2.6 Data Wrangling
+### 2.7 Data Wrangling
 
-#### 2.6.1 Data Wrangling: Area
+#### 2.7.1 Data Wrangling: Area
 
 Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge.To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to a lowercase string.
 
@@ -154,7 +154,7 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 ```
 
-#### 2.6.2 Data Wrangling: Crime
+#### 2.7.2 Data Wrangling: Crime
 
 As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
 
@@ -217,7 +217,7 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 
 ```
 
-#### 2.6.3 Data Wrangling: Poverty
+#### 2.7.3 Data Wrangling: Poverty
 
 56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we obviously have only 55 statistical areas provided, since we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for Baltimore in the year 2019: Here we took the average of the past years. 
 
@@ -228,7 +228,7 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 ```
 
-#### 2.6.4 Data Wrangling: CCTV
+#### 2.7.4 Data Wrangling: CCTV
 
 This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore,we still need to make sure to not have any missing values in these two columns. We do so by combination the `which`and the `is.na`function and by filtering for potential empty observations.
 
