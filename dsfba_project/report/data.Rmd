@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
-We have four raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+We have six raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
 ### Raw Data sets
 
@@ -125,11 +125,20 @@ This data set provides information about the population in each Community Statis
   + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **tpop20** = total population in for each Community Statistical Area in 2020
-
+  
 
 ```{r echo=TRUE}
 population_data <- read.csv(file = here::here("data/Total_Population.csv"))
 ```
+
+  
+### 2.6 Household Internet Data set
+
+```{r echo=TRUE}
+Percent_of_Households_with_No_Internet_at_Home <- read_csv("data/Percent_of_Households_with_No_Internet_at_Home.csv")
+```
+
+
 
 ### 2.6 Data Wrangling
 
