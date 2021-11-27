@@ -134,8 +134,23 @@ population_data <- read.csv(file = here::here("data/Total_Population.csv"))
   
 ### 2.6 Household Internet Data set
 
+This data set give information about percentage of households with no internet in each of the 55 Community statistical areas. This information is provided for the years 2017, 2018 and 2019. This will be useful to detect whether there is an relationship between internet access and crimes or CCTV installations in neighborhoods. The most important variabels are: 
+
+  + **CSA2010** = name of the community statistical area.
+  
+  + **nohhint17** = percentage of household in this particular neighboorhood with no internet access in the year 2017. 
+  
+  + **nohhint18** = percentage of household in this particular neighboorhood with no internet access in the year 2018. 
+  
+  + **nohhint19** = percentage of household in this particular neighboorhood with no internet access in the year 2019.
+  
+  + **Shape_Area** = 
+  
+  + **Shape_Lenght** = 
+  
+
 ```{r echo=TRUE}
-Percent_of_Households_with_No_Internet_at_Home <- read_csv("data/Percent_of_Households_with_No_Internet_at_Home.csv")
+Percent_of_Households_with_No_Internet_at_Home <- read.csv(file = here::here("data/Percent_of_Households_with_No_Internet_at_Home.csv"))
 ```
 
 
