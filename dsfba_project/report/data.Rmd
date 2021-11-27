@@ -154,7 +154,6 @@ Percent_of_Households_with_No_Internet_at_Home <- read.csv(file = here::here("da
 ```
 
 
-
 ### 2.7 Data Wrangling
 
 #### 2.7.1 Data Wrangling: Area
