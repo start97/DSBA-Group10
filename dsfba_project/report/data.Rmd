@@ -94,10 +94,7 @@ Federal and state governments use such estimates to allocate funds to local comm
   + **Shape_Area - Shape_Length** = standard fields to determine the area and the perimeter of a polygon
 
 ```{r}
-
 poverty_data <- read.csv(file = here::here("data/Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv"))
-
-
 ```
 
 _Source of the data set:_ [https://arcg.is/1qOrnH]
@@ -134,9 +131,9 @@ population_data <- read.csv(file = here::here("data/Total_Population.csv"))
   
 ### 2.6 Household Internet Data set
 
-This data set give information about percentage of households with no internet in each of the 55 Community statistical areas. This information is provided for the years 2017, 2018 and 2019. This will be useful to detect whether there is an relationship between internet access and crimes or CCTV installations in neighborhoods. The most important variabels are: 
+This data set give information about percentage of households with no internet in each of the 55 Community statistical areas. This information is provided for the years 2017, 2018 and 2019. This will be useful to detect whether there is an relationship between internet access and crimes or CCTV installations in neighborhoods. The most important variables are: 
 
-  + **CSA2010** = name of the community statistical area.
+  + **CSA2010** = name of the community statistical area. 
   
   + **nohhint17** = percentage of household in this particular neighboorhood with no internet access in the year 2017. 
   
