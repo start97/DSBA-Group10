@@ -49,3 +49,4 @@ Here are some interesting articles that guided us in our research :
 3)    Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 4)    Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (Does the government respect privacy issues depending on your income level?) 
 5)    Do we observe crime displacement issues caused by the installation of CCTV in some neighbourhoods?
+6)    Is there a relationship between internet accessibility of a neighbourhood and crimes/CCTV installations?
