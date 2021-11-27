@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
-We have six raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+We have six raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty ratesm the population and the households with internet access. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
 ### Raw Data sets
 
