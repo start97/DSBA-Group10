@@ -128,6 +128,7 @@ This data set provides information about the population in each Community Statis
 population_data <- read.csv(file = here::here("data/Total_Population.csv"))
 ```
 
+_Source of the data set:_ [INSERT SOURCE HERE]
   
 ### 2.6 Household Internet Data set
 
@@ -252,5 +253,14 @@ filter(cctv_data, cctv_data$X=="")
 filter(cctv_data, cctv_data$Y=="") 
 
 #We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
-
 ```
+
+#### 2.7.5 Data Wrangling: Household internet in CSA's
+
+On the first sight, this Household internet datasets from Baltimore looks very tidy. Nevertheless, we quickly run some code to try filter out missing values or detect anomalies. 
+
+```{r results='markup'}
+sum(is.na(Percent_of_Households_with_No_Internet_at_Home))
+```
+
+Having examined the sum of NA's, we see that this dataset is clean and since there are only 55 rows, jail was also automatically not included when configurating this dataset about interenet access (which makes sense, since jail has probably it own internet access, but has no households to count).
