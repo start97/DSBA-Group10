@@ -73,7 +73,7 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 
 #### 3.1.1 Mapping of CCTV density
 
-We now want to mape CCTV density on the Baltimore map. We first have to use the piping operator to ensure that the community that we have in the Baltimore data set are the same as the one we are having in the CCTV per are data set. As this only returns true values that means that it works and is good for further analysis. 
+We now want to map CCTV density on the Baltimore map. We first have to use the piping operator to ensure that the community that we have in the Baltimore data set are the same as the one we are having in the CCTV per are data set. As this only returns true values that means that it works and is good for further analysis. 
 
 ```{r}
 library(tmap)
