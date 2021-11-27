@@ -87,9 +87,9 @@ This dataset provides information about the percent of family households living 
 
 Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
-  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore        into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are       used in social planning.
+  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
-  + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to         2019.
+  + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.
 
   + **Shape_Area - Shape_Length** = standard fields to determine the area and the perimeter of a polygon
 
@@ -144,9 +144,9 @@ This data set give information about percentage of households with no internet i
   
   + **nohhint19** = percentage of household in this particular neighboorhood with no internet access in the year 2019.
   
-  + **Shape_Area** = 
+  + **Shape_Area** = standard fields to determine the area and the perimeter of a polygon
   
-  + **Shape_Lenght** = 
+  + **Shape_Lenght** = standard fields to determine the area and the perimeter of a polygon
   
 
 ```{r echo=TRUE}
