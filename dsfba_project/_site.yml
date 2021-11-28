@@ -5,5 +5,5 @@ navbar:
 - text: "Report"
 href: report.html
 output:
-  html_document:
+  html_document: report.html
   theme: cosmo
