@@ -1,8 +1,0 @@
-name: "Group10 website"
-navbar:
-  title: "Investigative research of Crimes in Baltimore"
-  left:
-    - text: "Home"
-      href: index.html
-    - text: "About"
-      href: about.html
