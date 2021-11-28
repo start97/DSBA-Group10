@@ -1,0 +1,9 @@
+name: "Crimes in Baltimore"
+output_dir: "docs"
+navbar:
+  title: "Crimes in Balimore"
+- text: "Report"
+href: report.html
+output:
+  html_document:
+  theme: cosmo
