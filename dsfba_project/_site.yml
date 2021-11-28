@@ -1,9 +1,8 @@
-name: "Crimes in Baltimore"
-output_dir: "report"
+name: "Group10 website"
 navbar:
-  title: "Crimes in Balimore"
-- text: "Report"
-href: report.html
-output:
-  html_document: report.html
-  theme: cosmo
+  title: "Investigative research of Crimes in Baltimore"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
