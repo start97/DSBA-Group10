@@ -332,5 +332,16 @@ crime_evolution <- CrimePerCapitaPerArea2021 %>%
   left_join(CrimePerCapitaPerArea2016,by="Community") %>% 
   left_join(CrimePerCapitaPerArea2015,by="Community") %>% 
   left_join(CrimePerCapitaPerArea2014,by="Community")
-
 ```
+
+### 3.5 Internet access and crimes
+
+First, we need to merge the datafiles of internet access and crimes per CSA's into one dataset, to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
+
+```{r echo=TRUE}
+Percent_of_Households_with_No_Internet_at_Home <- mutate(Percent_of_Households_with_No_Internet_at_Home, =tolower(CSA))
+
+
+Joined_Poverty_Crime_dataset <- crime_data_with_areas %>% left_join(Percent_of_Households_with_No_Internet_at_Home,by="CSA")
+```
+

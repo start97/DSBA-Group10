@@ -263,4 +263,5 @@ On the first sight, this Household internet datasets from Baltimore looks very t
 sum(is.na(Percent_of_Households_with_No_Internet_at_Home))
 ```
 
+
 Having examined the sum of NA's, we see that this dataset is clean and since there are only 55 rows, jail was also automatically not included when configurating this dataset about interenet access (which makes sense, since jail has probably it own internet access, but has no households to count).
