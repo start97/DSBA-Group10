@@ -336,12 +336,9 @@ crime_evolution <- CrimePerCapitaPerArea2021 %>%
 
 ### 3.5 Internet access and crimes
 
-First, we need to merge the datafiles of internet access and crimes per CSA's into one dataset, to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
+First, we need to merge the data in one big file. Here every datasets needs one colums which is named in the same way (e.g. Community). Here we create a table with the following colums: Community Statistical Area, Internet accessibility CSA,CCTV per area, CrimeStatsPerArea,crime_data_with_areas, FelonyStats, MisdemeanorStats,  . Merging these files in one excel will help up to get a overview table and enable us to do some regressions to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
 
 ```{r echo=TRUE}
-Percent_of_Households_with_No_Internet_at_Home <- mutate(Percent_of_Households_with_No_Internet_at_Home, =tolower(CSA))
-
-
-Joined_Poverty_Crime_dataset <- crime_data_with_areas %>% left_join(Percent_of_Households_with_No_Internet_at_Home,by="CSA")
+Joined_Poverty_Crime_dataset <- crime_data_with_areas  %>% left_join(Percent_of_Households_with_No_Internet_at_Home,by="community")
 ```
 
