@@ -477,6 +477,8 @@ animated_crime_map <- tm_shape(baltimore_alias,bbox = bbox, projection = crs.geo
 
 tmap_animation(animated_crime_map, delay=100)
 
+#maybe write.gif
+
 ```
 
 ### 3.5 Internet access and crimes
