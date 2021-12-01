@@ -136,9 +136,13 @@ Prison_map
 print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
 ```
 
-### 4.2 CCTVs VS Felonies and Misdemeanors - What types of crimes may be deterred by surveillance cameras?
+### 4.2 What types of crimes may be deterred by surveillance cameras?
 
-The logic here is the same as in section 4.1, except that here,we want to see whether the presence of CCTV can deter a certain type of crime. The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors and felonies. It therefore does not seem like the presence of CCTV has a particularly strong impact on a certain type of crime. 
+The logic here is the same as in section 4.1, except that here,we want to see whether the presence of CCTV can deter a certain type of crime. We start with felonies and misdemeanors, then we analyse violent and property crimes.
+
+#### 4.2.1 CCTVs VS Felonies and Misdemeanors
+
+The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors and felonies. It therefore does not seem like the presence of CCTV has a particularly strong impact on a certain type of crime. 
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -168,6 +172,38 @@ ggplot(data=CCTV_VS_misdemeanors,mapping= aes(x=MisdemeanorPerCapitaPerArea,y=de
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
+#### 4.2.2 CCTVs VS Violent and Property Crime
+
+```{r echo=FALSE, results = 'markup'}
+
+CCTV_VS_ViolentCrime <- CCTV_per_area %>% 
+  left_join(ViolentStats,by="Community")
+
+regression21 <- lm(CCTV_VS_ViolentCrime$density_perc~CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea)
+
+summary(regression21)
+
+CCTV_VS_PropertyCrime <- CCTV_per_area %>% 
+  left_join(PropertyStats,by="Community")
+
+regression22 <- lm(CCTV_VS_PropertyCrime$density_perc~CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea)
+
+summary(regression22)
+
+#We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
+
+ggplot(Community_data,aes(x=ViolentCrimePerCapitaPerArea,y=density_perc))+
+  geom_point()+
+  geom_smooth(se=F)+
+  labs(x="Violent Crime per Capita per Area",y="CCTV Density per Area",title="CCTV density increases with violent crime",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas has an impact."),width=45)
+
+ggplot(Community_data,aes(x=PropertyCrimePerCapitaPerArea,y=density_perc))+
+  geom_point()+
+  geom_smooth(se=F)+
+  labs(x="Property Crime per Capita per Area",y="CCTV Density per Area",title="CCTV density is weakly correlated with property crime",subtitle = str_wrap("The correlation is much weaker than between CCTV density and violent crime"),width=45)
+
+```
+
 
 ### 4.3 Comparison of CCTV density and wealth
 
@@ -245,65 +281,46 @@ ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=Misdem
 
 ```{r echo=FALSE, results = 'markup'}
 
-Community_data <- CrimeStatsPerArea[,-2] %>% 
-  left_join(CCTV_per_area,by="Community") %>% 
-  left_join(crime_evolution,by="Community") %>% 
-  left_join(FelonyStats[,-c(2:3)],by="Community") %>%
-  left_join(MisdemeanorStats[,-c(2:3)],by="Community") %>%
-  left_join(poverty_data[,c(2,7)],by=c("Community"="CSA2010"))
+Unemployment <- read.csv(file = here::here("data/Unemployment_Rate.csv"))
 
-MultipleRegression1 <- lm(Community_data$CrimePer1000inhabitants~Community_data$density_perc+Community_data$hhpov19)
-summary(MultipleRegression1)
+Unemployment[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0,0,0,0,0,0,0,0)
 
-#Test the model
+HSAexam <- read.csv(file = here::here("data/Percentage_of_Students_Passing_H.S.A._Government.csv"))
 
-#We formulate the null hypothesis:
+HSAexam[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0,0)
 
-#H0: β1 = β2 = 0
-#h1: At least one βi ≠ 0
+Readiness <- read.csv(file = here::here("data/Kindergarten_School_Readiness.csv"))
 
-anova(MultipleRegression1)
+Readiness[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0)
 
-SSE1 <- sum((fitted(MultipleRegression1)-Community_data$CrimePer1000inhabitants)^2)
+Internet_data <- read.csv(file = here::here("data/Percent_of_Households_with_No_Internet_at_Home.csv"))
 
-SST1 <- sum((Community_data$CrimePer1000inhabitants-mean(Community_data$CrimePer1000inhabitants))^2)
+Internet_data[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0)
 
-SSR1 <- SST1-SSE1
+Community_data <- Community_data %>% 
+  left_join(HSAexam[,c(2,6)],by=c("Community"="CSA2010")) %>%
+  left_join(Internet_data[,c(2,5)],by=c("Community"="CSA2010")) %>% 
+  left_join(Readiness[,c(2,5)],by=c("Community"="CSA2010")) %>% 
+  left_join(Unemployment[,c(2,12)],by=c("Community"="CSA2010"))
 
-df1 <- 2
+fullmod <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19+Community_data$ready13+Community_data$unempr19)
 
-df2 <- nrow(Community_data)-2-1
+nullmod <- lm(Community_data$density_perc~1)
 
-MSE1 <- SSE1/df2
-
-MSR1 <- SSR1/df1
-
-Fstat1 <- MSR1/MSE1
-
-Fborder1 <- qf(0.05,df1,df2, lower.tail=FALSE)
-
-Fstat1>Fborder1 #As it returns TRUE, we know that it falls in the rejection area, that we can reject the null hypothesis and that the overall regression  is significant
-
-#Rsquared and Adjusted Rsquared
-
-summary(MultipleRegression1)$r.squared 
-summary(MultipleRegression1)$adj.r.squared 
-
-#We have a decent results
-
-#From the summary of the regression we see that the regression coefficient for poverty is not significant.
-
-#One further way to discuss about the model quality is associated to the standard error of the estimate:
-
-MultipleRegression1$fitted.values
-Community_data$CrimePer1000inhabitants
-
-sqrt(MSE1)
-
-#Multcollinearity
+selAIC <- step(nullmod,scope=list(lower=nullmod,upper=fullmod),direction="forward")
+summary(selAIC)
 
 library(car)
-vif(MultipleRegression1) #The VIF is low, indicating a rather low multicollinearity, which is what we expect
+vif(selAIC)
+
+fullmod2 <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19+Community_data$ready13+Community_data$unempr19+Community_data$CrimePer1000inhabitants+Community_data$PropertyCrimePerCapitaPerArea+Community_data$FelonyPerCapitaPerArea+Community_data$MisdemeanorPerCapitaPerArea)
+
+nullmod <- lm(Community_data$density_perc~1)
+
+selAIC2 <- step(nullmod,scope=list(lower=nullmod,upper=fullmod2),direction="forward")
+summary(selAIC2)
+
+vif(selAIC2)
 
 ```
 

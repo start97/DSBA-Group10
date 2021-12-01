@@ -8,7 +8,7 @@ source(here::here("scripts/setup.R"))
 
 The original CCTV data set which we observed had a slight challenge. Although it contained some neighborhood names, most of them were not matching the "standard neighborhood" names. There, to solve that we involved geospatial counting. 
 
-Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates of the newly created spatial file. Here we have several types of coordinates, we use X and Y which use the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Spatial files must have coordinate systems assigned to them, in the case at hand, we will work with the above mentioned EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system for all the spatial files that we are going to use, therefore, to ensure consistency, we create a crs object called `crs.geo1` that is going to be assigned to all the spatial files we will use. In order to assign a known crs to spatial data, we use the `proj4string` function, to which we assign `crs.geo1`.
+Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates of the newly created spatial file. Here we have several types of coordinates, we use X and Y which use the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Spatial files must have coordinate systems assigned to them. In the case at hand, we will work with the above mentioned EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system for all the spatial files that we are going to use. Therefore, to ensure consistency, we create a crs object called `crs.geo1` that is going to be assigned to all the spatial files we will use. In order to assign a known crs to spatial data, we use the `proj4string` function, to which we assign `crs.geo1`.
 
 ```{r echo=TRUE}
 #read in data table
@@ -73,7 +73,7 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 
 #### 3.1.1 Mapping of CCTV density
 
-We now want to mape CCTV density on the Baltimore map. We first have to use the piping operator to ensure that the community that we have in the Baltimore data set are the same as the one we are having in the CCTV per are data set. As this only returns true values that means that it works and is good for further analysis. 
+We now want to map CCTV density on the Baltimore map. We first have to use the piping operator to ensure that the community that we have in the Baltimore data set are the same as the one we are having in the CCTV per are data set. As this only returns true values that means that it works and is good for further analysis. 
 
 ```{r}
 library(tmap)
@@ -105,6 +105,11 @@ CrimeStatsPerArea <-  mutate(CrimeStatsPerArea,CrimePer1000inhabitants=((CrimeSt
 CrimeStatsPerArea <- rbind(CrimeStatsPerArea,list("Unassigned -- Jail",0,0))  #We have no information about crimes committed in jail, yet, the community statistical area encompass 56 area, including jail. In order to ensure consistency, we must add a 56th observation in this data frame.
 
 sum(CrimeStatsPerArea$CrimeFrequency) #The total sum is 349482, which is what we expect
+
+Community_data <- CrimeStatsPerArea[,-2] %>% 
+  left_join(CCTV_per_area,by="Community") %>%
+  left_join(poverty_data[,c(2,7)],by=c("Community"="CSA2010"))
+
 ```
 
 #### 3.2.1 Mapping of crime per capita per community
@@ -191,7 +196,60 @@ MisdemeanorStats$MisdemeanorPerCapitaPerArea <-((CrimePerCategoryPerArea%>% filt
 
 MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0)
 
+Community_data <- Community_data %>% 
+  left_join(FelonyStats[,-c(2:3)],by="Community") %>%
+  left_join(MisdemeanorStats[,-c(2:3)],by="Community")
+
 ```
+
+As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by 'type' of crime. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim. Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder.
+
+In order determine whether the crimes contained in our `crime_data_with_area`. We will use a data set once again provided by the Baltimore open data portal. This data set provides information about the crime codes used by the police to categorize crimes. We first import the data set. Then, we compare whether codes are well and truly similar, three crime codes are written with an extra blank space afterward. We correct that. Then, suing the `left_join` function, we add a new column to our `crime_data_with_area` data frame. We then wish to create data frames for both violent and property crime. The methodology is the same as we used for felonies and misdemeanors.
+
+```{r echo=TRUE}
+
+crimecode_data <- read.csv(file = here::here("data/Balt_CRIME_CODES.csv"))
+
+unique(crime_data_with_areas$CrimeCode) %in% unique(crimecode_data$CODE) #We identify spelling errors
+
+crimecode_data$CODE[185] <- "8H"
+crimecode_data$CODE[186] <- "8I"
+crimecode_data$CODE[187] <- "8J"
+
+crime_data_with_areas <- crime_data_with_areas %>% 
+  left_join(crimecode_data[,c(1,8)],by=c("CrimeCode"="CODE"))
+
+unique(crime_data_with_areas$VIO_PROP_CFS)
+which(is.na(crime_data_with_areas$VIO_PROP_CFS)) #We ensure that we have no NAs
+
+CrimePerCategory2PerArea <- crime_data_with_areas %>% 
+  group_by(Community,VIO_PROP_CFS) %>%
+  summarize(RepartitionPerCategory2PerArea=n())
+
+sum(CrimePerCategory2PerArea$RepartitionPerCategory2PerArea) #Again, we check that we indeed have 349482 observations
+
+CrimeCategory2Repartition <- CrimePerCategory2PerArea %>% 
+  group_by(VIO_PROP_CFS) %>% 
+  summarise(Repartition=sum(RepartitionPerCategory2PerArea))
+
+PropertyStats <-  CrimePerCategory2PerArea %>% filter(VIO_PROP_CFS=="PROPERTY") 
+
+PropertyStats$PropertyCrimePerCapitaPerArea <-((CrimePerCategory2PerArea%>% filter(VIO_PROP_CFS=="PROPERTY"))[[3]]/population_data$tpop20)*1000
+
+PropertyStats[56,] <- list("Unassigned -- Jail","PROPERTY",0,0)
+
+ViolentStats <-  CrimePerCategory2PerArea %>% filter(VIO_PROP_CFS=="VIOLENT") 
+
+ViolentStats$ViolentCrimePerCapitaPerArea <-((CrimePerCategory2PerArea%>% filter(VIO_PROP_CFS=="VIOLENT"))[[3]]/population_data$tpop20)*1000
+
+ViolentStats[56,] <- list("Unassigned -- Jail","PROPERTY",0,0)
+
+Community_data <- Community_data %>% 
+  left_join(ViolentStats[,c(1,4)],by="Community") %>% 
+  left_join(PropertyStats[,c(1,4)],by="Community")
+
+```
+
 
 #### 3.3.1 Mapping of felonies and Misdemeanors
 
@@ -333,4 +391,102 @@ crime_evolution <- CrimePerCapitaPerArea2021 %>%
   left_join(CrimePerCapitaPerArea2015,by="Community") %>% 
   left_join(CrimePerCapitaPerArea2014,by="Community")
 
+Community_data <- Community_data %>% 
+  left_join(crime_evolution,by="Community")
+
 ```
+
+Another interesting way to visualise how crime evolved is by using an animated map. We can create animated maps using the `tmap_animation` function. Yet, in order to be in position to use it, we have to create a very particular tibble. In the case at hand, we want our animated map to display crime per capita evolution over 7 years (from 2014 to 2020, we get ride of 2021 as the year is not complete). Therefore, we must have 7 x 56 observations, one crime per capita value for each year, for each 56 area. Yet, the tibble becomes a bit more peculiar as for each observation, we have to add a in a separate column, a polygon (which is an S4 element) corresponding to the area in question. It is not possible to use a function like the `rep` function to replicate S4 elements, therefore, we had to do that manually.
+
+Once the tibble is built, we want to merge the data contained in it in a SpatialPolygonsDataFrame. We want to use the `baltimore` SpatialPolygonsDataFrame.However, as the tibble contains 392 observations, this will enlarge our our SpatialPolygonsDataFrame. As the `baltimore` object is also used for other purposes, we create an alias. Then, we merge the newly created tibble with the newly created alias, simply using `left_join`. We create the `bbox` object as well as an object called `pb`. The first element allows us to delimit the geographical area of interest and the second allows us to create custom classes. Finally, we crate a map using the `tm_shape` function. We animate the latter using `tmap_animation`.
+
+```{r echo=TRUE}
+
+anim_tibble <-  tibble(Year=rep(2020:2014,56),Community=rep(Community_data$Community,each=7),CrimeRate=as.vector(t(crime_evolution[,-c(1,2,3,4,6,8,10,12,14,16)])),geometry=list(
+  baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],
+  baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],
+  baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],
+  baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],
+  baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],
+  baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],
+  baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],
+  baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],
+  baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],
+  baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],
+  baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],
+  baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],
+  baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],
+  baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],
+  baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],
+  baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],
+  baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],
+  baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],
+  baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],
+  baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],
+  baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],
+  baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],
+  baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],
+  baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],
+  baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],
+  baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],
+  baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],
+  baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],
+  baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],
+  baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],
+  baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],
+  baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],
+  baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],
+  baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],
+  baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],
+  baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],
+  baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],
+  baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],
+  baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],
+  baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],
+  baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],
+  baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],
+  baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],
+  baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],
+  baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],
+  baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],
+  baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],
+  baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],
+  baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],
+  baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],
+  baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],
+  baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],
+  baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],
+  baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],
+  baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],
+  baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]]))
+
+baltimore_alias <- baltimore
+
+baltimore_alias@polygons <- anim_tibble$geometry
+
+baltimore_alias@data$community %in% anim_tibble$Community #Again, we ensure that we have a perfect match
+
+baltimore_alias@data <-left_join(baltimore_alias@data,anim_tibble,by = c('community' = 'Community'))
+
+bbox <- baltimore@bbox
+pb <-  c(0,25,50,75,100,125,150,175,200,225,250)
+
+animated_crime_map <- tm_shape(baltimore_alias,bbox = bbox, projection = crs.geo1) +
+  tm_polygons("CrimeRate",breaks=pb) +
+  tm_facets(free.scales.fill = F,along = "Year")+tm_shape(baltimore)+tm_borders()
+
+test <- tmap_animation(animated_crime_map, delay=100)
+
+test
+
+```
+
+### 3.5 Internet access and crimes
+
+First, we need to merge the data in one big file. Here every datasets needs one colums which is named in the same way (e.g. Community). Here we create a table with the following colums: Community Statistical Area, Internet accessibility CSA,CCTV per area, CrimeStatsPerArea,crime_data_with_areas, FelonyStats, MisdemeanorStats,  . Merging these files in one excel will help up to get a overview table and enable us to do some regressions to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
+
+```{r echo=TRUE}
+
+
+```
+

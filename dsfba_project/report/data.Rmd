@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
-We have four raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+We have six raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty ratesm the population and the households with internet access. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
 
 ### Raw Data sets
 
@@ -87,17 +87,14 @@ This dataset provides information about the percent of family households living 
 
 Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
-  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore        into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are       used in social planning.
+  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
-  + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to         2019.
+  + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.
 
   + **Shape_Area - Shape_Length** = standard fields to determine the area and the perimeter of a polygon
 
 ```{r}
-
 poverty_data <- read.csv(file = here::here("data/Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv"))
-
-
 ```
 
 _Source of the data set:_ [https://arcg.is/1qOrnH]
@@ -125,15 +122,40 @@ This data set provides information about the population in each Community Statis
   + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **tpop20** = total population in for each Community Statistical Area in 2020
-
+  
 
 ```{r echo=TRUE}
 population_data <- read.csv(file = here::here("data/Total_Population.csv"))
 ```
 
-### 2.6 Data Wrangling
+_Source of the data set:_ [INSERT SOURCE HERE]
+  
+### 2.6 Household Internet Data set
 
-#### 2.6.1 Data Wrangling: Area
+This data set give information about percentage of households with no internet in each of the 55 Community statistical areas. This information is provided for the years 2017, 2018 and 2019. This will be useful to detect whether there is an relationship between internet access and crimes or CCTV installations in neighborhoods. The most important variables are: 
+
+  + **CSA2010** = name of the community statistical area. 
+  
+  + **nohhint17** = percentage of household in this particular neighboorhood with no internet access in the year 2017. 
+  
+  + **nohhint18** = percentage of household in this particular neighboorhood with no internet access in the year 2018. 
+  
+  + **nohhint19** = percentage of household in this particular neighboorhood with no internet access in the year 2019.
+  
+  + **Shape_Area** = standard fields to determine the area and the perimeter of a polygon
+  
+  + **Shape_Lenght** = standard fields to determine the area and the perimeter of a polygon
+  
+
+```{r echo=TRUE}
+Percent_of_Households_with_No_Internet_at_Home <- read.csv(file = here::here("data/Percent_of_Households_with_No_Internet_at_Home.csv"))
+```
+
+_Source of the data set:_ [INSERT SOURCE HERE]
+
+### 2.7 Data Wrangling
+
+#### 2.7.1 Data Wrangling: Area
 
 Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge.To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to a lowercase string.
 
@@ -145,7 +167,7 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 ```
 
-#### 2.6.2 Data Wrangling: Crime
+#### 2.7.2 Data Wrangling: Crime
 
 As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
 
@@ -208,7 +230,7 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 
 ```
 
-#### 2.6.3 Data Wrangling: Poverty
+#### 2.7.3 Data Wrangling: Poverty
 
 56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we obviously have only 55 statistical areas provided, since we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for Baltimore in the year 2019: Here we took the average of the past years. 
 
@@ -219,7 +241,7 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 ```
 
-#### 2.6.4 Data Wrangling: CCTV
+#### 2.7.4 Data Wrangling: CCTV
 
 This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore,we still need to make sure to not have any missing values in these two columns. We do so by combination the `which`and the `is.na`function and by filtering for potential empty observations.
 
@@ -231,5 +253,15 @@ filter(cctv_data, cctv_data$X=="")
 filter(cctv_data, cctv_data$Y=="") 
 
 #We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
-
 ```
+
+#### 2.7.5 Data Wrangling: Household internet in CSA's
+
+On the first sight, this Household internet datasets from Baltimore looks very tidy. Nevertheless, we quickly run some code to try filter out missing values or detect anomalies. 
+
+```{r results='markup'}
+sum(is.na(Percent_of_Households_with_No_Internet_at_Home))
+```
+
+
+Having examined the sum of NA's, we see that this dataset is clean and since there are only 55 rows, jail was also automatically not included when configurating this dataset about interenet access (which makes sense, since jail has probably it own internet access, but has no households to count).
