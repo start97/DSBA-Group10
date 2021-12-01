@@ -16,6 +16,9 @@ CCTV_VS_crimes <- CCTV_per_area %>%
 regression <- lm(CCTV_VS_crimes$density_perc~CCTV_VS_crimes$CrimePer1000inhabitants)
 summary(regression)
 
+stargazer(regression,
+          type = "text")
+
 ggplot(data=CCTV_VS_crimes,mapping= aes(x=CrimePer1000inhabitants,y=density_perc)) + 
   labs(title = "Crime per Capita per Community VS CCTV Density per Community", x="CrimePerCapitaPerCommunity",y="CCTVDensityPerCommunity")+
   geom_point(shape=1) + 
