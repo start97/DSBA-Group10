@@ -396,6 +396,89 @@ Community_data <- Community_data %>%
 
 ```
 
+Another interesting way to visualise how crime evolved is by using an animated map. We can create animated maps using the `tmap_animation` function. Yet, in order to be in position to use it, we have to create a very particular tibble. In the case at hand, we want our animated map to display crime per capita evolution over 7 years (from 2014 to 2020, we get ride of 2021 as the year is not complete). Therefore, we must have 7 x 56 observations, one crime per capita value for each year, for each 56 area. Yet, the tibble becomes a bit more peculiar as for each observation, we have to add a in a separate column, a polygon (which is an S4 element) corresponding to the area in question. It is not possible to use a function like the `rep` function to replicate S4 elements, therefore, we had to do that manually.
+
+Once the tibble is built, we want to merge the data contained in it in a SpatialPolygonsDataFrame. We want to use the `baltimore` SpatialPolygonsDataFrame.However, as the tibble contains 392 observations, this will enlarge our our SpatialPolygonsDataFrame. As the `baltimore` object is also used for other purposes, we create an alias. Then, we merge the newly created tibble with the newly created alias, simply using `left_join`. We create the `bbox` object as well as an object called `pb`. The first element allows us to delimit the geographical area of interest and the second allows us to create custom classes. Finally, we crate a map using the `tm_shape` function. We animate the latter using `tmap_animation`.
+
+```{r echo=TRUE}
+
+anim_tibble <-  tibble(Year=rep(2020:2014,56),Community=rep(Community_data$Community,each=7),CrimeRate=as.vector(t(crime_evolution[,-c(1,2,3,4,6,8,10,12,14,16)])),geometry=list(
+  baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],baltimore@polygons[[1]],
+  baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],baltimore@polygons[[2]],
+  baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],baltimore@polygons[[3]],
+  baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],baltimore@polygons[[4]],
+  baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],baltimore@polygons[[5]],
+  baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],baltimore@polygons[[6]],
+  baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],baltimore@polygons[[7]],
+  baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],baltimore@polygons[[8]],
+  baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],baltimore@polygons[[9]],
+  baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],baltimore@polygons[[10]],
+  baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],baltimore@polygons[[11]],
+  baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],baltimore@polygons[[12]],
+  baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],baltimore@polygons[[13]],
+  baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],baltimore@polygons[[14]],
+  baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],baltimore@polygons[[15]],
+  baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],baltimore@polygons[[16]],
+  baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],baltimore@polygons[[17]],
+  baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],baltimore@polygons[[18]],
+  baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],baltimore@polygons[[19]],
+  baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],baltimore@polygons[[20]],
+  baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],baltimore@polygons[[21]],
+  baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],baltimore@polygons[[22]],
+  baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],baltimore@polygons[[23]],
+  baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],baltimore@polygons[[24]],
+  baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],baltimore@polygons[[25]],
+  baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],baltimore@polygons[[26]],
+  baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],baltimore@polygons[[27]],
+  baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],baltimore@polygons[[28]],
+  baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],baltimore@polygons[[29]],
+  baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],baltimore@polygons[[30]],
+  baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],baltimore@polygons[[31]],
+  baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],baltimore@polygons[[32]],
+  baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],baltimore@polygons[[33]],
+  baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],baltimore@polygons[[34]],
+  baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],baltimore@polygons[[35]],
+  baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],baltimore@polygons[[36]],
+  baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],baltimore@polygons[[37]],
+  baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],baltimore@polygons[[38]],
+  baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],baltimore@polygons[[39]],
+  baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],baltimore@polygons[[40]],
+  baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],baltimore@polygons[[41]],
+  baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],baltimore@polygons[[42]],
+  baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],baltimore@polygons[[43]],
+  baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],baltimore@polygons[[44]],
+  baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],baltimore@polygons[[45]],
+  baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],baltimore@polygons[[46]],
+  baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],baltimore@polygons[[47]],
+  baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],baltimore@polygons[[48]],
+  baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],baltimore@polygons[[49]],
+  baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],baltimore@polygons[[50]],
+  baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],baltimore@polygons[[51]],
+  baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],baltimore@polygons[[52]],
+  baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],baltimore@polygons[[53]],
+  baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],baltimore@polygons[[54]],
+  baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],baltimore@polygons[[55]],
+  baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]],baltimore@polygons[[56]]))
+
+baltimore_alias <- baltimore
+
+baltimore_alias@polygons <- anim_tibble$geometry
+
+baltimore_alias@data$community %in% anim_tibble$Community #Again, we ensure that we have a perfect match
+
+baltimore_alias@data <-left_join(baltimore_alias@data,anim_tibble,by = c('community' = 'Community'))
+
+bbox <- baltimore@bbox
+pb <-  c(0,25,50,75,100,125,150,175,200,225,250)
+
+animated_crime_map <- tm_shape(baltimore_alias,bbox = bbox, projection = crs.geo1) +
+  tm_polygons("CrimeRate",breaks=pb) +
+  tm_facets(free.scales.fill = F,along = "Year")+tm_shape(baltimore)+tm_borders()
+
+tmap_animation(animated_crime_map, delay=100)
+
+```
+
 ### 3.5 Internet access and crimes
 
 First, we need to merge the data in one big file. Here every datasets needs one colums which is named in the same way (e.g. Community). Here we create a table with the following colums: Community Statistical Area, Internet accessibility CSA,CCTV per area, CrimeStatsPerArea,crime_data_with_areas, FelonyStats, MisdemeanorStats,  . Merging these files in one excel will help up to get a overview table and enable us to do some regressions to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
