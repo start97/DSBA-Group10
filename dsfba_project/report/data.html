@@ -171,14 +171,14 @@ pre code {
 <h1 class="tabset">Data</h1>
 <div id="data-source" class="section level3">
 <h3>Data source</h3>
-<p>We have four raw data sets. All data sets were retrieved on baltimore government open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set’s observations together.</p>
+<p>We have four raw data sets. All data sets were retrieved on Baltimore government’s open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set’s observations together.</p>
 </div>
 <div id="raw-data-sets" class="section level3">
 <h3>Raw Data sets</h3>
 </div>
 <div id="crime-data-set" class="section level3">
 <h3>2.1 Crime Data set</h3>
-<p>This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the City of Baltimore. This dataset contains 350’294 observations.</p>
+<p>This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the city of Baltimore. This data set contains 350’294 observations.</p>
 <ul>
 <li><p><strong>RowID</strong> = ID of the row, 350’294 in total</p></li>
 <li><p><strong>CrimeDateTime</strong> = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd</p></li>
@@ -192,9 +192,10 @@ pre code {
 <li><p><strong>Neighborhood</strong> = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about Community Statistical Areas.</p></li>
 <li><p><strong>Latitude</strong> = Latitude, Coordinate system: EPSG:4326 WGS 84</p></li>
 <li><p><strong>Longitude</strong> = Longitude, Coordinate system: EPSG:4326 WGS 84</p></li>
-<li><p><strong>GeoLocation</strong> = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS</p></li>
+<li><p><strong>GeoLocation</strong> = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84</p></li>
 <li><p><strong>Premise</strong> = Information on the premise where the crime was committed. One counts more than 120’000 observations in the streets.</p></li>
 </ul>
+<pre class="r"><code>crime_data &lt;- read.csv(file = here::here(&quot;data/Baltimore_Part1_Crime_data.csv&quot;))</code></pre>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/part1-crime-data/explore" class="uri">https://data.baltimorecity.gov/datasets/part1-crime-data/explore</a>]</p>
 </div>
 <div id="cctv-data-set" class="section level3">
@@ -204,12 +205,13 @@ pre code {
 <li><p><strong>X = Longitude:</strong> Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p></li>
 <li><p><strong>Y = Latitude:</strong> Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator</p></li>
 <li><p><strong>OBJECTID</strong> = ID of of the camera, 837 in total</p></li>
-<li><p><strong>CAM_NUM</strong> = Unique number attributed to the camera. This might suggest that the dataset does not show the location of every camera in Baltimore. Here at this point we want to mentioned that the CAM_NUM column has many zeros, which we couldn’t relate to anything. So we are still in the process of figuring out the exact meaning of that.</p></li>
+<li><p><strong>CAM_NUM</strong> = Unique number attributed to the camera. This might suggest that the data set does not show the location of every camera in Baltimore.</p></li>
 <li><p><strong>LOCATION</strong> = Textual information on where the camera is located</p></li>
 <li><p><strong>PROJ</strong> = Name of the area in which the camera is located. It does not always match the name of the “standard” community statistical areas.</p></li>
 <li><p><strong>XCCORD</strong> = Longitude, Coordinate system: EPSG:4326 WGS 84</p></li>
 <li><p><strong>YCOORD</strong> = Latitude, Coordinate system: EPSG:4326 WGS 84</p></li>
 </ul>
+<pre class="r"><code>cctv_data &lt;- read.csv(file = here::here(&quot;data/Baltimore_CCTV_Locations_Crime_Cameras.csv&quot;))</code></pre>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore" class="uri">https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore</a>]</p>
 </div>
 <div id="poverty-data-set" class="section level3">
@@ -219,9 +221,10 @@ pre code {
 <ul>
 <li><p><strong>CSA2010</strong> = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p></li>
 <li><p><strong>hhpov15 - hhpov19</strong> = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.</p></li>
-<li><p>**Shape__Area - Shape__Length** = standard fields to determine the area and the perimeter of a polygon</p></li>
+<li><p><strong>Shape_Area - Shape_Length</strong> = standard fields to determine the area and the perimeter of a polygon</p></li>
 </ul>
-<p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/bniajfi" class="uri">https://data.baltimorecity.gov/datasets/bniajfi</a>::percent-of-family-households-living-below-the-poverty-line-community-statistical-area/explore]</p>
+<pre class="r"><code>poverty_data &lt;- read.csv(file = here::here(&quot;data/Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv&quot;))</code></pre>
+<p><em>Source of the data set:</em> [<a href="https://arcg.is/1qOrnH" class="uri">https://arcg.is/1qOrnH</a>]</p>
 </div>
 <div id="area-data-set" class="section level3">
 <h3>2.4 Area Data set</h3>
@@ -229,7 +232,7 @@ pre code {
 <ul>
 <li><p><strong>community</strong> = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.</p></li>
 <li><p><strong>neigh</strong> = name of the neighbourhoods contained in the area.</p></li>
-<li><p><strong>tracts</strong> = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (<a href="http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pm" class="uri">http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pm</a> d_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).</p></li>
+<li><p><strong>tracts</strong> = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (<a href="http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9" class="uri">http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9</a>).</p></li>
 </ul>
 <pre class="r"><code>area_data &lt;- read_csv(file = here::here(&quot;data/Community_Statistical_Areas__CSAs___Reference_Boundaries.csv&quot;))</code></pre>
 <p><em>Source of the data set:</em> [<a href="https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26" class="uri">https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26</a>]</p>
@@ -238,76 +241,92 @@ pre code {
 <h3>2.5 Data Wrangling</h3>
 <div id="data-wrangling-area" class="section level4">
 <h4>2.5.1 Data Wrangling: Area</h4>
-<p>Here main goal is the transformation of the area data into a new dataset, which contains one observation per names of neighborhoods. We achieve that by first creating a new dataset with each neighbourhood being assigned to an area and second establishing a new columns with lower case letter for later merge.</p>
-<pre class="r"><code>
-area_data2 &lt;- separate_rows(area_data, Neigh, sep = &quot;, &quot;) #Creation of a new dataset with each neighbourhood being assigned to an area
+<p>Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per <strong>neighborhood</strong>. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using <code>separate_rows</code> and second establishing a new columns with lower case letter for later merge.To do so, we combine the <code>mutate</code> function with <code>tolower</code> which convert the uppercase letters of string to a lowercase string.</p>
+<pre class="r"><code>area_data2 &lt;- separate_rows(area_data, Neigh, sep = &quot;, &quot;) #Creation of a new data set with each neighborhood being assigned to an area
 
 area_data2 &lt;- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column with lower case letters</code></pre>
 </div>
 <div id="data-wrangling-crime" class="section level4">
 <h4>2.5.2 Data Wrangling: Crime</h4>
-<p>Since in the crime dataset the neighborhood names are written in lower case letters we again create a colums with lower case letters to join the two datasets. Next, we use the <span class="math inline">\(anti_join function\)</span> to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. These include using the names function:</p>
+<p>As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using <code>left_join</code>. Next, we use the <code>anti_join</code> function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.</p>
 <ul>
-<li>#mount washington -&gt; Mt. Washington</li>
-<li>carroll - camden industrial area -&gt; Caroll-Camden Industrial Area</li>
-<li>patterson park neighborhood -&gt; Patterson Park</li>
-<li>glenham-belhar -&gt; Glenham-Belford</li>
-<li>new southwest/mount clare -&gt; Hollins Market</li>
-<li>mount winans = Mt.Winans</li>
-<li>rosemont homeowners/tenants -&gt; Rosemont</li>
-<li>broening manor -&gt; O’Donnell Heights</li>
-<li>boyd-booth -&gt; Booth-boyd</li>
-<li>lower herring run park -&gt; Herring Run Park</li>
-<li>mt pleasant park -&gt; Mt. Pleasant Park</li>
+<li>mount washington <span class="math inline">\(→\)</span> Mt. Washington</li>
+<li>carroll - camden industrial area <span class="math inline">\(→\)</span> Caroll-Camden Industrial Area</li>
+<li>patterson park neighborhood <span class="math inline">\(→\)</span> Patterson Park</li>
+<li>glenham-belhar <span class="math inline">\(→\)</span> Glenham-Belford</li>
+<li>new southwest/mount clare <span class="math inline">\(→\)</span> Hollins Market</li>
+<li>mount winans <span class="math inline">\(→\)</span> Mt.Winans</li>
+<li>rosemont homeowners/tenants <span class="math inline">\(→\)</span> Rosemont</li>
+<li>broening manor <span class="math inline">\(→\)</span> O’Donnell Heights</li>
+<li>boyd-booth <span class="math inline">\(→\)</span> Booth-boyd</li>
+<li>lower herring run park <span class="math inline">\(→\)</span> Herring Run Park</li>
+<li>mt pleasant park <span class="math inline">\(→\)</span> Mt. Pleasant Park</li>
 </ul>
-<p>We get rid of the 764 remaining observations which had no information about neighbourhood. Finally, we use the <span class="math inline">\(semi_join function\)</span> to create the final datasets which in total is basically the same dataset as the original one minus the 764 observations.</p>
-<p>To see the structure of the dataset we use the <span class="math inline">\(str function\)</span> and filter for the dates from</p>
-<pre><code>#&gt;  [1] &quot;mount washington&quot;                
-#&gt;  [2] &quot;carroll - camden industrial area&quot;
-#&gt;  [3] &quot;patterson park neighborhood&quot;     
-#&gt;  [4] &quot;glenham-belhar&quot;                  
-#&gt;  [5] &quot;new southwest/mount clare&quot;       
-#&gt;  [6] &quot;&quot;                                
-#&gt;  [7] &quot;mount winans&quot;                    
-#&gt;  [8] &quot;rosemont homeowners/tenants&quot;     
-#&gt;  [9] &quot;broening manor&quot;                  
-#&gt; [10] &quot;boyd-booth&quot;                      
-#&gt; [11] &quot;lower herring run park&quot;          
-#&gt; [12] &quot;mt pleasant park&quot;
-#&gt; &#39;data.frame&#39;:    349530 obs. of  25 variables:
-#&gt;  $ ï..X           : num  1421661 1428630 1429982 1433589 1421304 ...
-#&gt;  $ Y              : num  593584 592267 593694 590797 591033 ...
-#&gt;  $ RowID          : int  1 2 3 4 5 6 7 8 9 10 ...
-#&gt;  $ CrimeDateTime  : chr  &quot;2021/09/24 08:00:00+00&quot; &quot;2021/09/23 02:0&quot;..
-#&gt;  $ CrimeCode      : chr  &quot;6D&quot; &quot;6D&quot; &quot;6J&quot; &quot;6J&quot; ...
-#&gt;  $ Location       : chr  &quot;500 SAINT PAUL ST APT 118&quot; &quot;0 N WASHINGT&quot;..
-#&gt;  $ Description    : chr  &quot;LARCENY FROM AUTO&quot; &quot;LARCENY FROM AUTO&quot; &quot;&quot;..
-#&gt;  $ Inside_Outside : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-#&gt;  $ Weapon         : chr  NA NA NA NA ...
-#&gt;  $ Post           : chr  &quot;124&quot; &quot;212&quot; &quot;221&quot; &quot;225&quot; ...
-#&gt;  $ District       : chr  &quot;CENTRAL&quot; &quot;SOUTHEAST&quot; &quot;SOUTHEAST&quot; &quot;SOUTHE&quot;..
-#&gt;  $ Neighborhood   : chr  &quot;MOUNT VERNON&quot; &quot;BUTCHER&#39;S HILL&quot; &quot;MCELDERR&quot;..
-#&gt;  $ Latitude       : num  39.3 39.3 39.3 39.3 39.3 ...
-#&gt;  $ Longitude      : num  -76.6 -76.6 -76.6 -76.6 -76.6 ...
-#&gt;  $ GeoLocation    : chr  &quot;(39.2959,-76.6137)&quot; &quot;(39.2922,-76.5891)&quot;&quot;..
-#&gt;  $ Premise        : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-#&gt;  $ VRIName        : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
-#&gt;  $ Total_Incidents: int  1 1 1 1 1 1 1 1 1 1 ...
-#&gt;  $ Shape          : logi  NA NA NA NA NA NA ...
-#&gt;  $ neigh          : chr  &quot;mount vernon&quot; &quot;butcher&#39;s hill&quot; &quot;mcelderr&quot;..
-#&gt;  $ FID            : num  55 16 31 26 14 32 13 26 28 41 ...
-#&gt;  $ Community      : chr  &quot;Midtown&quot; &quot;Fells Point&quot; &quot;Madison/East End&quot;..
-#&gt;  $ Neigh          : chr  &quot;Mount Vernon&quot; &quot;Butcher&#39;s Hill&quot; &quot;McElderr&quot;..
-#&gt;  $ Tracts         : chr  &quot;110100, 110200, 140100, 120500&quot; &quot;020200,&quot;..
-#&gt;  $ Link           : chr  &quot;http://bniajfi.org/community/Midtown/&quot; &quot;&quot;..</code></pre>
+<pre class="r"><code>crime_data &lt;- mutate(crime_data,neigh=tolower(crime_data$Neighborhood)) #Creation of new column with lower case letters
+
+crime_data_with_areas &lt;- crime_data %&gt;% 
+  left_join(area_data2,by=&quot;neigh&quot;) #We create a new data sets that contains the name of the area in which the crime was committed
+
+crime_data_NAs &lt;- crime_data %&gt;% 
+  anti_join(area_data2,
+            by=&quot;neigh&quot;) #Here is the list of all the NAs we have
+
+unique(crime_data_NAs$neigh) #We see that we have very few unassigned names, we can change this by hand.
+
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;mount washington&quot;] &lt;- &quot;mt. washington&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;carroll - camden industrial area&quot;] &lt;- &quot;caroll-camden industrial area&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;patterson park neighborhood&quot;] &lt;- &quot;patterson park&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;glenham-belhar&quot;] &lt;- &quot;glenham-belford&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;new southwest/mount clare&quot;] &lt;- &quot;hollins market&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;mount winans&quot;] &lt;- &quot;mt. winans&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;rosemont homeowners/tenants&quot;] &lt;- &quot;rosemont&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;broening manor&quot;] &lt;- &quot;o&#39;donnell heights&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;boyd-booth&quot;] &lt;- &quot;booth-boyd&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;lower herring run park&quot;] &lt;- &quot;herring run park&quot;
+crime_data[&quot;neigh&quot;][crime_data[&quot;neigh&quot;]==&quot;mt pleasant park&quot;] &lt;- &quot;mt. pleasant park&quot;
+
+#We got rid of the 764 remaining observations which had no information about neighbourhood</code></pre>
+<p>We get rid of the 764 remaining observations which had no information about neighborhood. This represent a very tiny portion of our total number of observations. Finally, we use the <code>semi join</code> function to create the final data sets which in total is basically the same data set as the original one minus the 764 observations.</p>
+<p>Finally, we want to get rid of the observations dating before 2000, as the the Baltimore CCTV program started in the year 2000. We first check the structure of the data set using the <code>str</code> function. We notice that the CrimeDateTime column is not a date. We change that and finally filter the information we want to keep using <code>filter</code>.</p>
+<pre class="r"><code>crime_data_with_areas &lt;- crime_data %&gt;% 
+ semi_join(area_data2,by=&quot;neigh&quot;) %&gt;% 
+  left_join(area_data2,by=&quot;neigh&quot;) #Here we have the final data frame with a community for each crime
+
+str(crime_data_with_areas) # We see that the crime CrimeDateTime column is not a date. We thus convert it.
+
+crime_data_with_areas$CrimeDateTime &lt;-  as.Date(crime_data_with_areas$CrimeDateTime)
+
+crime_data_with_areas &lt;- crime_data_with_areas %&gt;%  filter(CrimeDateTime &gt;= as.Date(&quot;2000-01-01&quot;)) #We had 24 observations that dates back to before the year 2000 and 24 observation with no date. We only select crime committed after 2000 as the CCTV program in Baltimore started in 2000.</code></pre>
 </div>
 <div id="data-wrangling-poverty" class="section level4">
 <h4>2.5.3 Data Wrangling: Poverty</h4>
+<p>56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we obviously have only 55 statistical areas provided, since we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for Baltimore in the year 2019: Here we took the average of the past years.</p>
+<pre class="r"><code>poverty_data &lt;- rbind(poverty_data,list(56,&quot;Unassigned -- Jail&quot;,0,0,0,0,0,0,0))
+
+poverty_data[48,7] &lt;- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5],poverty_data[48,6]) %&gt;% mean() #The poverty rate of South Baltimore in 19 was missing. This area&#39;s rate over the past years seems to be stable (always one of the richest area), that&#39;s why we compute the mean of the past 4 years to replace the missing value.</code></pre>
 </div>
 <div id="data-wrangling-cctv" class="section level4">
 <h4>2.5.4 Data Wrangling: CCTV</h4>
-<p>which(is.na(cctv_data<span class="math inline">\(X)) which(is.na(cctv_data\)</span>Y)) filter(cctv_data, X==&quot;“) filter(cctv_data, ==”&quot;)</p>
-<p>#I don’t know if it is the proper technique but by doing so I ensure that we have no NAs neihter empty values and so that our dataset is tidy</p>
+<p>This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore,we still need to make sure to not have any missing values in these two columns. We do so by combination the <code>which</code>and the <code>is.na</code>function and by filtering for potential empty observations.</p>
+<pre class="r"><code>which(is.na(cctv_data$X))
+#&gt; integer(0)
+which(is.na(cctv_data$Y))
+#&gt; integer(0)
+filter(cctv_data, cctv_data$X==&quot;&quot;)
+#&gt;  [1] X                Y                OBJECTID        
+#&gt;  [4] CAM_NUM          NOTES            LOCATION        
+#&gt;  [7] PROJ             XCOORD           YCOORD          
+#&gt; [10] created_user     created_date     last_edited_user
+#&gt; [13] last_edited_date
+#&gt; &lt;0 rows&gt; (or 0-length row.names)
+filter(cctv_data, cctv_data$Y==&quot;&quot;) 
+#&gt;  [1] X                Y                OBJECTID        
+#&gt;  [4] CAM_NUM          NOTES            LOCATION        
+#&gt;  [7] PROJ             XCOORD           YCOORD          
+#&gt; [10] created_user     created_date     last_edited_user
+#&gt; [13] last_edited_date
+#&gt; &lt;0 rows&gt; (or 0-length row.names)
+#We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.</code></pre>
 <ul>
 <li>Sources</li>
 <li>Description</li>
