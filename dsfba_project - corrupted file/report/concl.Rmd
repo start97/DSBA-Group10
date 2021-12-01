@@ -1,9 +1,0 @@
-# Conclusion {.tabset}
-
-```{r, echo = FALSE, message = FALSE, warning = FALSE}
-source(here::here("scripts/setup.R"))
-```
-
-* Take home message
-* Limitations
-* Future work?
