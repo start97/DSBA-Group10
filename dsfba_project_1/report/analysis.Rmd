@@ -281,9 +281,17 @@ ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=Misdem
 
 ```{r echo=FALSE, results = 'markup'}
 
+#Socio-economic indicators:
+
 Unemployment <- read.csv(file = here::here("data/Unemployment_Rate.csv"))
 
 Unemployment[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0,0,0,0,0,0,0,0)
+
+Internet_data <- read.csv(file = here::here("data/Percent_of_Households_with_No_Internet_at_Home.csv"))
+
+Internet_data[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0)
+
+#Educational indicators:
 
 HSAexam <- read.csv(file = here::here("data/Percentage_of_Students_Passing_H.S.A._Government.csv"))
 
@@ -293,34 +301,63 @@ Readiness <- read.csv(file = here::here("data/Kindergarten_School_Readiness.csv"
 
 Readiness[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0)
 
-Internet_data <- read.csv(file = here::here("data/Percent_of_Households_with_No_Internet_at_Home.csv"))
+#Racial indicators
 
-Internet_data[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0)
+Caucasian_perc <- read.csv(file = here::here("data/Percent_of_Residents_-_White_Caucasian_(Non-Hispanic).csv"))
+
+Caucasian_perc[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0,0,0,0,0)
+
+AfroAm_perc <- read.csv(file = here::here("data/Percent_of_Residents_-_Black_African-American_(Non-Hispanic).csv"))
+
+AfroAm_perc[56,] <- list(56,"Unassigned -- Jail",0,0,0,0,0,0,0,0,0)
 
 Community_data <- Community_data %>% 
   left_join(HSAexam[,c(2,6)],by=c("Community"="CSA2010")) %>%
   left_join(Internet_data[,c(2,5)],by=c("Community"="CSA2010")) %>% 
   left_join(Readiness[,c(2,5)],by=c("Community"="CSA2010")) %>% 
-  left_join(Unemployment[,c(2,12)],by=c("Community"="CSA2010"))
+  left_join(Unemployment[,c(2,12)],by=c("Community"="CSA2010"))%>% 
+  left_join(Caucasian_perc[,c(2,9)],by=c("Community"="CSA2010"))%>% 
+  left_join(AfroAm_perc[,c(2,9)],by=c("Community"="CSA2010"))
 
-fullmod <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19+Community_data$ready13+Community_data$unempr19)
+fullmod <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19+Community_data$ready13+Community_data$unempr19+Community_data$pwhite20+Community_data$paa20)
 
 nullmod <- lm(Community_data$density_perc~1)
 
 selAIC <- step(nullmod,scope=list(lower=nullmod,upper=fullmod),direction="forward")
-summary(selAIC)
+summary(selAIC) #We have a satisfactory R-Squared
 
 library(car)
-vif(selAIC)
+vif(selAIC) #Yet, the issue is that we have multicollinearity
 
-fullmod2 <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19+Community_data$ready13+Community_data$unempr19+Community_data$CrimePer1000inhabitants+Community_data$PropertyCrimePerCapitaPerArea+Community_data$FelonyPerCapitaPerArea+Community_data$MisdemeanorPerCapitaPerArea)
+lm(Community_data$paa20~Community_data$pwhite20)
+summary(lm(Community_data$paa20~Community_data$pwhite20)) #This illustrates the mutlicollinearity issue, percentage of white people is highly correlated with percentage of black people
+
+lm(Community_data$density_perc~Community_data$pwhite20+Community_data$paa20)
+summary(lm(Community_data$density_perc~Community_data$pwhite20+Community_data$paa20)) #We observe that the percentage of white people is negatively correlated with CCTV density while the percentage of black people is positively correlated. However, none of the results are significant.
+
+lm(Community_data$density_perc~Community_data$pwhite20)
+summary(lm(Community_data$density_perc~Community_data$pwhite20))
+
+lm(Community_data$density_perc~Community_data$paa20)
+summary(lm(Community_data$density_perc~Community_data$paa20)) #Overall, this enables us to conclude that the race does not seem to be such a good predictor
+
+fullmod2 <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19 + Community_data$ready13 + Community_data$unempr19)
 
 nullmod <- lm(Community_data$density_perc~1)
 
 selAIC2 <- step(nullmod,scope=list(lower=nullmod,upper=fullmod2),direction="forward")
-summary(selAIC2)
+summary(selAIC2) #We see that internet access information and readiness are not even included and that among the included variables, only two are significant: violent crime and unemployment rate. This enables us to conclude that like racial metrics, educational metrics are poor predictors of CCTV levels.
 
-vif(selAIC2)
+library(car)
+vif(selAIC2) #We can try to make a multiple regression containing the only two significant variables: 
+
+CCTV_VS_ViolentCrime_and_Unemp <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea+Community_data$unempr19)
+
+summary(CCTV_VS_ViolentCrime_and_Unemp) #We see that unemployment becomes insignificant
+
+#Overall, it really seems that the main predictor of CCTV density that we could observe is violent crime. Racial metrics, educational metrics and socio economic indicators are quite poor predictors. We must note that linear regressions with 56 observations might also be problematic to yield great results.
+
+#Yet, this statement must be mitigated. Indeed, with R-squared of approximatnely 50%, we are in situation where we can only explain 50% of the  variation. This means that thee approximantely is 50% of the variation whose origin is unknown to us. 
 
 ```
 
