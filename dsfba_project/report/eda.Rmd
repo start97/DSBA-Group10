@@ -105,6 +105,11 @@ CrimeStatsPerArea <-  mutate(CrimeStatsPerArea,CrimePer1000inhabitants=((CrimeSt
 CrimeStatsPerArea <- rbind(CrimeStatsPerArea,list("Unassigned -- Jail",0,0))  #We have no information about crimes committed in jail, yet, the community statistical area encompass 56 area, including jail. In order to ensure consistency, we must add a 56th observation in this data frame.
 
 sum(CrimeStatsPerArea$CrimeFrequency) #The total sum is 349482, which is what we expect
+
+Community_data <- CrimeStatsPerArea[,-2] %>% 
+  left_join(CCTV_per_area,by="Community") %>%
+  left_join(poverty_data[,c(2,7)],by=c("Community"="CSA2010"))
+
 ```
 
 #### 3.2.1 Mapping of crime per capita per community
@@ -191,7 +196,60 @@ MisdemeanorStats$MisdemeanorPerCapitaPerArea <-((CrimePerCategoryPerArea%>% filt
 
 MisdemeanorStats[56,] <- list("Unassigned -- Jail","Misdemeanor",0,0)
 
+Community_data <- Community_data %>% 
+  left_join(FelonyStats[,-c(2:3)],by="Community") %>%
+  left_join(MisdemeanorStats[,-c(2:3)],by="Community")
+
 ```
+
+As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by 'type' of crime. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim. Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder.
+
+In order determine whether the crimes contained in our `crime_data_with_area`. We will use a data set once again provided by the Baltimore open data portal. This data set provides information about the crime codes used by the police to categorize crimes. We first import the data set. Then, we compare whether codes are well and truly similar, three crime codes are written with an extra blank space afterward. We correct that. Then, suing the `left_join` function, we add a new column to our `crime_data_with_area` data frame. We then wish to create data frames for both violent and property crime. The methodology is the same as we used for felonies and misdemeanors.
+
+```{r echo=TRUE}
+
+crimecode_data <- read.csv(file = here::here("data/Balt_CRIME_CODES.csv"))
+
+unique(crime_data_with_areas$CrimeCode) %in% unique(crimecode_data$CODE) #We identify spelling errors
+
+crimecode_data$CODE[185] <- "8H"
+crimecode_data$CODE[186] <- "8I"
+crimecode_data$CODE[187] <- "8J"
+
+crime_data_with_areas <- crime_data_with_areas %>% 
+  left_join(crimecode_data[,c(1,8)],by=c("CrimeCode"="CODE"))
+
+unique(crime_data_with_areas$VIO_PROP_CFS)
+which(is.na(crime_data_with_areas$VIO_PROP_CFS)) #We ensure that we have no NAs
+
+CrimePerCategory2PerArea <- crime_data_with_areas %>% 
+  group_by(Community,VIO_PROP_CFS) %>%
+  summarize(RepartitionPerCategory2PerArea=n())
+
+sum(CrimePerCategory2PerArea$RepartitionPerCategory2PerArea) #Again, we check that we indeed have 349482 observations
+
+CrimeCategory2Repartition <- CrimePerCategory2PerArea %>% 
+  group_by(VIO_PROP_CFS) %>% 
+  summarise(Repartition=sum(RepartitionPerCategory2PerArea))
+
+PropertyStats <-  CrimePerCategory2PerArea %>% filter(VIO_PROP_CFS=="PROPERTY") 
+
+PropertyStats$PropertyCrimePerCapitaPerArea <-((CrimePerCategory2PerArea%>% filter(VIO_PROP_CFS=="PROPERTY"))[[3]]/population_data$tpop20)*1000
+
+PropertyStats[56,] <- list("Unassigned -- Jail","PROPERTY",0,0)
+
+ViolentStats <-  CrimePerCategory2PerArea %>% filter(VIO_PROP_CFS=="VIOLENT") 
+
+ViolentStats$ViolentCrimePerCapitaPerArea <-((CrimePerCategory2PerArea%>% filter(VIO_PROP_CFS=="VIOLENT"))[[3]]/population_data$tpop20)*1000
+
+ViolentStats[56,] <- list("Unassigned -- Jail","PROPERTY",0,0)
+
+Community_data <- Community_data %>% 
+  left_join(ViolentStats[,c(1,4)],by="Community") %>% 
+  left_join(PropertyStats[,c(1,4)],by="Community")
+
+```
+
 
 #### 3.3.1 Mapping of felonies and Misdemeanors
 
@@ -332,6 +390,10 @@ crime_evolution <- CrimePerCapitaPerArea2021 %>%
   left_join(CrimePerCapitaPerArea2016,by="Community") %>% 
   left_join(CrimePerCapitaPerArea2015,by="Community") %>% 
   left_join(CrimePerCapitaPerArea2014,by="Community")
+
+Community_data <- Community_data %>% 
+  left_join(crime_evolution,by="Community")
+
 ```
 
 ### 3.5 Internet access and crimes
@@ -339,6 +401,7 @@ crime_evolution <- CrimePerCapitaPerArea2021 %>%
 First, we need to merge the data in one big file. Here every datasets needs one colums which is named in the same way (e.g. Community). Here we create a table with the following colums: Community Statistical Area, Internet accessibility CSA,CCTV per area, CrimeStatsPerArea,crime_data_with_areas, FelonyStats, MisdemeanorStats,  . Merging these files in one excel will help up to get a overview table and enable us to do some regressions to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
 
 ```{r echo=TRUE}
-Joined_Poverty_Crime_dataset <- crime_data_with_areas  %>% left_join(Percent_of_Households_with_No_Internet_at_Home,by="community")
+
+
 ```
 
