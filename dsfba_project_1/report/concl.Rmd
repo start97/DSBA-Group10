@@ -4,9 +4,9 @@
 source(here::here("scripts/setup.R"))
 ```
 
-* Take home message
-* Limitations
+To put it all in a nutshell, our analysis shows quite well that CCTV placement seems to follow areas where crime per capita is highest. Although this is not conclusive evidence, our observation goes against the idea that CCTVs are effective crime deterrents. Regarding crime types our analysis and results, it therefore does not seem like the presence of CCTV has a particularly strong impact on a certain type of crime. MOreover, one of our initial hypothesis was that the government respected more the privacy of wealthier people, which turned out to be proven wrongly by data. However, we are not sure whether wealth is the only influential factor in this. Regarding the distribution and pattern of crime types in Baltimore, we see that in Downtown, misdemeanor per capita is much larger than the felony per capita and it must be mentioned that this area also is one of the richest area in Baltimore. This suggests that richer areas are more impacted by less severe crimes.
 
-+ the "CAM_NUM" column in the CCTV dataset suggests that not all CCTVS are included in our data set.
+**Limitations:** Our limitations surround the data, the methodology and the selection bias for our research. First, we see that we have same limitations in the datasets, i.e. in the CCTV dataset the "CAM_NUM" column suggests that not all CCTVS are included in our data set. Second, we used simple regression models to show the effects of certain criteria on our variables of interest. Here of course there are more advanced ways to model and predict some effects on different datasets. 
 
-* Future work?
+
+**Future work:** We only involved in descriptive data analysis, without doing any concrete modelling on some external datasets. One advancement and proposal for future work is to build a model on our Baltimore dataset and treat it as test set, and then apply this model on another data set of a different city to see whether we could predict "where the next crimes would happen and where CCTVs would have a big impact". Here, we could create trees, or random forests for this prediction. Moreover, one could also study whether it is really the CCTVs which determine crime or whether there are alternatives to CCTVs. Maybe nudging people in doing good through showing some poster with some motivational verses - i.e. "Do to others how you yourself want to be treated"- would have a higher impact and would be overall cheaper. 
