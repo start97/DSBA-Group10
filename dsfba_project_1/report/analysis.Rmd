@@ -16,10 +16,9 @@ CCTV_VS_crimes <- CCTV_per_area %>%
 regression <- lm(CCTV_VS_crimes$density_perc~CCTV_VS_crimes$CrimePer1000inhabitants)
 
 stargazer(regression,
-          title = "Regression 1 data",
+          title = "Regression Crime vs CCTVs",
           type = "html")
 
-summary (regression)
 
 ggplot(data=CCTV_VS_crimes,mapping= aes(x=CrimePer1000inhabitants,y=density_perc)) + 
   labs(title = "Crime per Capita per Community VS CCTV Density per Community", x="CrimePerCapitaPerCommunity",y="CCTVDensityPerCommunity")+
@@ -157,7 +156,10 @@ CCTV_VS_Felony <- CCTV_per_area %>%
   left_join(FelonyStats,by="Community")
 
 regression5 <- lm(CCTV_VS_Felony$density_perc~CCTV_VS_Felony$FelonyPerCapitaPerArea)
-summary(regression5)
+
+stargazer(regression5,
+          title = "CCTV vs FelonyPerCapitaPerArea",
+          type = "text")
 
 ggplot(data=CCTV_VS_Felony,mapping= aes(x=FelonyPerCapitaPerArea,y=density_perc)) + 
   labs(title = "Felony per Capita per Community VS CCTV Density per Community", x="FelonyPerCapitaPerCommunity",y="CCTVDensityPerCommunity")+
@@ -170,7 +172,10 @@ CCTV_VS_misdemeanors <- CCTV_per_area %>%
   left_join(MisdemeanorStats,by="Community")
 
 regression6 <- lm(CCTV_VS_misdemeanors$density_perc~CCTV_VS_misdemeanors$MisdemeanorPerCapitaPerArea)
-summary(regression6)
+
+stargazer(regression6,
+          title = "CCTV vs MisdemeanorperCapitaPerArea",
+          type = "text")
 
 ggplot(data=CCTV_VS_misdemeanors,mapping= aes(x=MisdemeanorPerCapitaPerArea,y=density_perc)) + 
   labs(title = "Misdemeanor per Capita per Community VS CCTV Density per Community", x="MisdemeanorPerCapitaPerCommunity",y="CCTVDensityPerCommunity")+
@@ -186,14 +191,18 @@ CCTV_VS_ViolentCrime <- CCTV_per_area %>%
 
 regression21 <- lm(CCTV_VS_ViolentCrime$density_perc~CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea)
 
-summary(regression21)
+stargazer(regression21,
+          title = "CCTV vs ViolentCrimePerArea",
+          type = "text")
 
 CCTV_VS_PropertyCrime <- CCTV_per_area %>% 
   left_join(PropertyStats,by="Community")
 
 regression22 <- lm(CCTV_VS_PropertyCrime$density_perc~CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea)
 
-summary(regression22)
+stargazer(regression22,
+          title = "Property Crime vs CCTVs",
+          type = "html")
 
 #We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
 
@@ -220,7 +229,10 @@ CCTV_VS_poverty <- CCTV_per_area %>%
   left_join(poverty_data,by=c("Community"="CSA2010"))
 
 regression2 <- lm(CCTV_VS_poverty$density_perc~CCTV_VS_poverty$hhpov19)
-summary(regression2)
+
+stargazer(regression2,
+          title = "CCTV vs poverty ",
+          type = "text")
 
 ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) + 
   labs(title = "CCTV density VS poverty rate", x="Poverty rate",y="CCTV Density")+
@@ -254,7 +266,10 @@ Crime_VS_Poverty <- CrimeStatsPerArea %>%
   left_join(poverty_data,by=c("Community"="CSA2010"))
 
 regression3 <- lm(Crime_VS_Poverty$CrimePer1000inhabitants~Crime_VS_Poverty$hhpov19)
-summary(regression3)
+
+stargazer(regression3,
+          title = "CrimePer1000Inhabitants vs Poverty",
+          type = "html")
 
 ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
   labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
@@ -272,7 +287,11 @@ Felony_VS_Misdemeanor <- FelonyStats %>%
   left_join(MisdemeanorStats,by="Community")
 
 regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdemeanor$MisdemeanorPerCapitaPerArea)
-summary(regression4)#This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
+#This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
+
+stargazer(regression4,
+          title = "Felony vs Misdemeanor",
+          type = "text")
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
   labs(title = "Misdemeanor VS Felony", x="Felons per capita",y="Misdemeanor per capita")+
@@ -329,7 +348,11 @@ fullmod <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPe
 nullmod <- lm(Community_data$density_perc~1)
 
 selAIC <- step(nullmod,scope=list(lower=nullmod,upper=fullmod),direction="forward")
-summary(selAIC) #We have a satisfactory R-Squared
+#We have a satisfactory R-Squared
+
+stargazer(selAIC,
+          title = "Community data vs",
+          type = "text")
 
 library(car)
 vif(selAIC) #Yet, the issue is that we have multicollinearity

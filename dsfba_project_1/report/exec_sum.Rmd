@@ -1,4 +1,4 @@
-## Executive summary {.tabset}
+# Executive summary {.tabset}
 
 ### Overview and motivation
 
