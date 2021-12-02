@@ -11,5 +11,5 @@ output:
     code_folding: hide
 ---
 
-```{r child = c('intro.Rmd', 'data.Rmd', 'eda.Rmd', 'analysis.Rmd', 'concl.Rmd')}
+```{r child = c('exec_sum.Rmd', intro.Rmd', 'data.Rmd', 'eda.Rmd', 'analysis.Rmd', 'concl.Rmd')}
 ```
