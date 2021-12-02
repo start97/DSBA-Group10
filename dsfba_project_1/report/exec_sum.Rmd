@@ -1,0 +1,15 @@
+# Executive summary {.tabset}
+
+### Overview and motivation
+
+```{r, echo = FALSE, message = FALSE, warning = FALSE}
+source(here::here("scripts/setup.R"))
+```
+
+# Research goal 
+
+# Methodology
+
+# Main Takeaways
+
+# Conclusion
