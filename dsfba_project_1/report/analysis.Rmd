@@ -337,6 +337,11 @@ Cherry_Hill_map_Felony <- ggplot(Cherry_Hill_Felony,aes(x=Year,y=Cherry_Hill_evo
 
 grid.arrange(Downtown_Seton_Hill_map_Felony,Sandtown_Winchester_Harlem_Park_map_Felony,Oldtown_Middle_East_map_Felony,Cherry_Hill_map_Felony,nrow=2,ncol=2)
 
+Felony_Evolution_VS_CCTV <- Community_data[,c(1,63,73,4)] %>% 
+  mutate(change_perc=((Community_data$FelonyPer1000inhabitants19/Community_data$FelonyPer1000inhabitants14)-1)*100)
+
+Felony_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
+
 Poppleton_evolution_Felony <- as.vector(t(Community_data[46,c(73,71,69,67,65,63,61)]))
 
 Poppleton_Felony <- data.frame(Poppleton_evolution_Felony,Year)
@@ -377,6 +382,24 @@ grid.arrange(Poppleton_map_Felony,Madison_East_End_map_Felony,Clifton_Berea_map_
 
 
 ```
+We can check how ... evolved over time.
+
+```{r results='markup'}
+
+Felony_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(Category=="Felony") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "In Baltimore, Felony started to decrease as from 2017",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring felonies"),width=80),x="Year",y="Felony occurences")
+
+Felony_Yearly_evolution_map
+
+regression10 <- lm(Felony_Evolution_VS_CCTV$change_perc~Felony_Evolution_VS_CCTV$density_perc)
+summary(regression10)
+
+```
+
 We continue with misdemeanors.
 
 ```{r echo=FALSE, results = 'markup'}
@@ -476,6 +499,13 @@ Penn_North_Reservoir_Hill_map_Misdemeanor <- ggplot(Penn_North_Reservoir_Hill_Mi
 grid.arrange(Washington_Village_Pigtown_map_Misdemeanor,Harbor_East_Little_Italy_map_Misdemeanor,Canton_map_Misdemeanor,Penn_North_Reservoir_Hill_map_Misdemeanor,nrow=2,ncol=2)
 
 ```
+We can check how ... evolved over time.
+
+```{r results='markup'}
+
+
+```
+
 
 #### 4.2.2 CCTVs VS Violent and Property Crime
 
@@ -565,12 +595,190 @@ library(pdp)
 
 grid.arrange(Downtown_Seton_Hill_map_Violent,Oldtown_Middle_East_map_Violent,Sandtown_Winchester_Harlem_Park_map_Violent,Cherry_Hill_map_Violent,nrow=2,ncol=2)
 
+Violent_Crime_Evolution_VS_CCTV <- Community_data[,c(1,31,41,4)] %>% 
+  mutate(change_perc=((Community_data$ViolentCrimePer1000inhabitants19/Community_data$ViolentCrimePer1000inhabitants14)-1)*100)
+
+Violent_Crime_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
+
 #We observe a tendency for violent crime to slightly decrease in Sandtown-Winchester and Cherry Hill while for Downtown/Seton Hill and Oldtown/Middle East, things seem to have stood still and became worse, respectively.
 
+Clifton_Berea_evolution_Violent <- as.vector(t(Community_data[10,c(41,39,37,35,33,31,29)]))
 
+Clifton_Berea_Violent <- data.frame(Clifton_Berea_evolution_Violent,Year)
+
+Clifton_Berea_map_Violent <- ggplot(Clifton_Berea_Violent,aes(x=Year,y=Clifton_Berea_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Clifton-Berea",x="Year",y="Violent Crime per capita")
+
+Pimlico_Arlington_Hilltop_evolution_Violent <- as.vector(t(Community_data[45,c(41,39,37,35,33,31,29)]))
+
+Pimlico_Arlington_Hilltop_Violent <- data.frame(Pimlico_Arlington_Hilltop_evolution_Violent,Year)
+
+Pimlico_Arlington_Hilltop_map_Violent <- ggplot(Pimlico_Arlington_Hilltop_Violent,aes(x=Year,y=Pimlico_Arlington_Hilltop_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Pimlico/Arlington/Hilltop",x="Year",y="Violent Crime per capita")
+
+Midway_Coldstream_evolution_Violent <- as.vector(t(Community_data[36,c(41,39,37,35,33,31,29)]))
+
+Midway_Coldstream_Violent <- data.frame(Midway_Coldstream_evolution_Violent,Year)
+
+Midway_Coldstream_map_Violent <- ggplot(Midway_Coldstream_Violent,aes(x=Year,y=Midway_Coldstream_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Midway/Coldstream",x="Year",y="Violent Crime per capita")
+
+Madison_East_End_evolution_Violent <- as.vector(t(Community_data[33,c(41,39,37,35,33,31,29)]))
+
+Madison_East_End_Violent <- data.frame(Madison_East_End_evolution_Violent,Year)
+
+Madison_East_End_map_Violent <- ggplot(Madison_East_End_Violent,aes(x=Year,y=Madison_East_End_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Madison/East End",x="Year",y="Violent Crime per capita")
+
+grid.arrange(Clifton_Berea_map_Violent,Pimlico_Arlington_Hilltop_map_Violent,Midway_Coldstream_map_Violent,Madison_East_End_map_Violent,nrow=2,ncol=2)
+
+Violent_Crime_Evolution_VS_CCTV[c(10,33,36,45),c(-3)]
+
+#Comparing violent crime evolution in areas member of the high violent crime, high CCTV density cluster with violent crime evolution in areas member of th high violent crime, low CCTV density cluster, it seems like we could not detect any significant difference. The presence of CCTV does not seem to have an impact on violent crime.
 
 ```
 
+We can check how violent crime evolved over time.
+
+```{r results='markup'}
+
+Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(VIO_PROP_CFS=="VIOLENT") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "Overall, violent crime seems to have decreased for the 2017 to 2020 period",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring violent crime"),width=80),x="Year",y="Violent crime occurences")
+
+Violent_Crime_Yearly_evolution_map
+
+regression8 <- lm(Violent_Crime_Evolution_VS_CCTV$change_perc~Violent_Crime_Evolution_VS_CCTV$density_perc)
+summary(regression8)
+
+```
+
+We continue with property crimes.
+
+```{r echo=FALSE, results = 'markup'}
+
+fviz_nbclust(sc.Community_data_Clustering[,c(8,3)], kmeans, method="wss")+
+  geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
+  labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
+
+set.seed(30)
+km.clust4 <- kmeans(sc.Community_data_Clustering[,c(8,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
+print(km.clust4) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
+fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=90))
+
+Downtown_Seton_Hill_evolution_Property <- as.vector(t(Community_data[14,c(57,55,53,51,49,47,45)]))
+
+Downtown_Seton_Hill_Property <- data.frame(Downtown_Seton_Hill_evolution_Property,Year)
+
+Downtown_Seton_Hill_map_Property <- ggplot(Downtown_Seton_Hill_Property,aes(x=Year,y=Downtown_Seton_Hill_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Downtown/Seton Hill",x="Year",y="Property Crime per capita")
+
+Oldtown_Middle_East_evolution_Property <- as.vector(t(Community_data[41,c(57,55,53,51,49,47,45)]))
+
+Oldtown_Middle_East_Property <- data.frame(Oldtown_Middle_East_evolution_Property,Year)
+
+Oldtown_Middle_East_map_Property <- ggplot(Oldtown_Middle_East_Property,aes(x=Year,y=Oldtown_Middle_East_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Oldtown/Middle East",x="Year",y="Property Crime per capita")
+
+Sandtown_Winchester_Harlem_Park_evolution_Property <- as.vector(t(Community_data[47,c(57,55,53,51,49,47,45)]))
+
+Sandtown_Winchester_Harlem_Park_Property <- data.frame(Sandtown_Winchester_Harlem_Park_evolution_Property,Year)
+
+Sandtown_Winchester_Harlem_Park_map_Property <- ggplot(Sandtown_Winchester_Harlem_Park_Property,aes(x=Year,y=Sandtown_Winchester_Harlem_Park_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Sandtown-Winchester/Harlem Park",x="Year",y="Property Crime per capita")
+
+Uptown_Druid_Heights_evolution_Property <- as.vector(t(Community_data[53,c(57,55,53,51,49,47,45)]))
+
+Uptown_Druid_Heights_Property <- data.frame(Uptown_Druid_Heights_evolution_Property,Year)
+
+Uptown_Druid_Heights_map_Property <- ggplot(Uptown_Druid_Heights_Property,aes(x=Year,y=Uptown_Druid_Heights_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "SUptown/Druid Heights",x="Year",y="Property Crime per capita")
+
+grid.arrange(Downtown_Seton_Hill_map_Property,Oldtown_Middle_East_map_Property,Sandtown_Winchester_Harlem_Park_map_Property,Uptown_Druid_Heights_map_Property,nrow=2,ncol=2)
+
+Property_Crime_Evolution_VS_CCTV <- Community_data[,c(1,57,47,4)] %>% 
+  mutate(change_perc=((Community_data$PropertyCrimePer1000inhabitants19/Community_data$PropertyCrimePer1000inhabitants14)-1)*100)
+
+Property_Crime_Evolution_VS_CCTV[c(14,41,47,53),c(-3)]
+
+Washington_Village_Pigtown_evolution_Property <- as.vector(t(Community_data[54,c(57,55,53,51,49,47,45)]))
+
+Washington_Village_Pigtown_Property <- data.frame(Washington_Village_Pigtown_evolution_Property,Year)
+
+Washington_Village_Pigtown_map_Property <- ggplot(Washington_Village_Pigtown_Property,aes(x=Year,y=Washington_Village_Pigtown_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Washington Village/Pigtown",x="Year",y="Property Crime per capita")
+
+Harbor_East_Little_Italy_evolution_Property <- as.vector(t(Community_data[26,c(57,55,53,51,49,47,45)]))
+
+Harbor_East_Little_Italy_Property <- data.frame(Harbor_East_Little_Italy_evolution_Property,Year)
+
+Harbor_East_Little_Italy_map_Property <- ggplot(Harbor_East_Little_Italy_Property,aes(x=Year,y=Harbor_East_Little_Italy_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Harbor East/Little Italy",x="Year",y="Property Crime per capita")
+
+Canton_evolution_Property <- as.vector(t(Community_data[5,c(57,55,53,51,49,47,45)]))
+
+Canton_Property <- data.frame(Canton_evolution_Property,Year)
+
+Canton_map_Property <- ggplot(Canton_Property,aes(x=Year,y=Canton_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Canton",x="Year",y="Property Crime per capita")
+
+Southeastern_evolution_Property <- as.vector(t(Community_data[49,c(57,55,53,51,49,47,45)]))
+
+Southeastern_Property <- data.frame(Southeastern_evolution_Property,Year)
+
+Southeastern_map_Property <- ggplot(Southeastern_Property,aes(x=Year,y=Southeastern_evolution_Property)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Southeastern",x="Year",y="Property Crime per capita")
+
+grid.arrange(Washington_Village_Pigtown_map_Property,Harbor_East_Little_Italy_map_Property,Canton_map_Property,Southeastern_map_Property,nrow=2,ncol=2)
+
+Property_Crime_Evolution_VS_CCTV[c(5,26,49,54),c(-3)]
+
+```
+
+We can check how property crime evolved over time.
+
+```{r results='markup'}
+
+Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(VIO_PROP_CFS=="PROPERTY") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "Overall, property crime seems to have decreased for the 2017 to 2020 period",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring property crime"),width=80),x="Year",y="Property crime occurences")
+
+Property_Crime_Yearly_evolution_map
+
+regression9 <- lm(Property_Crime_Evolution_VS_CCTV$change_perc~Property_Crime_Evolution_VS_CCTV$density_perc)
+summary(regression9)
+
+```
 
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
