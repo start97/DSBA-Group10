@@ -141,6 +141,27 @@ tmap_mode("plot")
 Distorted_Crime_map
 ```
 
+#### 3.2.3 The prison anomaly
+
+One may wonder what this little square with no crime per capita, surrounded by CCTVs in the very center of Baltimore is. It actually is the prison. Zooming on this little square is interesting. The reason why we see so many CCTVs located on the right-hand side of the map is that the main entrance is located there.
+
+```{r}
+tmap_mode("plot")
+
+Prison_area <-  st_bbox(c(xmin = -8529169.92, xmax = -8526465.97,
+                      ymin =4764196.55, ymax = 4765056.50),
+                    crs = st_crs(baltimore)) %>% st_as_sfc()
+ 
+Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Baltimore Prison",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
+
+
+Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
+
+
+Prison_map
+print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
+```
+
 ### 3.3 Calculation of crime per capita by type of crime
 
 First thing we do here is to compute the unique values of the description column of the crime data set. We see that we have 14 types of crime. We want to observe crimes by types, therefore we want to make new classifications. The law consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies**. 
@@ -480,6 +501,431 @@ tmap_animation(animated_crime_map, delay=100)
 #maybe write.gif
 
 ```
+
+###3.4.1 Calculation of violent crime and property crime evolution
+
+We can make the exact same computation to calculate violent crime and property crime evolution.
+
+```{r echo=TRUE}
+
+Violent_Crime_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2020 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2020-01-01") & CrimeDateTime <= as.Date("2020-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2019 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2019-01-01") & CrimeDateTime <= as.Date("2019-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2018 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2018-01-01") & CrimeDateTime <= as.Date("2018-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2017 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2017-01-01") & CrimeDateTime <= as.Date("2017-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2016 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2016-01-01") & CrimeDateTime <= as.Date("2016-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2015 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2015-01-01") & CrimeDateTime <= as.Date("2015-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+Violent_Crime_in_2014 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2014-01-01") & CrimeDateTime <= as.Date("2014-12-31")) %>% filter(VIO_PROP_CFS=="VIOLENT")
+
+ViolentCrimePerCapitaPerArea2021 <- Violent_Crime_in_2021 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency21=n())
+
+ViolentCrimePerCapitaPerArea2021 <-  mutate(ViolentCrimePerCapitaPerArea2021,ViolentCrimePer1000inhabitants21=((ViolentCrimePerCapitaPerArea2021$ViolentCrimeFrequency21/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2021 <- rbind(ViolentCrimePerCapitaPerArea2021,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2020 <- Violent_Crime_in_2020 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency20=n())
+
+ViolentCrimePerCapitaPerArea2020 <-  mutate(ViolentCrimePerCapitaPerArea2020,ViolentCrimePer1000inhabitants20=((ViolentCrimePerCapitaPerArea2020$ViolentCrimeFrequency20/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2020 <- rbind(ViolentCrimePerCapitaPerArea2020,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2019 <- Violent_Crime_in_2019 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency19=n())
+
+ViolentCrimePerCapitaPerArea2019 <-  mutate(ViolentCrimePerCapitaPerArea2019,ViolentCrimePer1000inhabitants19=((ViolentCrimePerCapitaPerArea2019$ViolentCrimeFrequency19/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2019 <- rbind(ViolentCrimePerCapitaPerArea2019,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2018 <- Violent_Crime_in_2018 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency18=n())
+
+ViolentCrimePerCapitaPerArea2018 <-  mutate(ViolentCrimePerCapitaPerArea2018,ViolentCrimePer1000inhabitants18=((ViolentCrimePerCapitaPerArea2018$ViolentCrimeFrequency18/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2018 <- rbind(ViolentCrimePerCapitaPerArea2018,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2017 <- Violent_Crime_in_2017 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency17=n())
+
+ViolentCrimePerCapitaPerArea2017 <-  mutate(ViolentCrimePerCapitaPerArea2017,ViolentCrimePer1000inhabitants17=((ViolentCrimePerCapitaPerArea2017$ViolentCrimeFrequency17/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2017 <- rbind(ViolentCrimePerCapitaPerArea2017,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2016 <- Violent_Crime_in_2016 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency16=n())
+
+ViolentCrimePerCapitaPerArea2016 <-  mutate(ViolentCrimePerCapitaPerArea2016,ViolentCrimePer1000inhabitants16=((ViolentCrimePerCapitaPerArea2016$ViolentCrimeFrequency16/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2016 <- rbind(ViolentCrimePerCapitaPerArea2016,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2015 <- Violent_Crime_in_2015 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency15=n())
+
+ViolentCrimePerCapitaPerArea2015 <-  mutate(ViolentCrimePerCapitaPerArea2015,ViolentCrimePer1000inhabitants15=((ViolentCrimePerCapitaPerArea2015$ViolentCrimeFrequency15/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2015 <- rbind(ViolentCrimePerCapitaPerArea2015,list("Unassigned -- Jail",0,0))
+
+ViolentCrimePerCapitaPerArea2014 <- Violent_Crime_in_2014 %>% 
+  group_by(Community) %>%
+  summarize(ViolentCrimeFrequency14=n())
+
+ViolentCrimePerCapitaPerArea2014 <-  mutate(ViolentCrimePerCapitaPerArea2014,ViolentCrimePer1000inhabitants14=((ViolentCrimePerCapitaPerArea2014$ViolentCrimeFrequency14/population_data$tpop20)*1000))
+
+ViolentCrimePerCapitaPerArea2014 <- rbind(ViolentCrimePerCapitaPerArea2014,list("Unassigned -- Jail",0,0))
+
+Violent_crime_evolution <- ViolentCrimePerCapitaPerArea2021 %>% 
+  left_join(ViolentCrimePerCapitaPerArea2020,by="Community") %>% 
+  left_join(ViolentCrimePerCapitaPerArea2019,by="Community") %>%
+  left_join(ViolentCrimePerCapitaPerArea2018,by="Community") %>%
+  left_join(ViolentCrimePerCapitaPerArea2017,by="Community") %>% 
+  left_join(ViolentCrimePerCapitaPerArea2016,by="Community") %>% 
+  left_join(ViolentCrimePerCapitaPerArea2015,by="Community") %>% 
+  left_join(ViolentCrimePerCapitaPerArea2014,by="Community")
+
+Community_data <- Community_data %>% 
+  left_join(Violent_crime_evolution,by="Community")
+
+Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(VIO_PROP_CFS=="VIOLENT") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "Overall, violent crime seems to have decreased for the 2017 to 2020 period",x="Year",y="Violent crime occurences")
+
+Violent_Crime_Yearly_evolution_map
+
+#______________
+
+Property_Crime_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2020 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2020-01-01") & CrimeDateTime <= as.Date("2020-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2019 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2019-01-01") & CrimeDateTime <= as.Date("2019-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2018 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2018-01-01") & CrimeDateTime <= as.Date("2018-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2017 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2017-01-01") & CrimeDateTime <= as.Date("2017-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2016 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2016-01-01") & CrimeDateTime <= as.Date("2016-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2015 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2015-01-01") & CrimeDateTime <= as.Date("2015-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+Property_Crime_in_2014 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2014-01-01") & CrimeDateTime <= as.Date("2014-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
+
+PropertyCrimePerCapitaPerArea2021 <- Property_Crime_in_2021 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency21=n())
+
+PropertyCrimePerCapitaPerArea2021 <-  mutate(PropertyCrimePerCapitaPerArea2021,PropertyCrimePer1000inhabitants21=((PropertyCrimePerCapitaPerArea2021$PropertyCrimeFrequency21/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2021 <- rbind(PropertyCrimePerCapitaPerArea2021,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2020 <- Property_Crime_in_2020 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency20=n())
+
+PropertyCrimePerCapitaPerArea2020 <-  mutate(PropertyCrimePerCapitaPerArea2020,PropertyCrimePer1000inhabitants20=((PropertyCrimePerCapitaPerArea2020$PropertyCrimeFrequency20/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2020 <- rbind(PropertyCrimePerCapitaPerArea2020,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2019 <- Property_Crime_in_2019 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency19=n())
+
+PropertyCrimePerCapitaPerArea2019 <-  mutate(PropertyCrimePerCapitaPerArea2019,PropertyCrimePer1000inhabitants19=((PropertyCrimePerCapitaPerArea2019$PropertyCrimeFrequency19/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2019 <- rbind(PropertyCrimePerCapitaPerArea2019,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2018 <- Property_Crime_in_2018 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency18=n())
+
+PropertyCrimePerCapitaPerArea2018 <-  mutate(PropertyCrimePerCapitaPerArea2018,PropertyCrimePer1000inhabitants18=((PropertyCrimePerCapitaPerArea2018$PropertyCrimeFrequency18/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2018 <- rbind(PropertyCrimePerCapitaPerArea2018,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2017 <- Property_Crime_in_2017 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency17=n())
+
+PropertyCrimePerCapitaPerArea2017 <-  mutate(PropertyCrimePerCapitaPerArea2017,PropertyCrimePer1000inhabitants17=((PropertyCrimePerCapitaPerArea2017$PropertyCrimeFrequency17/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2017 <- rbind(PropertyCrimePerCapitaPerArea2017,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2016 <- Property_Crime_in_2016 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency16=n())
+
+PropertyCrimePerCapitaPerArea2016 <-  mutate(PropertyCrimePerCapitaPerArea2016,PropertyCrimePer1000inhabitants16=((PropertyCrimePerCapitaPerArea2016$PropertyCrimeFrequency16/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2016 <- rbind(PropertyCrimePerCapitaPerArea2016,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2015 <- Property_Crime_in_2015 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency15=n())
+
+PropertyCrimePerCapitaPerArea2015 <-  mutate(PropertyCrimePerCapitaPerArea2015,PropertyCrimePer1000inhabitants15=((PropertyCrimePerCapitaPerArea2015$PropertyCrimeFrequency15/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2015 <- rbind(PropertyCrimePerCapitaPerArea2015,list("Unassigned -- Jail",0,0))
+
+PropertyCrimePerCapitaPerArea2014 <- Property_Crime_in_2014 %>% 
+  group_by(Community) %>%
+  summarize(PropertyCrimeFrequency14=n())
+
+PropertyCrimePerCapitaPerArea2014 <-  mutate(PropertyCrimePerCapitaPerArea2014,PropertyCrimePer1000inhabitants14=((PropertyCrimePerCapitaPerArea2014$PropertyCrimeFrequency14/population_data$tpop20)*1000))
+
+PropertyCrimePerCapitaPerArea2014 <- rbind(PropertyCrimePerCapitaPerArea2014,list("Unassigned -- Jail",0,0))
+
+Property_crime_evolution <- PropertyCrimePerCapitaPerArea2021 %>% 
+  left_join(PropertyCrimePerCapitaPerArea2020,by="Community") %>% 
+  left_join(PropertyCrimePerCapitaPerArea2019,by="Community") %>%
+  left_join(PropertyCrimePerCapitaPerArea2018,by="Community") %>%
+  left_join(PropertyCrimePerCapitaPerArea2017,by="Community") %>% 
+  left_join(PropertyCrimePerCapitaPerArea2016,by="Community") %>% 
+  left_join(PropertyCrimePerCapitaPerArea2015,by="Community") %>% 
+  left_join(PropertyCrimePerCapitaPerArea2014,by="Community")
+
+Community_data <- Community_data %>% 
+  left_join(Property_crime_evolution,by="Community")
+
+Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(VIO_PROP_CFS=="PROPERTY") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "Overall, property crime seems to have decreased for the 2017 to 2020 period",x="Year",y="Property crime occurences")
+
+Property_Crime_Yearly_evolution_map
+
+```
+
+
+###3.4.2 Calculation of felony and misdemeanor evolution
+
+We can make the exact same computation to calculate felony and misdemeanor evolution.
+
+```{r echo=TRUE}
+
+Felony_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2020 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2020-01-01") & CrimeDateTime <= as.Date("2020-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2019 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2019-01-01") & CrimeDateTime <= as.Date("2019-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2018 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2018-01-01") & CrimeDateTime <= as.Date("2018-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2017 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2017-01-01") & CrimeDateTime <= as.Date("2017-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2016 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2016-01-01") & CrimeDateTime <= as.Date("2016-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2015 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2015-01-01") & CrimeDateTime <= as.Date("2015-12-31")) %>% filter(Category=="Felony")
+
+Felony_in_2014 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2014-01-01") & CrimeDateTime <= as.Date("2014-12-31")) %>% filter(Category=="Felony")
+
+FelonyPerCapitaPerArea2021 <- Felony_in_2021 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency21=n())
+
+FelonyPerCapitaPerArea2021 <-  mutate(FelonyPerCapitaPerArea2021,FelonyPer1000inhabitants21=((FelonyPerCapitaPerArea2021$FelonyFrequency21/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2021 <- rbind(FelonyPerCapitaPerArea2021,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2020 <- Felony_in_2020 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency20=n())
+
+FelonyPerCapitaPerArea2020 <-  mutate(FelonyPerCapitaPerArea2020,FelonyPer1000inhabitants20=((FelonyPerCapitaPerArea2020$FelonyFrequency20/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2020 <- rbind(FelonyPerCapitaPerArea2020,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2019 <- Felony_in_2019 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency19=n())
+
+FelonyPerCapitaPerArea2019 <-  mutate(FelonyPerCapitaPerArea2019,FelonyPer1000inhabitants19=((FelonyPerCapitaPerArea2019$FelonyFrequency19/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2019 <- rbind(FelonyPerCapitaPerArea2019,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2018 <- Felony_in_2018 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency18=n())
+
+FelonyPerCapitaPerArea2018 <-  mutate(FelonyPerCapitaPerArea2018,FelonyPer1000inhabitants18=((FelonyPerCapitaPerArea2018$FelonyFrequency18/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2018 <- rbind(FelonyPerCapitaPerArea2018,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2017 <- Felony_in_2017 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency17=n())
+
+FelonyPerCapitaPerArea2017 <-  mutate(FelonyPerCapitaPerArea2017,FelonyPer1000inhabitants17=((FelonyPerCapitaPerArea2017$FelonyFrequency17/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2017 <- rbind(FelonyPerCapitaPerArea2017,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2016 <- Felony_in_2016 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency16=n())
+
+FelonyPerCapitaPerArea2016 <-  mutate(FelonyPerCapitaPerArea2016,FelonyPer1000inhabitants16=((FelonyPerCapitaPerArea2016$FelonyFrequency16/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2016 <- rbind(FelonyPerCapitaPerArea2016,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2015 <- Felony_in_2015 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency15=n())
+
+FelonyPerCapitaPerArea2015 <-  mutate(FelonyPerCapitaPerArea2015,FelonyPer1000inhabitants15=((FelonyPerCapitaPerArea2015$FelonyFrequency15/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2015 <- rbind(FelonyPerCapitaPerArea2015,list("Unassigned -- Jail",0,0))
+
+FelonyPerCapitaPerArea2014 <- Felony_in_2014 %>% 
+  group_by(Community) %>%
+  summarize(FelonyFrequency14=n())
+
+FelonyPerCapitaPerArea2014 <-  mutate(FelonyPerCapitaPerArea2014,FelonyPer1000inhabitants14=((FelonyPerCapitaPerArea2014$FelonyFrequency14/population_data$tpop20)*1000))
+
+FelonyPerCapitaPerArea2014 <- rbind(FelonyPerCapitaPerArea2014,list("Unassigned -- Jail",0,0))
+
+Felony_evolution <- FelonyPerCapitaPerArea2021 %>% 
+  left_join(FelonyPerCapitaPerArea2020,by="Community") %>% 
+  left_join(FelonyPerCapitaPerArea2019,by="Community") %>%
+  left_join(FelonyPerCapitaPerArea2018,by="Community") %>%
+  left_join(FelonyPerCapitaPerArea2017,by="Community") %>% 
+  left_join(FelonyPerCapitaPerArea2016,by="Community") %>% 
+  left_join(FelonyPerCapitaPerArea2015,by="Community") %>% 
+  left_join(FelonyPerCapitaPerArea2014,by="Community")
+
+Community_data <- Community_data %>% 
+  left_join(Felony_evolution,by="Community")
+
+Felony_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(Category=="Felony") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "In Baltimore, Felony started to decrease as from 2017",x="Year",y="Felony occurences")
+
+Felony_Yearly_evolution_map
+
+#___________
+
+Misdemeanor_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2020 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2020-01-01") & CrimeDateTime <= as.Date("2020-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2019 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2019-01-01") & CrimeDateTime <= as.Date("2019-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2018 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2018-01-01") & CrimeDateTime <= as.Date("2018-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2017 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2017-01-01") & CrimeDateTime <= as.Date("2017-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2016 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2016-01-01") & CrimeDateTime <= as.Date("2016-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2015 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2015-01-01") & CrimeDateTime <= as.Date("2015-12-31")) %>% filter(Category=="Misdemeanor")
+
+Misdemeanor_in_2014 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2014-01-01") & CrimeDateTime <= as.Date("2014-12-31")) %>% filter(Category=="Misdemeanor")
+
+MisdemeanorPerCapitaPerArea2021 <- Misdemeanor_in_2021 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency21=n())
+
+MisdemeanorPerCapitaPerArea2021 <-  mutate(MisdemeanorPerCapitaPerArea2021,MisdemeanorPer1000inhabitants21=((MisdemeanorPerCapitaPerArea2021$MisdemeanorFrequency21/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2021 <- rbind(MisdemeanorPerCapitaPerArea2021,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2020 <- Misdemeanor_in_2020 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency20=n())
+
+MisdemeanorPerCapitaPerArea2020 <-  mutate(MisdemeanorPerCapitaPerArea2020,MisdemeanorPer1000inhabitants20=((MisdemeanorPerCapitaPerArea2020$MisdemeanorFrequency20/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2020 <- rbind(MisdemeanorPerCapitaPerArea2020,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2019 <- Misdemeanor_in_2019 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency19=n())
+
+MisdemeanorPerCapitaPerArea2019 <-  mutate(MisdemeanorPerCapitaPerArea2019,MisdemeanorPer1000inhabitants19=((MisdemeanorPerCapitaPerArea2019$MisdemeanorFrequency19/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2019 <- rbind(MisdemeanorPerCapitaPerArea2019,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2018 <- Misdemeanor_in_2018 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency18=n())
+
+MisdemeanorPerCapitaPerArea2018 <-  mutate(MisdemeanorPerCapitaPerArea2018,MisdemeanorPer1000inhabitants18=((MisdemeanorPerCapitaPerArea2018$MisdemeanorFrequency18/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2018 <- rbind(MisdemeanorPerCapitaPerArea2018,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2017 <- Misdemeanor_in_2017 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency17=n())
+
+MisdemeanorPerCapitaPerArea2017 <-  mutate(MisdemeanorPerCapitaPerArea2017,MisdemeanorPer1000inhabitants17=((MisdemeanorPerCapitaPerArea2017$MisdemeanorFrequency17/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2017 <- rbind(MisdemeanorPerCapitaPerArea2017,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2016 <- Misdemeanor_in_2016 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency16=n())
+
+MisdemeanorPerCapitaPerArea2016 <-  mutate(MisdemeanorPerCapitaPerArea2016,MisdemeanorPer1000inhabitants16=((MisdemeanorPerCapitaPerArea2016$MisdemeanorFrequency16/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2016 <- rbind(MisdemeanorPerCapitaPerArea2016,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2015 <- Misdemeanor_in_2015 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency15=n())
+
+MisdemeanorPerCapitaPerArea2015 <-  mutate(MisdemeanorPerCapitaPerArea2015,MisdemeanorPer1000inhabitants15=((MisdemeanorPerCapitaPerArea2015$MisdemeanorFrequency15/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2015 <- rbind(MisdemeanorPerCapitaPerArea2015,list("Unassigned -- Jail",0,0))
+
+MisdemeanorPerCapitaPerArea2014 <- Misdemeanor_in_2014 %>% 
+  group_by(Community) %>%
+  summarize(MisdemeanorFrequency14=n())
+
+MisdemeanorPerCapitaPerArea2014 <-  mutate(MisdemeanorPerCapitaPerArea2014,MisdemeanorPer1000inhabitants14=((MisdemeanorPerCapitaPerArea2014$MisdemeanorFrequency14/population_data$tpop20)*1000))
+
+MisdemeanorPerCapitaPerArea2014 <- rbind(MisdemeanorPerCapitaPerArea2014,list("Unassigned -- Jail",0,0))
+
+Misdemeanor_evolution <- MisdemeanorPerCapitaPerArea2021 %>% 
+  left_join(MisdemeanorPerCapitaPerArea2020,by="Community") %>% 
+  left_join(MisdemeanorPerCapitaPerArea2019,by="Community") %>%
+  left_join(MisdemeanorPerCapitaPerArea2018,by="Community") %>%
+  left_join(MisdemeanorPerCapitaPerArea2017,by="Community") %>% 
+  left_join(MisdemeanorPerCapitaPerArea2016,by="Community") %>% 
+  left_join(MisdemeanorPerCapitaPerArea2015,by="Community") %>% 
+  left_join(MisdemeanorPerCapitaPerArea2014,by="Community")
+
+Community_data <- Community_data %>% 
+  left_join(Misdemeanor_evolution,by="Community")
+
+Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(Category=="Misdemeanor") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "In Baltimore, Misdemeanor started to decrease as from 2017",x="Year",y="Misdemeanor occurences")
+
+Misdemeanor_Yearly_evolution_map
+```
+
 
 ### 3.5 Internet access and crimes
 
