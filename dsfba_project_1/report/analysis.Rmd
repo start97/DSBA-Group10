@@ -19,9 +19,8 @@ stargazer(regression,
           title = "Regression Crime vs CCTVs",
           type = "html")
 
-
-ggplot(data=CCTV_VS_crimes,mapping= aes(x=CrimePer1000inhabitants,y=density_perc)) + 
-  labs(title = "Crime per Capita per Community VS CCTV Density per Community", x="CrimePerCapitaPerCommunity",y="CCTVDensityPerCommunity")+
+ggplot(data=CCTV_VS_crimes,mapping= aes(x=density_perc,y=CrimePer1000inhabitants)) + 
+  labs(title = "CCTV Density per Community VS Crime per Capita per Community", x="CCTVDensityPerCommunity",y="CrimePerCapitaPerCommunity")+
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
@@ -229,7 +228,6 @@ CrimePerCapitaPerAreaAugust2021 <-mutate(CrimePerCapitaPerAreaAugust2021,CrimePe
 
 ```
 
-
 In order to create a "sub-map", we create a smaller area using the `st-bbox` function. The values indicated in the function represent the most extreme values on the x-axis and y-axis of a map using the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Then, using `tm_shape` with the new spatial file called `Downtown_area`as argument, we create a map in the same way as we have done before. As we want to be able to locate this smaller area in the picture map of baltimore, we must also create a Baltimore map with a rectangle representing the newly created "sub-area". In order to combine these two maps together, we run the two last lines together and use the `viewport` function. The output is a zoom on the desired area combined with the bigger map having a rectangle over the area which we are looking at and analyzing. In Downtown, we quite clearly see that some crimes are committed right next to some CCTVs.
 
 ```{r}
@@ -288,7 +286,7 @@ ggplot(data=CCTV_VS_misdemeanors,mapping= aes(x=density_perc,y=MisdemeanorPerCap
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
-We are in the exact same situation as with crime, in order to comment CCTC effectiveness on felonies and/or misdemeanors, we must analyse felony/misdemeanor evolution over time in areas with/without CCTVs. We start with felonies. 
+We are in the exact same situation as with crime, in order to comment CCTV effectiveness on felonies and/or misdemeanors, we must analyse felony/misdemeanor evolution over time in areas with/without CCTVs. We start with felonies. 
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -301,56 +299,36 @@ km.clust5 <- kmeans(sc.Community_data_Clustering[,c(5,3)], 5, nstart = 25) #It i
 print(km.clust5) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
 fviz_cluster(km.clust5, data=sc.Community_data_Clustering[,c(5,3)], repel=TRUE) + labs(x="Felony per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.1% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high felony, high CCTV density cluster as well as those in the lower felony, high CCTV density cluster"),width=90))
 
-Downtown_Seton_Hill_evolution_Felony <- as.vector(t(Community_data[14,c(79,77,75,73,71,69,67)]))
+Downtown_Seton_Hill_evolution_Felony <- as.vector(t(Community_data[14,c(73,71,69,67,65,63,61)]))
 
 Downtown_Seton_Hill_Felony <- data.frame(Downtown_Seton_Hill_evolution_Felony,Year)
-
-ggplot(Downtown_Seton_Hill_Felony,aes(x=Year,y=Downtown_Seton_Hill_evolution_Felony)) + 
-  geom_line() +
-  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
-  labs(title = "Felony has slightly increased in Downtown/Seton Hill",subtitle=str_wrap(("One observe variation from 2014 to 2019 but overall, felony has increased."),width=80),x="Year",y="Felony per capita")
 
 Downtown_Seton_Hill_map_Felony <- ggplot(Downtown_Seton_Hill_Felony,aes(x=Year,y=Downtown_Seton_Hill_evolution_Felony)) + 
   geom_line() +
   scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
   labs(title = "Downtown/Seton Hill",x="Year",y="Felony per capita")
 
-Sandtown_Winchester_Harlem_Park_evolution_Felony <- as.vector(t(Community_data[47,c(79,77,75,73,71,69,67)]))
+Sandtown_Winchester_Harlem_Park_evolution_Felony <- as.vector(t(Community_data[47,c(73,71,69,67,65,63,61)]))
 
 Sandtown_Winchester_Harlem_Park_Felony <- data.frame(Sandtown_Winchester_Harlem_Park_evolution_Felony,Year)
-
-ggplot(Sandtown_Winchester_Harlem_Park_Felony,aes(x=Year,y=Sandtown_Winchester_Harlem_Park_evolution_Felony)) + 
-  geom_line() +
-  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
-  labs(title = str_wrap(("Felony is fairly stable in Sandtown-Winchester/Harlem Park"),width = 60),subtitle=str_wrap(("After a slight increase in 2015, felony slowly decreased until 2019."),width=80),x="Year",y="Felony per capita")
 
 Sandtown_Winchester_Harlem_Park_map_Felony <- ggplot(Sandtown_Winchester_Harlem_Park_Felony,aes(x=Year,y=Sandtown_Winchester_Harlem_Park_evolution_Felony)) + 
   geom_line() +
   scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
   labs(title = "Sandtown-Winchester/Harlem Park",x="Year",y="Felony per capita")
 
-Oldtown_Middle_East_evolution_Felony <- as.vector(t(Community_data[41,c(79,77,75,73,71,69,67)]))
+Oldtown_Middle_East_evolution_Felony <- as.vector(t(Community_data[41,c(73,71,69,67,65,63,61)]))
 
 Oldtown_Middle_East_Felony <- data.frame(Oldtown_Middle_East_evolution_Felony,Year)
-
-ggplot(Oldtown_Middle_East_Felony,aes(x=Year,y=Oldtown_Middle_East_evolution_Felony)) + 
-  geom_line() +
-  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
-  labs(title=str_wrap(("Felony slightly increased in Oldtown/Middle East"),width=60),subtitle=str_wrap(("After an increase over the 2014-2017 period, felony decreased in 2018 before increasing again."),width=80),x="Year",y="Felony per capita")
 
 Oldtown_Middle_East_map_Felony <- ggplot(Oldtown_Middle_East_Felony,aes(x=Year,y=Oldtown_Middle_East_evolution_Felony)) + 
   geom_line() +
   scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
   labs(title = "Oldtown/Middle East",x="Year",y="Felony per capita")
 
-Cherry_Hill_evolution_Felony <- as.vector(t(Community_data[7,c(79,77,75,73,71,69,67)]))
+Cherry_Hill_evolution_Felony <- as.vector(t(Community_data[7,c(73,71,69,67,65,63,61)]))
 
 Cherry_Hill_Felony <- data.frame(Cherry_Hill_evolution_Felony,Year)
-
-ggplot(Cherry_Hill_Felony,aes(x=Year,y=Cherry_Hill_evolution_Felony)) + 
-  geom_line() +
-  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
-  labs(title = str_wrap(("Overall, felony did not change much in Cherry Hill"),width = 60),subtitle=str_wrap(("Still, it peaked in 2016 before going back to a level comparable to that of 2014 in 2019."),width=80),x="Year",y="Felony per capita")
 
 Cherry_Hill_map_Felony <- ggplot(Cherry_Hill_Felony,aes(x=Year,y=Cherry_Hill_evolution_Felony)) + 
   geom_line() +
@@ -358,6 +336,144 @@ Cherry_Hill_map_Felony <- ggplot(Cherry_Hill_Felony,aes(x=Year,y=Cherry_Hill_evo
   labs(title = "Cherry Hill",x="Year",y="Felony per capita")
 
 grid.arrange(Downtown_Seton_Hill_map_Felony,Sandtown_Winchester_Harlem_Park_map_Felony,Oldtown_Middle_East_map_Felony,Cherry_Hill_map_Felony,nrow=2,ncol=2)
+
+Poppleton_evolution_Felony <- as.vector(t(Community_data[46,c(73,71,69,67,65,63,61)]))
+
+Poppleton_Felony <- data.frame(Poppleton_evolution_Felony,Year)
+
+Poppleton_map_Felony <- ggplot(Poppleton_Felony,aes(x=Year,y=Poppleton_evolution_Felony)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Poppleton/The Terraces/Hollins Market",x="Year",y="Felony per capita")
+
+Madison_East_End_evolution_Felony <- as.vector(t(Community_data[33,c(73,71,69,67,65,63,61)]))
+
+Madison_East_End_Felony <- data.frame(Madison_East_End_evolution_Felony,Year)
+
+Madison_East_End_map_Felony <- ggplot(Madison_East_End_Felony,aes(x=Year,y=Madison_East_End_evolution_Felony)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Madinson/East End",x="Year",y="Felony per capita")
+
+Clifton_Berea_evolution_Felony <- as.vector(t(Community_data[10,c(73,71,69,67,65,63,61)]))
+
+Clifton_Berea_Felony <- data.frame(Clifton_Berea_evolution_Felony,Year)
+
+Clifton_Berea_map_Felony <- ggplot(Clifton_Berea_Felony,aes(x=Year,y=Clifton_Berea_evolution_Felony)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Clifton-Berea",x="Year",y="Felony per capita")
+
+Midway_Coldstream_evolution_Felony <- as.vector(t(Community_data[36,c(73,71,69,67,65,63,61)]))
+
+Midway_Coldstream_Felony <- data.frame(Midway_Coldstream_evolution_Felony,Year)
+
+Midway_Coldstream_map_Felony <- ggplot(Midway_Coldstream_Felony,aes(x=Year,y=Midway_Coldstream_evolution_Felony)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Midway/Coldstream",x="Year",y="Felony per capita")
+
+grid.arrange(Poppleton_map_Felony,Madison_East_End_map_Felony,Clifton_Berea_map_Felony,Midway_Coldstream_map_Felony,nrow=2,ncol=2)
+
+
+```
+We continue with misdemeanors.
+
+```{r echo=FALSE, results = 'markup'}
+
+fviz_nbclust(sc.Community_data_Clustering[,c(6,3)], kmeans, method="wss")+
+  geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
+  labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
+
+set.seed(50)
+km.clust6 <- kmeans(sc.Community_data_Clustering[,c(6,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
+print(km.clust6) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
+fviz_cluster(km.clust6, data=sc.Community_data_Clustering[,c(6,3)], repel=TRUE) + labs(x="Misdemeanor per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 84.41% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high misdemeanor, high CCTV density cluster as well as those in the lower misdemeanor, high CCTV density cluster"),width=90))
+
+Downtown_Seton_Hill_evolution_Misdemeanor <- as.vector(t(Community_data[14,c(89,87,85,83,81,79,77)]))
+
+Downtown_Seton_Hill_Misdemeanor <- data.frame(Downtown_Seton_Hill_evolution_Misdemeanor,Year)
+
+Downtown_Seton_Hill_map_Misdemeanor <- ggplot(Downtown_Seton_Hill_Misdemeanor,aes(x=Year,y=Downtown_Seton_Hill_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Downtown/Seton Hill",x="Year",y="Misdemeanor per capita")
+
+Oldtown_Middle_East_evolution_Misdemeanor <- as.vector(t(Community_data[41,c(89,87,85,83,81,79,77)]))
+
+Oldtown_Middle_East_Misdemeanor <- data.frame(Oldtown_Middle_East_evolution_Misdemeanor,Year)
+
+Oldtown_Middle_East_map_Misdemeanor <- ggplot(Oldtown_Middle_East_Misdemeanor,aes(x=Year,y=Oldtown_Middle_East_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Oldtown/Middle East",x="Year",y="Misdemeanor per capita")
+
+Upton_Druid_Heights_evolution_Misdemeanor <- as.vector(t(Community_data[53,c(89,87,85,83,81,79,77)]))
+
+Upton_Druid_Heights_Misdemeanor <- data.frame(Upton_Druid_Heights_evolution_Misdemeanor,Year)
+
+Upton_Druid_Heights_map_Misdemeanor <- ggplot(Upton_Druid_Heights_Misdemeanor,aes(x=Year,y=Upton_Druid_Heights_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Upton/Druid Heights",x="Year",y="Misdemeanor per capita")
+
+Sandtown_Winchester_Harlem_Park_evolution_Misdemeanor <- as.vector(t(Community_data[47,c(89,87,85,83,81,79,77)]))
+
+Sandtown_Winchester_Harlem_Park_Misdemeanor <- data.frame(Sandtown_Winchester_Harlem_Park_evolution_Misdemeanor,Year)
+
+Sandtown_Winchester_Harlem_Park_map_Misdemeanor <- ggplot(Sandtown_Winchester_Harlem_Park_Misdemeanor,aes(x=Year,y=Sandtown_Winchester_Harlem_Park_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Sandtown-Winchester/Harlem-Park",x="Year",y="Misdemeanor per capita")
+
+grid.arrange(Downtown_Seton_Hill_map_Misdemeanor,Oldtown_Middle_East_map_Misdemeanor,Upton_Druid_Heights_map_Misdemeanor,Sandtown_Winchester_Harlem_Park_map_Misdemeanor,nrow=2,ncol=2)
+
+Washington_Village_Pigtown_evolution_Misdemeanor <- as.vector(t(Community_data[54,c(89,87,85,83,81,79,77)]))
+
+Washington_Village_Pigtown_Misdemeanor <- data.frame(Washington_Village_Pigtown_evolution_Misdemeanor,Year)
+
+Washington_Village_Pigtown_map_Misdemeanor <- ggplot(Washington_Village_Pigtown_Misdemeanor,aes(x=Year,y=Washington_Village_Pigtown_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Washington Village/Pigtown",x="Year",y="Misdemeanor per capita")
+
+Harbor_East_Little_Italy_evolution_Misdemeanor <- as.vector(t(Community_data[26,c(89,87,85,83,81,79,77)]))
+
+Harbor_East_Little_Italy_Misdemeanor <- data.frame(Harbor_East_Little_Italy_evolution_Misdemeanor,Year)
+
+Harbor_East_Little_Italy_map_Misdemeanor <- ggplot(Harbor_East_Little_Italy_Misdemeanor,aes(x=Year,y=Harbor_East_Little_Italy_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Harbor East/Little Italy",x="Year",y="Misdemeanor per capita")
+
+Canton_evolution_Misdemeanor <- as.vector(t(Community_data[5,c(89,87,85,83,81,79,77)]))
+
+Canton_Misdemeanor <- data.frame(Canton_evolution_Misdemeanor,Year)
+
+Canton_map_Misdemeanor <- ggplot(Canton_Misdemeanor,aes(x=Year,y=Canton_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Canton",x="Year",y="Misdemeanor per capita")
+
+Canton_evolution_Misdemeanor <- as.vector(t(Community_data[5,c(89,87,85,83,81,79,77)]))
+
+Canton_Misdemeanor <- data.frame(Canton_evolution_Misdemeanor,Year)
+
+Canton_map_Misdemeanor <- ggplot(Canton_Misdemeanor,aes(x=Year,y=Canton_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Canton",x="Year",y="Misdemeanor per capita")
+
+Penn_North_Reservoir_Hill_evolution_Misdemeanor <- as.vector(t(Community_data[44,c(89,87,85,83,81,79,77)]))
+
+Penn_North_Reservoir_Hill_Misdemeanor <- data.frame(Penn_North_Reservoir_Hill_evolution_Misdemeanor,Year)
+
+Penn_North_Reservoir_Hill_map_Misdemeanor <- ggplot(Penn_North_Reservoir_Hill_Misdemeanor,aes(x=Year,y=Penn_North_Reservoir_Hill_evolution_Misdemeanor)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
+  labs(title = "Penn North/Reservoir Hill",x="Year",y="Misdemeanor per capita")
+
+grid.arrange(Washington_Village_Pigtown_map_Misdemeanor,Harbor_East_Little_Italy_map_Misdemeanor,Canton_map_Misdemeanor,Penn_North_Reservoir_Hill_map_Misdemeanor,nrow=2,ncol=2)
 
 ```
 
@@ -368,7 +484,7 @@ grid.arrange(Downtown_Seton_Hill_map_Felony,Sandtown_Winchester_Harlem_Park_map_
 CCTV_VS_ViolentCrime <- CCTV_per_area %>% 
   left_join(ViolentStats,by="Community")
 
-regression21 <- lm(CCTV_VS_ViolentCrime$density_perc~CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea)
+regression21 <- lm(CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea~CCTV_VS_ViolentCrime$density_perc)
 
 stargazer(regression21,
           title = "CCTV vs ViolentCrimePerArea",
@@ -377,7 +493,7 @@ stargazer(regression21,
 CCTV_VS_PropertyCrime <- CCTV_per_area %>% 
   left_join(PropertyStats,by="Community")
 
-regression22 <- lm(CCTV_VS_PropertyCrime$density_perc~CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea)
+regression22 <- lm(CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea~CCTV_VS_PropertyCrime$density_perc)
 
 stargazer(regression22,
           title = "Property Crime vs CCTVs",
@@ -385,17 +501,77 @@ stargazer(regression22,
 
 #We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
 
-ggplot(Community_data,aes(x=ViolentCrimePerCapitaPerArea,y=density_perc))+
+ggplot(Community_data,aes(x=density_perc,y=ViolentCrimePerCapitaPerArea))+
   geom_point()+
   geom_smooth(se=F)+
-  labs(x="Violent Crime per Capita per Area",y="CCTV Density per Area",title="CCTV density increases with violent crime",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas has an impact."),width=45)
+  labs(x="CCTV Density per Area",y="Violent Crime per Capita per Area",title="Violent crime increases with CCTV density",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas has an impact."),width=45)
 
-ggplot(Community_data,aes(x=PropertyCrimePerCapitaPerArea,y=density_perc))+
+ggplot(Community_data,aes(x=density_perc,y=PropertyCrimePerCapitaPerArea))+
   geom_point()+
   geom_smooth(se=F)+
-  labs(x="Property Crime per Capita per Area",y="CCTV Density per Area",title="CCTV density is weakly correlated with property crime",subtitle = str_wrap("The correlation is much weaker than between CCTV density and violent crime"),width=45)
+  labs(x="CCTV Density per Area",y="Property Crime per Capita per Area",title="Property crime is weakly correlated with CCTV intensity",subtitle = str_wrap("The correlation seems weaker than between violent crime and CCTV density"),width=45)
 
 ```
+We proceed in the same way as we did with felony and misdemeanors.
+
+```{r echo=FALSE, results = 'markup'}
+
+fviz_nbclust(sc.Community_data_Clustering[,c(7,3)], kmeans, method="wss")+
+  geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
+  labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
+
+set.seed(20)
+km.clust3 <- kmeans(sc.Community_data_Clustering[,c(7,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
+print(km.clust3) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
+fviz_cluster(km.clust3, data=sc.Community_data_Clustering[,c(7,3)], repel=TRUE) + labs(x="Violent crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.4% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high violent crime, high CCTV density cluster as well as those in the lower violent crime, high CCTV density cluster"),width=90))
+
+Downtown_Seton_Hill_evolution_Violent <- as.vector(t(Community_data[14,c(41,39,37,35,33,31,29)]))
+
+Downtown_Seton_Hill_Violent <- data.frame(Downtown_Seton_Hill_evolution_Violent,Year)
+
+Downtown_Seton_Hill_map_Violent <- ggplot(Downtown_Seton_Hill_Violent,aes(x=Year,y=Downtown_Seton_Hill_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Downtown/Seton Hill",x="Year",y="Violent Crime per capita")
+
+Oldtown_Middle_East_evolution_Violent <- as.vector(t(Community_data[41,c(41,39,37,35,33,31,29)]))
+
+Oldtown_Middle_East_Violent <- data.frame(Oldtown_Middle_East_evolution_Violent,Year)
+
+Oldtown_Middle_East_map_Violent <- ggplot(Oldtown_Middle_East_Violent,aes(x=Year,y=Oldtown_Middle_East_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Oldtown/Middle East",x="Year",y="Violent Crime per capita")
+
+Sandtown_Winchester_Harlem_Park_evolution_Violent <- as.vector(t(Community_data[47,c(41,39,37,35,33,31,29)]))
+
+Sandtown_Winchester_Harlem_Park_Violent <- data.frame(Sandtown_Winchester_Harlem_Park_evolution_Violent,Year)
+
+Sandtown_Winchester_Harlem_Park_map_Violent <- ggplot(Sandtown_Winchester_Harlem_Park_Violent,aes(x=Year,y=Sandtown_Winchester_Harlem_Park_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Sandtown-Winchester/Harlem Park",x="Year",y="Violent Crime per capita")
+
+Cherry_Hill_evolution_Violent <- as.vector(t(Community_data[7,c(41,39,37,35,33,31,29)]))
+
+Cherry_Hill_Violent <- data.frame(Cherry_Hill_evolution_Violent,Year)
+
+Cherry_Hill_map_Violent <- ggplot(Cherry_Hill_Violent,aes(x=Year,y=Cherry_Hill_evolution_Violent)) + 
+  geom_line() +
+  scale_y_continuous(limits = c(0, 125), breaks =seq(0,125,25)) + 
+  labs(title = "Cherry Hill",x="Year",y="Violent Crime per capita")
+
+library(pdp)
+
+grid.arrange(Downtown_Seton_Hill_map_Violent,Oldtown_Middle_East_map_Violent,Sandtown_Winchester_Harlem_Park_map_Violent,Cherry_Hill_map_Violent,nrow=2,ncol=2)
+
+#We observe a tendency for violent crime to slightly decrease in Sandtown-Winchester and Cherry Hill while for Downtown/Seton Hill and Oldtown/Middle East, things seem to have stood still and became worse, respectively.
+
+
+
+```
+
+
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
 As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime as evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas have evolved over time.
