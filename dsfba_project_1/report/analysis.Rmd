@@ -119,10 +119,8 @@ Crime_Evolution_VS_CCTV <- Community_data[,c(1,25,15,4)] %>%
 
 Crime_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
 
-knitr::kable(
-  Crime_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],
-  col.names = c('Community','Crime per Cap')
-)
+knitr::kable(Crime_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],col.names = c('Community','Crime per Capita % change')) %>%
+  kable_styling(position = "center")
 
 ```
 
