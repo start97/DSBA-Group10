@@ -171,7 +171,7 @@ knitr::kable(Crime_Evolution_VS_CCTV[c(26,33,51,54),c(1,5)],col.names = c('Commu
 
 When comparing the four members of the high crime, high CCTV density cluster with the four members of the high crime, low CCTV density cluster, we observe that for three members of the low CCTV density cluster, crime per capita has increased while crime per capita has decreased for two members of the high CCTV density cluster. While this could potentially indicate that crime decreased more often in areas with high CCTV density compared to areas with low CCTV density and therefore indicate that CCTV may be effective crime deterrent, it is **absolutely crucial** to temper this statement with statistically significant. Indeed, the decrease we observe in Cherry Hill and Sandtown-Winchester/Harlem Park could be the result of pure luck/coincidence or could be attributed to many other factors. In addition, the extremely small number of data items analysed makes it particularly difficult to draw conclusions.  It should also be noted that although crime has fallen in two high crime, high CCTV areas, in one case it has fallen only slightly (Cherry Hill).
 
-Looking at how crime per cpaita has evolved throughout Baltimore City, one observes a general downward trend. This confirms the fact that the downward results should be interpreted with caution because other factors than CCTVs might be the reason for decreases. Finally, we computed a simple linear regression model between CCTV density and crime per capita evolution. We found out no significant correlation.
+Looking at how crime per capita has evolved throughout Baltimore City, one observes a general downward trend since 2017. This confirms the fact that the downward results should be interpreted with caution because other factors than CCTVs might be the reason for decreases. Finally, we computed a simple linear regression model between CCTV density and crime per capita evolution. We found out no significant correlation.
 
 All this leads us to believe that it is difficult to attribute real effectiveness to CCTVs.
 
@@ -246,7 +246,7 @@ Although it is impossible to prove the effectiveness of surveillance cameras on 
 
 #### 4.2.1 CCTVs VS Felonies and Misdemeanors
 
-The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors. Plotting the observations enables one to see this (weak) tendency. The blue line represents the regression line. 
+The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors. the correlation between felony and CCTV density and between misdemeanros and CCTV density is roughly the same. Plotting the observations enables one to see this (weak) tendency. The blue line represents the regression line. 
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -337,7 +337,8 @@ grid.arrange(Downtown_Seton_Hill_map_Felony,Sandtown_Winchester_Harlem_Park_map_
 Felony_Evolution_VS_CCTV <- Community_data[,c(1,63,73,4)] %>% 
   mutate(change_perc=((Community_data$FelonyPer1000inhabitants19/Community_data$FelonyPer1000inhabitants14)-1)*100)
 
-Felony_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
+knitr::kable(Felony_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],col.names = c('Community','Felony per Capita % change')) %>%
+  kable_styling(position = "center")
 
 Poppleton_evolution_Felony <- as.vector(t(Community_data[46,c(73,71,69,67,65,63,61)]))
 
@@ -377,11 +378,12 @@ Midway_Coldstream_map_Felony <- ggplot(Midway_Coldstream_Felony,aes(x=Year,y=Mid
 
 grid.arrange(Poppleton_map_Felony,Madison_East_End_map_Felony,Clifton_Berea_map_Felony,Midway_Coldstream_map_Felony,nrow=2,ncol=2)
 
-Felony_Evolution_VS_CCTV[c(10,33,36,46),c(-3)]
+knitr::kable(Felony_Evolution_VS_CCTV[c(10,33,36,46),c(1,5)],col.names = c('Community','Felony per Capita % change')) %>%
+  kable_styling(position = "center")
 
 ```
 
-We can check how felony evolved over time.
+We see that in both clusters, felony has increased for three out of four members, regardless of CCTV density. This might indicate that CCTVs are not effective when it comes to felonies either. By plotting the felony evolution over time in Baltimore, we  observe that felony has also slightly increased comparing the 2014 and the 2019 level. Again, it makes it difficult to interpret these results as they are not statistically significant. Still, computing a regression between CCTV density and felony per capita gives the intuition that there only exists a very weak correlation between CCTV density and felony per capita, suggesting that surveillance cameras are not effective in preventing felonies either.
 
 ```{r results='markup'}
 
@@ -390,7 +392,7 @@ Felony_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = "In Baltimore, Felony started to decrease as from 2017",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring felonies"),width=80),x="Year",y="Felony occurences")
+  labs(title = "Comparing the 2014 felony level with the 2019 felony level, one observes that felony has slightly increased",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring felonies"),width=80),x="Year",y="Felony occurences")
 
 Felony_Yearly_evolution_map
 
@@ -398,8 +400,7 @@ regression10 <- lm(Felony_Evolution_VS_CCTV$change_perc~Felony_Evolution_VS_CCTV
 summary(regression10)
 
 ```
-
-We continue with misdemeanors.
+We continue with misdemeanors. We do the exact same thing.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -453,7 +454,8 @@ grid.arrange(Downtown_Seton_Hill_map_Misdemeanor,Oldtown_Middle_East_map_Misdeme
 Misdemeanor_Evolution_VS_CCTV <- Community_data[,c(1,79,89,4)] %>% 
   mutate(change_perc=((Community_data$MisdemeanorPer1000inhabitants19/Community_data$MisdemeanorPer1000inhabitants14)-1)*100)
 
-Misdemeanor_Evolution_VS_CCTV[c(14,41,47,53),c(-3)]
+knitr::kable(Misdemeanor_Evolution_VS_CCTV[c(14,41,47,53),c(1,5)],col.names = c('Community','Misdemeanor per Capita % change')) %>%
+  kable_styling(position = "center")
 
 Washington_Village_Pigtown_evolution_Misdemeanor <- as.vector(t(Community_data[54,c(89,87,85,83,81,79,77)]))
 
@@ -493,10 +495,12 @@ Penn_North_Reservoir_Hill_map_Misdemeanor <- ggplot(Penn_North_Reservoir_Hill_Mi
 
 grid.arrange(Washington_Village_Pigtown_map_Misdemeanor,Harbor_East_Little_Italy_map_Misdemeanor,Canton_map_Misdemeanor,Penn_North_Reservoir_Hill_map_Misdemeanor,nrow=2,ncol=2)
 
-Misdemeanor_Evolution_VS_CCTV[c(5,26,44,54),c(-3)]
+knitr::kable(Misdemeanor_Evolution_VS_CCTV[c(5,26,44,54),c(1,5)],col.names = c('Community','Misdemeanor per Capita % change')) %>%
+  kable_styling(position = "center")
 
 ```
-We can check how misdemeanor evolved over time.
+
+Misdemenaors have decreased more often in areas belonging to the low CCTV density cluster. Again, this could potentially suggest that surveillance cameras are not very effective in reducing misdemeanors. Moreover, there is a downward trend in terms of the number of crimes in the whole city. However, these results should be taken with caution as, again, they are not statistically significant and could be due to chance. In order to get a better overall picture of the relationship between CCTV density and misdemeanor per capita, we performed a regression. The correlation between the two variables is very weak, suggesting once again that surveillance cameras are ineffective against misdemeanors.
 
 ```{r results='markup'}
 
@@ -515,6 +519,8 @@ summary(regression11)
 ```
 
 #### 4.2.2 CCTVs VS Violent and Property Crime
+
+It seems that the severity of the crime (i. e. whether it is a felony or a misdemeanor) does not influence the crime-deterring potential of CCTVs. It is now interesting to see whether we observe a difference when decomposing crime into violent and property crime. We first perform one simple linear regression between CCTV density and violent crime and another between CCTV density and property crime. The first interesting thing one can observe is that we observe a much stronger correlation between between CCTV density and violent crime than between CCTV density and property crime. The $R^2$ of the first regression is at 51.5%, more than any other $R^2$ obtained until now. This suggests that violent crime per capita is a considerable determinant of CCTV density.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -546,10 +552,10 @@ ggplot(Community_data,aes(x=density_perc,y=ViolentCrimePerCapitaPerArea))+
 ggplot(Community_data,aes(x=density_perc,y=PropertyCrimePerCapitaPerArea))+
   geom_point()+
   geom_smooth(se=F)+
-  labs(x="CCTV Density per Area",y="Property Crime per Capita per Area",title="Property crime is weakly correlated with CCTV intensity",subtitle = str_wrap("The correlation seems weaker than between violent crime and CCTV density"),width=45)
+  labs(x="CCTV Density per Area",y="Property Crime per Capita per Area",title="Property crime is weakly correlated with CCTV intensity",subtitle = str_wrap("The correlation is weaker than between violent crime and CCTV density"),width=45)
 
 ```
-We proceed in the same way as we did with felony and misdemeanors.
+Yet, as in past sections, we have to analyse how violent and property crime evolved over time in areas with differnt CCTV densities to be in position to comment on CCTV effectiveness. We start with violent crime.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -607,7 +613,7 @@ Violent_Crime_Evolution_VS_CCTV <- Community_data[,c(1,31,41,4)] %>%
 
 Violent_Crime_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
 
-#We observe a tendency for violent crime to slightly decrease in Sandtown-Winchester and Cherry Hill while for Downtown/Seton Hill and Oldtown/Middle East, things seem to have stood still and became worse, respectively.
+knitr::kable(Violent_Crime_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],col.names = c('Community','Violent Crime per Capita % change')) %>% kable_styling(position = "center")
 
 Clifton_Berea_evolution_Violent <- as.vector(t(Community_data[10,c(41,39,37,35,33,31,29)]))
 
@@ -647,13 +653,11 @@ Madison_East_End_map_Violent <- ggplot(Madison_East_End_Violent,aes(x=Year,y=Mad
 
 grid.arrange(Clifton_Berea_map_Violent,Pimlico_Arlington_Hilltop_map_Violent,Midway_Coldstream_map_Violent,Madison_East_End_map_Violent,nrow=2,ncol=2)
 
-Violent_Crime_Evolution_VS_CCTV[c(10,33,36,45),c(-3)]
-
-#Comparing violent crime evolution in areas member of the high violent crime, high CCTV density cluster with violent crime evolution in areas member of th high violent crime, low CCTV density cluster, it seems like we could not detect any significant difference. The presence of CCTV does not seem to have an impact on violent crime.
+knitr::kable(Violent_Crime_Evolution_VS_CCTV[c(10,33,36,45),c(1,5)],col.names = c('Community','Violent Crime per Capita % change')) %>% kable_styling(position = "center")
 
 ```
 
-We can check how violent crime evolved over time.
+This time it is in the group of neighbourhoods with the highest concentration of cameras that violent crime has fallen most often. However, before jumping to conclusions, it is worth mentioning that only one neighbourhood in this group has decreased and that, as usual, this result could be due to luck. It should also be noted that overall, violent crime in Baltimore has increased. The simple linear regression performed between CCTV density and violent crime do not indicate any correlation between the two variables, thus leading us to the conclusion that CCTVs do not seem to be effective in reducing violent crime etiher.
 
 ```{r results='markup'}
 
@@ -662,7 +666,7 @@ Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = "Overall, violent crime seems to have decreased for the 2017 to 2020 period",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring violent crime"),width=80),x="Year",y="Violent crime occurences")
+  labs(title = "Overall, crime has increased in Baltimore over the 2014-2019 period",x="Year",y="Violent crime occurences")
 
 Violent_Crime_Yearly_evolution_map
 
@@ -671,7 +675,7 @@ summary(regression8)
 
 ```
 
-We continue with property crimes.
+The last type of crime we must consider is property crime.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -725,7 +729,7 @@ grid.arrange(Downtown_Seton_Hill_map_Property,Oldtown_Middle_East_map_Property,S
 Property_Crime_Evolution_VS_CCTV <- Community_data[,c(1,57,47,4)] %>% 
   mutate(change_perc=((Community_data$PropertyCrimePer1000inhabitants19/Community_data$PropertyCrimePer1000inhabitants14)-1)*100)
 
-Property_Crime_Evolution_VS_CCTV[c(14,41,47,53),c(-3)]
+knitr::kable(Property_Crime_Evolution_VS_CCTV[c(14,41,47,53),c(1,5)],col.names = c('Community','Property Crime per Capita % change')) %>% kable_styling(position = "center")
 
 Washington_Village_Pigtown_evolution_Property <- as.vector(t(Community_data[54,c(57,55,53,51,49,47,45)]))
 
@@ -765,11 +769,12 @@ Southeastern_map_Property <- ggplot(Southeastern_Property,aes(x=Year,y=Southeast
 
 grid.arrange(Washington_Village_Pigtown_map_Property,Harbor_East_Little_Italy_map_Property,Canton_map_Property,Southeastern_map_Property,nrow=2,ncol=2)
 
-Property_Crime_Evolution_VS_CCTV[c(5,26,49,54),c(-3)]
+knitr::kable(Property_Crime_Evolution_VS_CCTV[c(5,26,49,54),c(1,5)],col.names = c('Community','Property Crime per Capita % change')) %>% kable_styling(position = "center")
+
 
 ```
 
-We can check how property crime evolved over time.
+With regard to property crime, it more often decreased in areas with lower CCTV density. This is despite the fact that property crime has declined city-wide. Again, these results are not statistically significant. They simply allow us to see if a trend is observable. However, when looking at the regression results between CCTV density and property crime per capita, we again find a lack of correlation confirming that CCTVs do not seem to be effective in reducing property crime. 
 
 ```{r results='markup'}
 
@@ -786,6 +791,7 @@ regression9 <- lm(Property_Crime_Evolution_VS_CCTV$change_perc~Property_Crime_Ev
 summary(regression9)
 
 ```
+None of the comparisons between CCTV density and different crime type evolution seem to indicate significant relationships. Thus, it seems reasonable to conclude that in addition to being ineffective in reducing crime in general, CCTVs do not seem particularly effective in preventing any particular type of crime.However, from this analysis we found that violent crime appears to be an important determinant of CCTV density. This finding will be used to answer our fourth research question.
 
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
