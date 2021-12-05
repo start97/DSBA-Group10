@@ -20,7 +20,7 @@ stargazer(regression,
           type = "html")
 
 ggplot(data=CCTV_VS_crimes,mapping= aes(x=density_perc,y=CrimePer1000inhabitants)) + 
-  labs(title = "CCTV Density per Community VS Crime per Capita per Community", x="CCTVDensityPerCommunity",y="CrimePerCapitaPerCommunity")+
+  labs(title = "CCTV Density per Community VS Crime per Capita per Community", x="CCTV density",y="Crime per capita")+
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
@@ -380,9 +380,11 @@ Midway_Coldstream_map_Felony <- ggplot(Midway_Coldstream_Felony,aes(x=Year,y=Mid
 
 grid.arrange(Poppleton_map_Felony,Madison_East_End_map_Felony,Clifton_Berea_map_Felony,Midway_Coldstream_map_Felony,nrow=2,ncol=2)
 
+Felony_Evolution_VS_CCTV[c(10,33,36,46),c(-3)]
 
 ```
-We can check how ... evolved over time.
+
+We can check how felony evolved over time.
 
 ```{r results='markup'}
 
@@ -451,6 +453,11 @@ Sandtown_Winchester_Harlem_Park_map_Misdemeanor <- ggplot(Sandtown_Winchester_Ha
 
 grid.arrange(Downtown_Seton_Hill_map_Misdemeanor,Oldtown_Middle_East_map_Misdemeanor,Upton_Druid_Heights_map_Misdemeanor,Sandtown_Winchester_Harlem_Park_map_Misdemeanor,nrow=2,ncol=2)
 
+Misdemeanor_Evolution_VS_CCTV <- Community_data[,c(1,79,89,4)] %>% 
+  mutate(change_perc=((Community_data$MisdemeanorPer1000inhabitants19/Community_data$MisdemeanorPer1000inhabitants14)-1)*100)
+
+Misdemeanor_Evolution_VS_CCTV[c(14,41,47,53),c(-3)]
+
 Washington_Village_Pigtown_evolution_Misdemeanor <- as.vector(t(Community_data[54,c(89,87,85,83,81,79,77)]))
 
 Washington_Village_Pigtown_Misdemeanor <- data.frame(Washington_Village_Pigtown_evolution_Misdemeanor,Year)
@@ -478,15 +485,6 @@ Canton_map_Misdemeanor <- ggplot(Canton_Misdemeanor,aes(x=Year,y=Canton_evolutio
   scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
   labs(title = "Canton",x="Year",y="Misdemeanor per capita")
 
-Canton_evolution_Misdemeanor <- as.vector(t(Community_data[5,c(89,87,85,83,81,79,77)]))
-
-Canton_Misdemeanor <- data.frame(Canton_evolution_Misdemeanor,Year)
-
-Canton_map_Misdemeanor <- ggplot(Canton_Misdemeanor,aes(x=Year,y=Canton_evolution_Misdemeanor)) + 
-  geom_line() +
-  scale_y_continuous(limits = c(0, 150), breaks =seq(0,150,25)) + 
-  labs(title = "Canton",x="Year",y="Misdemeanor per capita")
-
 Penn_North_Reservoir_Hill_evolution_Misdemeanor <- as.vector(t(Community_data[44,c(89,87,85,83,81,79,77)]))
 
 Penn_North_Reservoir_Hill_Misdemeanor <- data.frame(Penn_North_Reservoir_Hill_evolution_Misdemeanor,Year)
@@ -498,14 +496,26 @@ Penn_North_Reservoir_Hill_map_Misdemeanor <- ggplot(Penn_North_Reservoir_Hill_Mi
 
 grid.arrange(Washington_Village_Pigtown_map_Misdemeanor,Harbor_East_Little_Italy_map_Misdemeanor,Canton_map_Misdemeanor,Penn_North_Reservoir_Hill_map_Misdemeanor,nrow=2,ncol=2)
 
+Misdemeanor_Evolution_VS_CCTV[c(5,26,44,54),c(-3)]
+
 ```
-We can check how ... evolved over time.
+We can check how misdemeanor evolved over time.
 
 ```{r results='markup'}
 
+Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
+  filter(Category=="Misdemeanor") %>% 
+  count(year=floor_date(CrimeDateTime,"year")) %>% 
+  ggplot(aes(year,n))+geom_line()+
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
+  labs(title = "In Baltimore, Misdemeanor started to decrease as from 2017",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring misdemenors"),width=80),x="Year",y="Misdemeanor occurences")
+
+Misdemeanor_Yearly_evolution_map
+
+regression11 <- lm(Misdemeanor_Evolution_VS_CCTV$change_perc~Misdemeanor_Evolution_VS_CCTV$density_perc)
+summary(regression11)
 
 ```
-
 
 #### 4.2.2 CCTVs VS Violent and Property Crime
 
