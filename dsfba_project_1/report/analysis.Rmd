@@ -20,44 +20,35 @@ stargazer(regression,
           type = "html")
 
 ggplot(data=CCTV_VS_crimes,mapping= aes(x=density_perc,y=CrimePer1000inhabitants)) + 
-  labs(title = "CCTV Density per Community VS Crime per Capita per Community", x="CCTV density",y="Crime per capita")+
+  labs(title = "As CCTV density increases, crime per capita tends to increase as well.", x="CCTV density",y="Crime per capita",)+
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
 
 #### 4.1.1 Mapping of CCTVs and crime, felony and misdemeanor per capita
 
-In these section we engage with the mapping of the CCTVs and crimes. The method is the same as before with the `tmap` package. However, this time we have two different shapes: `tm_shape(baltimore)` which constitutes the base map and `tm_shape(balt_dat)` which adds a layer containing points. If we take a look at this map we see that it gives an intuition about the phenomenon we illustrated before. It seems as if where crime per capita is the lowest, there seems to be less CCTVs (for instance in the north area of the city or even in the western areas). There seems to be a correlation between the dark red areas and the CCTV locations.   
+Another interesting way to illustrate this correlation is by using a map depicting crime per capita in Baltimore and adding an extra layer to represent CCTVs. The method is the same as before with the `tmap` package. However, this time we have two different shapes: `tm_shape(baltimore)` which constitutes the base map and `tm_shape(balt_dat)` which adds a layer containing points. If we take a look at this map we see that it gives an intuition about the phenomenon we illustrated before. It seems as if where crime per capita is the lowest, there seems to be less CCTVs. There seems to be a correlation between the dark red areas and the highest CCTV concentrations. Looking at the north-western and south-western areas of the map, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous. We can also use an interactive map. The benefit of using such map is that it enables to get precise information about crime per capita in a given area by clicking on it.
 
 ```{r results='markup'}
 
-Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
-
-Felony_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "FelonyPerCapitaPerArea", title ="Felony per capita per Area in %", style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
-
-Misdemeanor_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3)+ tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black")
-
-tmap_mode("view") #Use this command to have interactive maps
-
-baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
-
-tmap_arrange(Crime_and_CCTV_map,Felony_and_CCTV_map,Misdemeanor_and_CCTV_map)
-```
-
-
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
-
-This map shows quite well that CCTV placement seems to follow the areas where crime per capita is the highest. Looking at the north-western and south-western areas of the map, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous.
-
-```{r}
 Crime_per_capita_VS_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05) + tm_shape(balt_dat) + tm_dots(col="black") 
 
 tmap_mode("plot")
+
 Crime_per_capita_VS_CCTV_map
 
+baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
+
+Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
+
+tmap_mode("view") #Use this command to have interactive maps
+
+Crime_and_CCTV_map
 ```
 
-However, even though this correlation is interesting, it does not allow one to say much about the effectiveness of CCTVs. We are stuck in a sort of chicken-and-egg problem. In order to get in position to comment on the crime-deterring potential of CCTV, we decided to analyse the crime per capita evolution of certain areas in relation with their respective CCTV density. In order to select our areas of interest, we performed a k-means clustering based on two dimensions:  CCTV density and  crime per capita. We first scale the data, then we add the names of each area as row name. We then use the elbow method to determine the optimal number of cluster using `fviz_nbclust`. When performing the kmeans clustering, we specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the data set as initial centers. We end up with 5 clusters that we represent using `fviz_cluster`. The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from between groups and not within groups.
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+However, even though this correlation is interesting, it does not allow one to say much about the effectiveness of CCTVs. We are stuck in a sort of chicken-and-egg problem. In order to get in position to comment on the crime-deterring potential of CCTV, we decided to analyse the crime per capita evolution of certain areas in relation with their respective CCTV density. Our goal is to observe how crime per capita behaved since 2014 in areas with high CCTV density compared to areas with low CCTV density. In order to select our areas of interest, we performed a k-means clustering based on two dimensions:  CCTV density and crime per capita. We first scale the data, then we add the names of each area as row name. We then use the elbow method to determine the optimal number of cluster using `fviz_nbclust`. When performing the kmeans clustering, we specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the data set as initial centers. We end up with 5 clusters that we represent using `fviz_cluster`. The ratio between the between sum of square and the within sum of square is good (85%), the higher this value the better. Indeed, we want the variation to come from between groups and not within groups.
 
 
 ```{r}
@@ -74,11 +65,10 @@ fviz_nbclust(sc.Community_data_Clustering[,c(1,3)], kmeans, method="wss")+
 
 set.seed(10)
 km.clust2 <- kmeans(sc.Community_data_Clustering[,c(1,3)], 5, nstart = 25)
-print(km.clust2)
 fviz_cluster(km.clust2, data=sc.Community_data_Clustering[,c(1,3)], repel=TRUE)+labs(x="Crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 85% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high crime, high CCTV density cluster as well as those in the lower crime, high CCTV density cluster"),width=90))
 
 ```
-We will start analysing how crime per capita evolved in areas belonging to the "high crime, high CCTV density" cluster. On top of graphically representing this evolution, one may also compute the percentage change in crime per capita betwen 2014 and 2019.
+We  start analysing how crime per capita evolved in areas belonging to the "high crime, high CCTV density" cluster. On top of graphically representing this evolution, one may also compute the percentage change in crime per capita betwen 2014 and 2019. We want to see whether we can observe a decreasing tendency in these areas full of CCTVs. We create maps using `ggplot` and `geom_line`. Then, in order to show these maps in a more concise way, we use `grid.arrange`. The table below shows the percentage change in crime per capita between the 2014 and the 2019 period. For the sake of our analysis we will only consider the 2014-2019 period. Indeed, it seems reasonable to assume that the decrease one observes in most areas for the 2020 period can be attributed to the Covid-19 pandemic.
 
 ```{r results='markup'}
 
@@ -129,9 +119,14 @@ Crime_Evolution_VS_CCTV <- Community_data[,c(1,25,15,4)] %>%
 
 Crime_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
 
+knitr::kable(
+  Crime_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],
+  col.names = c('Community','Crime per Cap')
+)
+
 ```
 
-For the sake of our analysis we will only consider the 2014-2019 period. Indeed, it seems reasonable to assume that the decrease one observes in most areas for the 2020 period can be attributed to the Covid-19 pandemic. One can see that for two out of these four areas with high crime and high CCTV density, crime per capita has increased. It slightly decreased for Cherry Hill and decreased more significantly for Sandtown-Winchester/Harlem Park. In order to be able to make a comment on CCTV effectiveness, we decided to also analyse how crime pr capita evolved in areas with high crime and low CCTV density. 
+One can see that for two out of these four areas with high crime and high CCTV density, crime per capita has increased. It slightly decreased for Cherry Hill and decreased more significantly for Sandtown-Winchester/Harlem Park. In order to be able to make a comment on CCTV effectiveness, we decided to also analyse how crime pr capita evolved in areas with high crime and low CCTV density. 
 
 ```{r results='markup'}
 
