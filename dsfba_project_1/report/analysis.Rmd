@@ -117,14 +117,12 @@ grid.arrange(Downtown_Seton_Hill_map,Oldtown_Middle_East_map,Sandtown_Winchester
 Crime_Evolution_VS_CCTV <- Community_data[,c(1,25,15,4)] %>% 
   mutate(change_perc=((Community_data$CrimePer1000inhabitants19/Community_data$CrimePer1000inhabitants14)-1)*100)
 
-Crime_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
-
 knitr::kable(Crime_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],col.names = c('Community','Crime per Capita % change')) %>%
   kable_styling(position = "center")
 
 ```
 
-One can see that for two out of these four areas with high crime and high CCTV density, crime per capita has increased. It slightly decreased for Cherry Hill and decreased more significantly for Sandtown-Winchester/Harlem Park. In order to be able to make a comment on CCTV effectiveness, we decided to also analyse how crime pr capita evolved in areas with high crime and low CCTV density. 
+One can see that for two out of these four areas with high crime and high CCTV density, crime per capita has actually increased. It slightly decreased for Cherry Hill and decreased more significantly for Sandtown-Winchester/Harlem Park. In order to be able to make a comment on CCTV effectiveness, we decided to also analyse how crime per capita evolved in areas with high crime and low CCTV density.
 
 ```{r results='markup'}
 
@@ -164,14 +162,18 @@ Southwest_Baltimore_map <- ggplot(Southwest_Baltimore,aes(x=Year,y=Southwest_Bal
   scale_y_continuous(limits = c(0, 250), breaks =seq(0,250,50)) +
   labs(title ="Southwest Baltimore",x="Year",y="Crime per capita")
 
-
 grid.arrange(Washington_Village_Pigtown_map,Harbor_East_Little_Italy_map,Madison_East_End_map,Southwest_Baltimore_map,nrow=2,ncol=2)
 
-Crime_Evolution_VS_CCTV[c(26,33,51,54),c(-3)]
+knitr::kable(Crime_Evolution_VS_CCTV[c(26,33,51,54),c(1,5)],col.names = c('Community','Crime per Capita % change')) %>%
+  kable_styling(position = "center")
 
 ```
 
-When comparing the four members of the high crime, high CCTV density cluster with the four members of the high crime, low CCTV density cluster, we can note that for all members of the low CCTV density cluster, crime per capita has increased while crime per capita has decreased for two members of the high CCTV density cluster. However, it is **crucial** to note that these observations have **no statistical significance**. The decrease we observe in Cherry Hill and Sandtown-Winchester/Harlem Park could be the result of pure luck/coincidence or could be attributed to many other factory. It is, for example, important to note that we observe a decreasing tendency when looking at the overall yearly crime evolution. Another important point to be made is that we observe no correlation between CCTV density and crime per capita change
+When comparing the four members of the high crime, high CCTV density cluster with the four members of the high crime, low CCTV density cluster, we observe that for three members of the low CCTV density cluster, crime per capita has increased while crime per capita has decreased for two members of the high CCTV density cluster. While this could potentially indicate that crime decreased more often in areas with high CCTV density compared to areas with low CCTV density and therefore indicate that CCTV may be effective crime deterrent, it is **absolutely crucial** to temper this statement with statistically significant. Indeed, the decrease we observe in Cherry Hill and Sandtown-Winchester/Harlem Park could be the result of pure luck/coincidence or could be attributed to many other factors. In addition, the extremely small number of data items analysed makes it particularly difficult to draw conclusions.  It should also be noted that although crime has fallen in two high crime, high CCTV areas, in one case it has fallen only slightly (Cherry Hill).
+
+Looking at how crime per cpaita has evolved throughout Baltimore City, one observes a general downward trend. This confirms the fact that the downward results should be interpreted with caution because other factors than CCTVs might be the reason for decreases. Finally, we computed a simple linear regression model between CCTV density and crime per capita evolution. We found out no significant correlation.
+
+All this leads us to believe that it is difficult to attribute real effectiveness to CCTVs.
 
 ```{r results='markup'}
 
@@ -190,7 +192,7 @@ summary(regression7)
 
 #### 4.1.2 Analysis of where crime took place: August 2021
 
-Another way to consider CCTVs crime-deterring potential is to spatially locate crime and compare it to CCTV location. We know that CCTVs capture activities within 256ft (~2 blocks). We will only select crime committed in August 2021 to have intereprtable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time points from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place compared to the CCTV location. By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
+However, still in an effort to observe how CCTVs impact on crime, we set out to locate crimes committed and compare these locations to those of the surveillance cameras. Knowing that a surveillance camera captures activities within 256ft (~2 blocks), it is interesting to observe whether or not there are "crime-free zones" around the cameras. We will only select crime committed in August 2021 to have interpretable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time points from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place (in red) compared to the CCTV location (in black). By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
 
 ```{r results='markup'}
 
@@ -207,7 +209,8 @@ tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
 ```
 
-To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime incidence in August. Thus, we needed to calculate the crime rate for August per area to see where crime was highest. The results show that they are in Downtown. 
+To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime incidence in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
+
 So following this we take a closer look at the Downtown area.
 
 ```{r}
@@ -220,8 +223,7 @@ CrimePerCapitaPerAreaAugust2021 <-mutate(CrimePerCapitaPerAreaAugust2021,CrimePe
 
 
 ```
-
-In order to create a "sub-map", we create a smaller area using the `st-bbox` function. The values indicated in the function represent the most extreme values on the x-axis and y-axis of a map using the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Then, using `tm_shape` with the new spatial file called `Downtown_area`as argument, we create a map in the same way as we have done before. As we want to be able to locate this smaller area in the picture map of baltimore, we must also create a Baltimore map with a rectangle representing the newly created "sub-area". In order to combine these two maps together, we run the two last lines together and use the `viewport` function. The output is a zoom on the desired area combined with the bigger map having a rectangle over the area which we are looking at and analyzing. In Downtown, we quite clearly see that some crimes are committed right next to some CCTVs.
+We create a "sub-map" in the exact same way as we did for the prison in section 3.2.3. In Downtown, we quite clearly see that some crimes (red points) are committed right next to some CCTVs (black triangles).
 
 ```{r}
 Downtown_area <-  st_bbox(c(xmin = -8531335.08, xmax = -8526873.06,
@@ -236,6 +238,7 @@ tmap_mode("plot")
 Downtown_map
 print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain the map with an additional overview
 ```
+The fact that we observe crimes committed right next to surveillance cameras reinforces the hypothesis put forward so far and allows us to answer our first research question once and for all: it does not seem that CCTVs reduce crime.
 
 ### 4.2 What types of crimes may be deterred by surveillance cameras?
 

@@ -143,7 +143,7 @@ Distorted_Crime_map
 
 #### 3.2.3 The prison anomaly
 
-One may wonder what this little square with no crime per capita, surrounded by CCTVs in the very center of Baltimore is. It actually is the prison. Zooming on this little square is interesting. The reason why we see so many CCTVs located on the right-hand side of the map is that the main entrance is located there.
+One may wonder what this little square with no crime per capita, surrounded by CCTVs in the very center of Baltimore is. It actually is the prison. Zooming on this little square is interesting. In order to create a "sub-map", we create a smaller area using the `st-bbox` function. The values indicated in the function represent the most extreme values on the x-axis and y-axis of a map using the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Then, using `tm_shape` with the new spatial file called `Prison_map`as argument, we create a map in the same way as we have done before. As we want to be able to locate this smaller area in the picture map of baltimore, we must also create a Baltimore map with a rectangle representing the newly created "sub-area". In order to combine these two maps together, we run the two last lines together and use the `viewport` function. The output is a zoom on the desired area combined with the bigger map having a rectangle over the area which we are looking at and analyzing. The reason why we see so many CCTVs located on the right-hand side of the map is that the main entrance is located there.
 
 ```{r}
 tmap_mode("plot")
