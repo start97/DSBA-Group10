@@ -795,7 +795,7 @@ None of the comparisons between CCTV density and different crime type evolution 
 
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
-As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime as evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas have evolved over time.
+As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas have evolved over time.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -814,11 +814,11 @@ summary(Evolution_VS_poverty_regr)
 
 ```
 
-The very poor R2 indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used.
+The very poor $R^2$ indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used.
 
-### 4.4 Comparison of CCTV density and wealth
+### 4.4 Research question 4 - Are there more public cameras in poorer areas compared to wealthier areas?
 
-We went to see whether there is a correlation between CCTV density and wealth. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. The next sub-section illustrates this in a map.
+We went to see whether there is a correlation between CCTV density and wealth. As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ and a poor $R^2$. The next sub-section illustrates this in a map.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -839,7 +839,7 @@ ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) +
 
 #### 4.4.1 Mapping of CCTVs and wealth
 
-The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns. If we look at the map we see that at least those areas with no CCTVs are more likely to be quite wealthy. However, we are not sure whether this is the only influential factor here, thus we think it is rather correlated to crime per capita in these areas. Again, in the northern parts we see less CCTV, less crime, and also more wealthier population.
+The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. Indeed, we see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the centre of Baltimore and that the poverty rates is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. Yet, we also see that areas with no CCTVs often are quite wealthy.
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -851,54 +851,11 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="Pove
 
 tmap_mode("view")
 Wealth_and_CCTV_map
+
 ```
 
-### 4.5 Comparison of crimes and wealth
 
-We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
-
-```{r echo=FALSE, results = 'markup'}
-
-Crime_VS_Poverty <- CrimeStatsPerArea %>% 
-  left_join(poverty_data,by=c("Community"="CSA2010"))
-
-regression3 <- lm(Crime_VS_Poverty$CrimePer1000inhabitants~Crime_VS_Poverty$hhpov19)
-
-stargazer(regression3,
-          title = "CrimePer1000Inhabitants vs Poverty",
-          type = "html")
-
-ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
-  labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
-  geom_point(shape=1) + 
-  geom_smooth(method = lm,color="blue",size=0.3)
-```
-
-### 4.6 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
-
-It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore. This might **suggest** the idea that richer areas are more impacted by less severe crimes.
-
-```{r echo=FALSE, results = 'markup'}
-
-Felony_VS_Misdemeanor <- FelonyStats %>% 
-  left_join(MisdemeanorStats,by="Community")
-
-regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdemeanor$MisdemeanorPerCapitaPerArea)
-#This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
-
-stargazer(regression4,
-          title = "Felony vs Misdemeanor",
-          type = "text")
-
-ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
-  labs(title = "Misdemeanor VS Felony", x="Felons per capita",y="Misdemeanor per capita")+
-  geom_point(shape=1) + 
-  geom_smooth(method = lm,color="blue",size=0.3)
-
-#Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
-```
-
-### 4.7 Attempt to create a more accurate model: Multiple Regression
+#### 4.4.2 An attempt to understand what determines CCTV density
 
 ```{r echo=FALSE, results = 'markup'}
 

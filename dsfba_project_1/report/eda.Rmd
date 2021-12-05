@@ -161,8 +161,9 @@ Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_
 Prison_map
 print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
 ```
-
 ### 3.3 Calculation of crime per capita by type of crime
+
+#### 3.3.1 Felonies and Misdemeanors
 
 First thing we do here is to compute the unique values of the description column of the crime data set. We see that we have 14 types of crime. We want to observe crimes by types, therefore we want to make new classifications. The law consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies**. 
 In our data set, we have no infractions. The 14 types of crime are divided in this way into the two remaining categories.
@@ -223,6 +224,61 @@ Community_data <- Community_data %>%
 
 ```
 
+#### 3.3.2 Mapping of felonies and Misdemeanors
+
+After ensuring that we have a perfect match we perform a left joint  for felony and misdemeanor and map everything. 
+
+```{r echo=TRUE}
+
+#Felony
+
+baltimore$community %in% FelonyStats$Community
+
+baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'Community'))
+
+Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyPerCapitaPerArea", title ="Felony per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+Felony_map
+
+#Misdemeanor
+
+baltimore$community %in% MisdemeanorStats$Community
+
+baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
+
+Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+
+Misdemeanor_map
+
+```
+
+#### 3.3.3 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
+
+It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore. This might **suggest** the idea that richer areas are more impacted by less severe crimes.
+
+```{r echo=FALSE, results = 'markup'}
+
+Felony_VS_Misdemeanor <- FelonyStats %>% 
+  left_join(MisdemeanorStats,by="Community")
+
+regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdemeanor$MisdemeanorPerCapitaPerArea)
+#This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
+
+stargazer(regression4,
+          title = "Felony vs Misdemeanor",
+          type = "text")
+
+ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
+  labs(title = "Misdemeanor VS Felony", x="Felons per capita",y="Misdemeanor per capita")+
+  geom_point(shape=1) + 
+  geom_smooth(method = lm,color="blue",size=0.3)
+
+#Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
+```
+
+
+#### 3.3.4 Violent crime and Property crime
+
 As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by 'type' of crime. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim. Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder.
 
 In order determine whether the crimes contained in our `crime_data_with_area`. We will use a data set once again provided by the Baltimore open data portal. This data set provides information about the crime codes used by the police to categorize crimes. We first import the data set. Then, we compare whether codes are well and truly similar, three crime codes are written with an extra blank space afterward. We correct that. Then, suing the `left_join` function, we add a new column to our `crime_data_with_area` data frame. We then wish to create data frames for both violent and property crime. The methodology is the same as we used for felonies and misdemeanors.
@@ -268,35 +324,6 @@ ViolentStats[56,] <- list("Unassigned -- Jail","PROPERTY",0,0)
 Community_data <- Community_data %>% 
   left_join(ViolentStats[,c(1,4)],by="Community") %>% 
   left_join(PropertyStats[,c(1,4)],by="Community")
-
-```
-
-
-#### 3.3.1 Mapping of felonies and Misdemeanors
-
-After ensuring that we have a perfect match we perform a left joint  for felony and misdemeanor and map everything. 
-
-```{r echo=TRUE}
-
-#Felony
-
-baltimore$community %in% FelonyStats$Community
-
-baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'Community'))
-
-Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyPerCapitaPerArea", title ="Felony per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
-
-Felony_map
-
-#Misdemeanor
-
-baltimore$community %in% MisdemeanorStats$Community
-
-baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
-
-Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
-
-Misdemeanor_map
 
 ```
 
@@ -713,8 +740,6 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
 Property_Crime_Yearly_evolution_map
 
 ```
-
-
 ###3.4.2 Calculation of felony and misdemeanor evolution
 
 We can make the exact same computation to calculate felony and misdemeanor evolution.
@@ -925,14 +950,24 @@ Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
 
 Misdemeanor_Yearly_evolution_map
 ```
+### 3.5 Comparison of crimes and wealth
 
+We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
 
-### 3.5 Internet access and crimes
+```{r echo=FALSE, results = 'markup'}
 
-First, we need to merge the data in one big file. Here every datasets needs one colums which is named in the same way (e.g. Community). Here we create a table with the following colums: Community Statistical Area, Internet accessibility CSA,CCTV per area, CrimeStatsPerArea,crime_data_with_areas, FelonyStats, MisdemeanorStats,  . Merging these files in one excel will help up to get a overview table and enable us to do some regressions to generate meaningful output of it. Here we simply merge the files by their same column, namely the community statistical area. 
+Crime_VS_Poverty <- CrimeStatsPerArea %>% 
+  left_join(poverty_data,by=c("Community"="CSA2010"))
 
-```{r echo=TRUE}
+regression3 <- lm(Crime_VS_Poverty$CrimePer1000inhabitants~Crime_VS_Poverty$hhpov19)
 
+stargazer(regression3,
+          title = "CrimePer1000Inhabitants vs Poverty",
+          type = "html")
+
+ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
+  labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
+  geom_point(shape=1) + 
+  geom_smooth(method = lm,color="blue",size=0.3)
 
 ```
-
