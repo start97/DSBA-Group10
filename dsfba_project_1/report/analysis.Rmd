@@ -242,11 +242,11 @@ The fact that we observe crimes committed right next to surveillance cameras rei
 
 ### 4.2 What types of crimes may be deterred by surveillance cameras?
 
-The logic here is the same as in section 4.1, except that here,we want to see whether the presence of CCTV can deter a certain type of crime in particular. We start with felonies and misdemeanors, then we analyse violent and property crimes.
+Although it is impossible to prove the effectiveness of surveillance cameras on crime in general, it is interesting to investigate whether different results are obtained when crime is broken down by type. The methodology we will use is the same as with crime in general.We start with felonies and misdemeanors, then we analyse violent and property crimes.
 
 #### 4.2.1 CCTVs VS Felonies and Misdemeanors
 
-The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors and felonies. It therefore does not seem like the presence of CCTV has a particularly strong impact on a certain type of crime. 
+The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors. Plotting the observations enables one to see this (weak) tendency. The blue line represents the regression line. 
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -282,7 +282,8 @@ ggplot(data=CCTV_VS_misdemeanors,mapping= aes(x=density_perc,y=MisdemeanorPerCap
   geom_point(shape=1) + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
-We are in the exact same situation as with crime, in order to comment CCTV effectiveness on felonies and/or misdemeanors, we must analyse felony/misdemeanor evolution over time in areas with/without CCTVs. We start with felonies. 
+
+We are in the exact same situation as with crime, in order to comment on the effectiveness of CCTVs on felonies and/or misdemeanors, we must analyse felony/misdemeanor evolution over time in areas with/without CCTVs. We start with felonies. 
 
 ```{r echo=FALSE, results = 'markup'}
 
