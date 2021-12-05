@@ -854,8 +854,9 @@ Wealth_and_CCTV_map
 
 ```
 
-
 #### 4.4.2 An attempt to understand what determines CCTV density
+
+We have seen that the level of poverty does not really seem to be a major determinant of CCTV density in an area. Therefore, we decided to construct a multiple regression model containing various variables. This enables us to see whether city officials make decisions regarding where to implement CCTVs based on, for example, socio-economic factors, educational factors or racial factors. We retrieved six new datasets on Baltimore's open data portal. The first one provides information about the percent of persons between the ages of 16 and 64 who are currently unemployed. The second one provides information about ... to be continued, I had to go to lunch - Augustin
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -942,6 +943,8 @@ summary(CCTV_VS_ViolentCrime_and_Unemp) #We see that unemployment becomes insign
 #Yet, this statement must be mitigated. Indeed, with R-squared of approximatnely 50%, we are in situation where we can only explain 50% of the  variation. This means that thee approximantely is 50% of the variation whose origin is unknown to us. 
 
 ```
+
+Overall, it really seems that the main predictor of CCTV density that we could observe is violent crime. Racial metrics, educational metrics and socio economic indicators are quite poor predictors.
 
 ### 4.67 Next steps after feedback on project update
 
