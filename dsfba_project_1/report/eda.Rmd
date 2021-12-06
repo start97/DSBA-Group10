@@ -80,7 +80,7 @@ library(tmap)
 baltimore$community %in% CCTV_per_area$Community
 ```
 
-Next, we perform a `left_join` between the Baltimore shape file and the CCTV per area data set. To hedge against the different writing styles (one time it is written with a capital letter and one time with a small letter), we use the vector in the end. Finally, we create the map with the `tmap` package. The `tmap` package somehow works as the `ggplot2` package: First, we need to define an element, it always starts with the `tm_shape` argument, and then you can add with the plus operator  as many arguments as you wish. We used the Baltimore shape file, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
+Next, we perform a `left_join` between the Baltimore shape file and the CCTV per area data set. To hedge against the different writing styles (one time it is written with a capital letter and one time with a small letter), we use the vector in the end. Finally, we create the map with the `tmap` package. The `tmap` package somehow works as the `ggplot2` package: First, we need to define an element, it always starts with the `tm_shape` argument, and then you can add with the plus operator as many arguments as you wish. We used the Baltimore shape file, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
 
 ```{r results='markup'}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
@@ -143,7 +143,7 @@ Distorted_Crime_map
 
 #### 3.2.3 The prison anomaly
 
-One may wonder what this little square with no crime per capita, surrounded by CCTVs in the very center of Baltimore is. It actually is the prison. Zooming on this little square is interesting. In order to create a "sub-map", we create a smaller area using the `st-bbox` function. The values indicated in the function represent the most extreme values on the x-axis and y-axis of a map using the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Then, using `tm_shape` with the new spatial file called `Prison_map`as argument, we create a map in the same way as we have done before. As we want to be able to locate this smaller area in the picture map of baltimore, we must also create a Baltimore map with a rectangle representing the newly created "sub-area". In order to combine these two maps together, we run the two last lines together and use the `viewport` function. The output is a zoom on the desired area combined with the bigger map having a rectangle over the area which we are looking at and analyzing. The reason why we see so many CCTVs located on the right-hand side of the map is that the main entrance is located there.
+One may wonder what this little square with no crime per capita, surrounded by CCTVs in the very center of Baltimore is. It actually is the prison. Zooming on this little square is interesting. In order to create a "sub-map", we create a smaller area using the `st-bbox` function. The values indicated in the function represent the most extreme values on the x-axis and y-axis of a map using the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Then, using `tm_shape` with the new spatial file called `Prison_map`as argument, we create a map in the same way as we have done before. As we want to be able to locate this smaller area in the picture map of Baltimore, we must also create a Baltimore map with a rectangle representing the newly created "sub-area". In order to combine these two maps together, we run the two last lines together and use the `viewport` function. The output is a zoom on the desired area combined with the bigger map having a rectangle over the area which we are looking at and analyzing. The reason why we see so many CCTVs located on the right-hand side of the map is that the main entrance is located there.
 
 ```{r}
 tmap_mode("plot")
@@ -226,7 +226,7 @@ Community_data <- Community_data %>%
 
 #### 3.3.2 Mapping of felonies and Misdemeanors
 
-After ensuring that we have a perfect match we perform a left joint  for felony and misdemeanor and map everything. 
+After ensuring that we have a perfect match we perform a left joint for felony and misdemeanor and map everything. 
 
 ```{r echo=TRUE}
 
@@ -331,7 +331,7 @@ Community_data <- Community_data %>%
 
 The idea is that we want to get information about how crime evolved. Here we could have done a loop, but could not yet find a way to properly do it. We have created a data set for each year.
 The results are interesting. If we compare how many observations we have in each crime-per year data sets, we see that we have ~40.000ish cases a year except from 2020 (which is due to COVID) and the year 2021 (which is not finished. We don't make any datasets for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
-The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in december.
+The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in December.
 
 ```{r echo=TRUE}
 

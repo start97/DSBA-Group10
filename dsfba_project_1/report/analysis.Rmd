@@ -17,7 +17,7 @@ regression <- lm(CCTV_VS_crimes$CrimePer1000inhabitants~CCTV_VS_crimes$density_p
 
 stargazer(regression,
           title = "Regression Crime vs CCTVs",
-          type = "html")
+          type = "text")
 
 ggplot(data=CCTV_VS_crimes,mapping= aes(x=density_perc,y=CrimePer1000inhabitants)) + 
   labs(title = "As CCTV density increases, crime per capita tends to increase as well.", x="CCTV density",y="Crime per capita",)+
@@ -540,7 +540,7 @@ regression22 <- lm(CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea~CCTV_VS_P
 
 stargazer(regression22,
           title = "Property Crime vs CCTVs",
-          type = "html")
+          type = "text")
 
 #We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
 
