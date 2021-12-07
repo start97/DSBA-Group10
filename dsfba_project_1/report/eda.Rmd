@@ -267,10 +267,9 @@ regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdeme
 
 stargazer(regression4,
           title = "Felony vs Misdemeanor",
-          type = "text",
-          ci=FALSE, 
-          no.space = TRUE,
-          )
+          type = "html",
+          ci = FALSE, 
+          no.space = TRUE)
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
   labs(title = "Misdemeanor VS Felony", x="Felons per capita",y="Misdemeanor per capita")+
@@ -959,7 +958,7 @@ Misdemeanor_Yearly_evolution_map
 
 We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
 
-```{r echo=FALSE, results = 'markup'}
+```{r echo=FALSE, results = 'asis'}
 
 Crime_VS_Poverty <- CrimeStatsPerArea %>% 
   left_join(poverty_data,by=c("Community"="CSA2010"))
