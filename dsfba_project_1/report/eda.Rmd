@@ -161,6 +161,7 @@ Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_
 Prison_map
 print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
 ```
+
 ### 3.3 Calculation of crime per capita by type of crime
 
 #### 3.3.1 Felonies and Misdemeanors
@@ -256,7 +257,7 @@ Misdemeanor_map
 
 It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore. This might **suggest** the idea that richer areas are more impacted by less severe crimes.
 
-```{r echo=FALSE, results = 'markup'}
+```{r echo=FALSE, results = 'asis'}
 
 Felony_VS_Misdemeanor <- FelonyStats %>% 
   left_join(MisdemeanorStats,by="Community")
@@ -266,7 +267,10 @@ regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdeme
 
 stargazer(regression4,
           title = "Felony vs Misdemeanor",
-          type = "text")
+          type = "text",
+          ci=FALSE, 
+          no.space = TRUE,
+          )
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
   labs(title = "Misdemeanor VS Felony", x="Felons per capita",y="Misdemeanor per capita")+
@@ -529,7 +533,7 @@ tmap_animation(animated_crime_map, delay=100)
 
 ```
 
-###3.4.1 Calculation of violent crime and property crime evolution
+### 3.4.1 Calculation of violent crime and property crime evolution
 
 We can make the exact same computation to calculate violent crime and property crime evolution.
 
@@ -740,7 +744,7 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
 Property_Crime_Yearly_evolution_map
 
 ```
-###3.4.2 Calculation of felony and misdemeanor evolution
+#### 3.4.2 Calculation of felony and misdemeanor evolution
 
 We can make the exact same computation to calculate felony and misdemeanor evolution.
 
@@ -950,6 +954,7 @@ Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
 
 Misdemeanor_Yearly_evolution_map
 ```
+
 ### 3.5 Comparison of crimes and wealth
 
 We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
