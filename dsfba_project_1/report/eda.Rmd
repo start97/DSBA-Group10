@@ -540,13 +540,9 @@ magick::image_read("animated_crime_map.gif")
 
 ```
 
-<center>
-
-<video width="550" height="450" controls>
-  <source src="testmp4.mp4" type="video/mp4">
-</video>
-
-</center>
+<div align="center">
+<img src="animated_crime_map.gif" width="180" height="105" name="animated_crime_map"> 
+</div>
 
 ### 3.4.1 Calculation of violent crime and property crime evolution
 
