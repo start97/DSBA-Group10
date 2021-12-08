@@ -85,7 +85,7 @@ Next, we perform a `left_join` between the Baltimore shape file and the CCTV per
 ```{r results='markup'}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
-CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "CCTV density per area in Baltimore",title.size =1 ,title.position= c("center","top"),legend.title.size = 1)
+CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,.main.title = "CCTV density per area in Baltimore",title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
 
 tmap_mode("plot")
 CCTV_dens_map
@@ -258,6 +258,7 @@ Misdemeanor_map
 
 It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
 
+<div align="center">
 ```{r echo=FALSE, results = 'asis'}
 
 Felony_VS_Misdemeanor <- FelonyStats %>% 
@@ -282,7 +283,7 @@ ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=Misdem
   geom_smooth(method = lm,color="blue",size=0.3)
 
 ```
-
+</div>
 #### 3.3.4 Violent crime and Property crime
 
 As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by 'type' of crime. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim. Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder.
@@ -532,10 +533,20 @@ animated_crime_map <- tm_shape(baltimore_alias,bbox = bbox, projection = crs.geo
 tmap_animation(animated_crime_map, delay=100)
 
 library(magick)
+library(av)
+tmap_animation(animated_crime_map,filename = "testmp4.mp4",delay=100)
 
 magick::image_read("animated_crime_map.gif")
 
 ```
+
+<center>
+
+<video width="550" height="450" controls>
+  <source src="testmp4.mp4" type="video/mp4">
+</video>
+
+</center>
 
 ### 3.4.1 Calculation of violent crime and property crime evolution
 

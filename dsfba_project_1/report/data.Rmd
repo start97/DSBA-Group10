@@ -48,7 +48,7 @@ This dataset represents the location and characteristics of major crime against 
 crime_data <- read.csv(file = here::here("data/Baltimore_Part1_Crime_data.csv"))
 ```
 
-_Source of the data set:_ [https://data.baltimorecity.gov/datasets/part1-crime-data/explore]
+_Source of the data set:_ <br> [https://data.baltimorecity.gov/datasets/part1-crime-data/explore]
 
 ### 2.2 CCTV Data set
 
@@ -74,7 +74,7 @@ This dataset represents closed circuit camera locations capturing activity withi
 cctv_data <- read.csv(file = here::here("data/Baltimore_CCTV_Locations_Crime_Cameras.csv"))
 ```
 
-_Source of the data set:_ [https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore]
+_Source of the data set:_ <br>  [https://data.baltimorecity.gov/datasets/cctv-locations-crime-cameras/explore]
 
 ### 2.3 Poverty Data set
 
@@ -92,7 +92,7 @@ Federal and state governments use such estimates to allocate funds to local comm
 poverty_data <- read.csv(file = here::here("data/Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv"))
 ```
 
-_Source of the data set:_ [https://arcg.is/1qOrnH]
+_Source of the data set:_<br> [https://arcg.is/1qOrnH]
 
 ### 2.4 Area Data set
 
@@ -108,7 +108,7 @@ This dataset provides information about the Community Statistical Area geographi
 area_data <- read_csv(file = here::here("data/Community_Statistical_Areas__CSAs___Reference_Boundaries.csv"))
 ```
 
-_Source of the data set:_ [https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26]
+_Source of the data set:_ <br> [https://data.baltimorecity.gov/datasets/community-statistical-area-1/explore?location=39.284605%2C-76.620550%2C12.26]
 
 ### 2.5 Population Data set
 
@@ -122,7 +122,7 @@ This data set provides information about the population in each Community Statis
 population_data <- read.csv(file = here::here("data/Total_Population.csv"))
 ```
 
-_Source of the data set:_ [INSERT SOURCE HERE]
+_Source of the data set:_<br>  [https://arcg.is/01eimm0]
 
 ### 2.6 Data Wrangling
 
