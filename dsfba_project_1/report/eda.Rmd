@@ -23,14 +23,14 @@ crs.geo1 <-  CRS("+proj=merc +a=6378137 +b=6378137 +lat_ts=0 +lon_0=0 +x_0=0 +y_
 proj4string(balt_dat) <-  crs.geo1  
 ```
 
-Then we plot to see the output (as cloud of points which represent all the CCTVs).
+Then we plot to see the output: as cloud of points which represent all the CCTVs in baltimore.
 
 ```{r}
 
 plot(balt_dat, pch = 20, col = "steelblue") #We can use the plot function to quickly plot the SpatialPointDataFrame that we created. We see a bunch of points which represent the CCTV location in Baltimore.
 ```
 
-Next, we have to work with the shapefile which is another special type of file. Basically it is a set of polygons which represent different areas of the city Baltimore. We downloaded this file on the Open Baltimore Portal. We read it in and assign this file again to our crs.geo1 coordinate system. In this way we have assured that our files have the same coordinate system.
+Next, we have to work with the shapefile object which is another special type of file. Basically it is a set of polygons which represent different areas of the city Baltimore. We downloaded this file on the Open Baltimore Portal. We read it in and assign this file again to our crs.geo1 coordinate system. In this way we have assured that our files have the same coordinate system.
 
 ```{r echo=TRUE}
 #read in shapefile of baltimore
@@ -85,7 +85,7 @@ Next, we perform a `left_join` between the Baltimore shape file and the CCTV per
 ```{r results='markup'}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
-CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density per Area in %", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "CCTV density per area in Baltimore",title.size =1 ,title.position= c("center","top"),legend.title.size = 1)
 
 tmap_mode("plot")
 CCTV_dens_map
@@ -93,7 +93,7 @@ CCTV_dens_map
 
 ### 3.2 Calculation of the crime per capita per community
 
-What we create is the `CrimeStatsPerArea`. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime frequency for each area. Then, using the population data, we can divide the crime frequency by the number of inhabitants in each area. We finally multiply this by 1000 to obtain the crime per 1000 inhabitants. Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeFrequency column to see whether it equals to 349482. This is the case. We can therefore go further confidently.
+What we create is the `CrimeStatsPerArea` object. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime frequency for each area. Then, using the population data, we can divide the crime frequency by the number of inhabitants in each area. We finally multiply this by 1000 to obtain the crime per 1000 inhabitants. Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeFrequency column to see whether it equals to 349482. This is the case. We can therefore go further confidently.
 
 ```{r}
 CrimeStatsPerArea <- crime_data_with_areas %>% 
@@ -114,7 +114,7 @@ Community_data <- CrimeStatsPerArea[,-2] %>%
 
 #### 3.2.1 Mapping of crime per capita per community
 
-We want to map  crimes per capita per community. The methodology is the same as we did for CCTV density. This time, we use the "quantile" method to create category breaks.
+We want to map  crime per capita per community. The methodology is the same as we did for CCTV density. This time, we use the "quantile" method to create category breaks. We see that crime tends to be higher in the city center.
 
 ```{r echo=TRUE}
 library(tmap)
@@ -123,7 +123,7 @@ baltimore$community %in% CrimeStatsPerArea$Community #We see that we have a perf
 
 baltimore@data <- left_join(baltimore@data, CrimeStatsPerArea, by = c('community' = 'Community'))
 
-Crime_per_capita_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+Crime_per_capita_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "Crime tends to be higher in the city center of Balimore",title.size =1 ,title.position= c("center","top"))
 
 tmap_mode("plot")
 Crime_per_capita_map
