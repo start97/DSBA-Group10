@@ -8,7 +8,7 @@ source(here::here("scripts/setup.R"))
 
 In order to be in position to comment on the effectiveness of CCTVs on crime deterrence, one is first going to investigate the relationship between CCTV density and crime per capita. To do so, we first create a simple linear regression model. We create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The linear regression indicates a moderate correlation between higher CCTV density and higher crime per capita. The $R^2$ is at 42.9%. Plotting the observations enables one to see this tendency. The blue line represents the regression line.
 
-```{r echo=FALSE, results='asis'}
+```{r echo=FALSE}
 
 CCTV_VS_crimes <- CCTV_per_area %>% 
   left_join(CrimeStatsPerArea,by="Community")
@@ -46,7 +46,6 @@ tmap_mode("view") #Use this command to have interactive maps
 Crime_and_CCTV_map
 ```
 
-<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 However, even though this correlation is interesting, it does not allow one to say much about the effectiveness of CCTVs. We are stuck in a sort of chicken-and-egg problem. In order to get in position to comment on the crime-deterring potential of CCTV, we decided to analyse the crime per capita evolution of certain areas in relation with their respective CCTV density. Our goal is to observe how crime per capita behaved since 2014 in areas with high CCTV density compared to areas with low CCTV density. In order to select our areas of interest, we performed a k-means clustering based on two dimensions:  CCTV density and crime per capita. We first scale the data, then we add the names of each area as row name. We then use the elbow method to determine the optimal number of cluster using `fviz_nbclust`. When performing the kmeans clustering, we specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the data set as initial centers. We end up with 5 clusters that we represent using `fviz_cluster`. The ratio between the between sum of square and the within sum of square is good (85%), the higher this value the better. Indeed, we want the variation to come from between groups and not within groups.
 
@@ -194,7 +193,7 @@ summary(regression7)
 
 However, still in an effort to observe how CCTVs impact on crime, we set out to locate crimes committed and compare these locations to those of the surveillance cameras. Knowing that a surveillance camera captures activities within 256ft (~2 blocks), it is interesting to observe whether or not there are "crime-free zones" around the cameras. We will only select crime committed in August 2021 to have interpretable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time points from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place (in red) compared to the CCTV location (in black). By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
 
-```{r results='markup'}
+```{r results='markup',fig.align='center'}
 
 crime_spatial <- as.data.table(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")))
 coordinates(crime_spatial) <-  c("Longitude","Latitude")
@@ -862,15 +861,15 @@ After importing all the data sets, we created an object called `fullmod` which i
 
 _Source of the data sets:_ 
 
-[https://arcg.is/0KOH1q]
-[https://arcg.is/1znCqm0]
-[https://arcg.is/1LiHnn0]
-[https://arcg.is/1nOK9X]
-[https://arcg.is/05LyTO]
-[https://arcg.is/1vqyTu0]
+[https://arcg.is/0KOH1q] <br>
+[https://arcg.is/1znCqm0] <br>
+[https://arcg.is/1LiHnn0] <br>
+[https://arcg.is/1nOK9X] <br>
+[https://arcg.is/05LyTO] <br>
+[https://arcg.is/1vqyTu0] <br>
 
 
-```{r echo=FALSE, results = 'markup'}
+```{r echo=FALSE}
 
 #Socio-economic indicators:
 
@@ -918,7 +917,7 @@ selAIC <- step(nullmod,scope=list(lower=nullmod,upper=fullmod),direction="forwar
 #We have a satisfactory R-Squared
 
 stargazer(selAIC,
-          title = "Community data vs",
+          title = "Selected model after a forward stepwise regression, 4 independent variables are retained",
           type = "text")
 
 library(car)
