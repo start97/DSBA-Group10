@@ -29,7 +29,7 @@ ggplot(data=CCTV_VS_crimes,mapping= aes(x=density_perc,y=CrimePer1000inhabitants
 
 Another interesting way to illustrate this correlation is by using a map depicting crime per capita in each area and adding an extra layer to represent CCTVs. The method is the same as before with the `tmap` package. However, this time we have two different shapes: `tm_shape(baltimore)` which constitutes the base map and `tm_shape(balt_dat)` which adds a layer containing points. If we take a look at this map we see that it gives an intuition about the phenomenon we illustrated before. It seems as if where crime per capita is the lowest, there seems to be less CCTVs. There seems to be a correlation between the dark red areas and the highest CCTV concentrations. Looking at the north-western and south-western areas of the map, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous. We can also use an interactive map. The benefit of using such map is that it enables to get precise information about crime per capita in a given area by clicking on it.
 
-```{r results='markup',fig.width=10,fig.height=20}
+```{r results='markup',fig.width=10,fig.height=10}
 
 Crime_per_capita_VS_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crime seems to be higher in areas with more CCTVs") + tm_shape(balt_dat) + tm_dots(col="black") 
 
