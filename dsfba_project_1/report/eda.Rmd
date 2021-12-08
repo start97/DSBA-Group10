@@ -250,7 +250,7 @@ baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community'
 
 Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per 1000 inhabitants",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title="Misdemeanor tends to be more located in the eastern part of the city",title.size =1 ,title.position= c("center","top"))
 
-Misdemeanor_map + Felony_map
+(Misdemeanor_map) + (Felony_map)
 
 ```
 
