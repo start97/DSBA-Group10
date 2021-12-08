@@ -258,26 +258,26 @@ Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerA
 
 It is always interesting to see whether we can spot patterns in crime data. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
 
-<div align="center">
-```{r echo=FALSE, results = 'asis'}
+```{r results = 'markup'}
 
 Felony_VS_Misdemeanor <- FelonyStats %>% 
   left_join(MisdemeanorStats,by="Community")
 
 regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdemeanor$MisdemeanorPerCapitaPerArea)
 #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
-
+```
+<div align="center">
+```{r echo=FALSE, results = 'asis'}
 stargazer(regression4,
           title = "Felony vs Misdemeanor",
           type = "html",
           ci = FALSE, 
           no.space = TRUE)
-
-Downtown_label <- Felony_VS_Misdemeanor[14,]
 ```
 </div>
-<br><br><br>
-```{r echo=FALSE, results = 'asis'}
+<br><br>
+```{r results = 'markup'}
+Downtown_label <- Felony_VS_Misdemeanor[14,]
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
   labs(title = str_wrap(("Misdemeanors and felonies are rather equally distributed in Baltimore"),width=70), x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
