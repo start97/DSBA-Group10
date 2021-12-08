@@ -250,7 +250,7 @@ baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community'
 
 Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per 1000 inhabitants",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title="Misdemeanor tends to be more located in the eastern part of the city",title.size =1 ,title.position= c("center","top"))
 
-(Misdemeanor_map) + (Felony_map)
+tmap_arrange(Felony_map,Misdemeanor_map)
 
 ```
 
@@ -971,21 +971,23 @@ Misdemeanor_Yearly_evolution_map
 
 We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
 
-<div align="center">
-```{r echo=FALSE, results = 'asis'}
+
+```{r}
 
 Crime_VS_Poverty <- CrimeStatsPerArea %>% 
   left_join(poverty_data,by=c("Community"="CSA2010"))
 
 regression3 <- lm(Crime_VS_Poverty$CrimePer1000inhabitants~Crime_VS_Poverty$hhpov19)
-
+```
+<div align="center">
+```{r echo=FALSE, results = 'asis'}
 stargazer(regression3,
           title = "CrimePer1000Inhabitants vs Poverty",
           type = "html")
 ```
 </div>
-<br><br><br>
-```{r echo=FALSE, results = 'asis'}
+<br><br>
+```{r results = 'markup'}
 ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
   labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
   geom_point() + 

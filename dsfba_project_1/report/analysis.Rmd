@@ -8,14 +8,15 @@ source(here::here("scripts/setup.R"))
 
 In order to be in position to comment on the effectiveness of CCTVs on crime deterrence, one is first going to investigate the relationship between CCTV density and crime per capita. To do so, we  create a simple linear regression model. We first create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The linear regression indicates a moderate correlation between higher CCTV density and higher crime per capita. The $R^2$ is at 42.9%. Plotting the observations enables one to see this tendency. The blue line represents the regression line.
 
-<div align="center">
-```{r echo=FALSE,results='asis'}
+```{r}
 
 CCTV_VS_crimes <- CCTV_per_area %>% 
   left_join(CrimeStatsPerArea,by="Community")
   
 regression <- lm(CCTV_VS_crimes$CrimePer1000inhabitants~CCTV_VS_crimes$density_perc)
-
+```
+<div align="center">
+```{r echo=FALSE,results='asis'}
 stargazer(regression,
           title = "Crime VS CCTVs",
           type = "html")
@@ -182,8 +183,8 @@ Looking at how crime per capita has evolved throughout Baltimore City, one obser
 
 All this leads us to believe that it is difficult to attribute real effectiveness to CCTVs.
 
-<div align="center">
-```{r results='asis'}
+
+```{r results='markup'}
 
 Crime_Yearly_evolution_map <- crime_data_with_areas %>% 
   count(year=floor_date(CrimeDateTime,"year")) %>% 
@@ -194,11 +195,13 @@ Crime_Yearly_evolution_map <- crime_data_with_areas %>%
 Crime_Yearly_evolution_map
 
 regression7 <- lm(Crime_Evolution_VS_CCTV$change_perc~Crime_Evolution_VS_CCTV$density_perc)
-
+```
+<br><br>
+<div align="center">
+```{r echo=FALSE,results='asis'}
 stargazer(regression7,
           title = "CCTV density VS Crime evolution",
           type = "html")
-
 ```
 </div>
 
@@ -206,7 +209,6 @@ stargazer(regression7,
 
 However, still in an effort to observe how CCTVs impact on crime, we set out to locate crimes committed and compare these locations to those of the surveillance cameras. Knowing that a surveillance camera captures activities within 256ft (~2 blocks), it is interesting to observe whether or not there are "crime-free zones" around the cameras. We will only select crime committed in August 2021 to have interpretable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time point from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place (in red) compared to the CCTV location (in black). By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
 
-<div align="center">
 ```{r results='markup'}
 
 crime_spatial <- as.data.table(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")))
@@ -219,7 +221,6 @@ August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3
 tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
 ```
-</div>
 
 To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime incidence in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
 
@@ -261,8 +262,8 @@ Although it is impossible to prove the effectiveness of surveillance cameras on 
 
 The results of the simple linear regression shows a weak $R^2$ for both felonies and misdemeanors. The correlation between felony and CCTV density and between misdemeanors and CCTV density is roughly the same. Plotting the observations enables one to see this (weak) tendency. The blue line represents the regression line. 
 
-<div align="center">
-```{r echo=FALSE, results = 'asis'}
+
+```{r}
 
 #Felonies
 
@@ -270,13 +271,16 @@ CCTV_VS_Felony <- CCTV_per_area %>%
   left_join(FelonyStats,by="Community")
 
 regression5 <- lm(CCTV_VS_Felony$FelonyPerCapitaPerArea~CCTV_VS_Felony$density_perc)
+```
+<div align="center">
+```{r echo=FALSE, results = 'asis'}
 
 stargazer(regression5,
           title = "CCTV vs Felony",
           type = "html")
 ```
 </div>
-
+<br><br>
 ```{r results='markup'}
 ggplot(data=CCTV_VS_Felony,mapping= aes(x=density_perc,y=FelonyPerCapitaPerArea)) + 
   labs(title = "As CCTV density increases, felony tends to increase as well.", x="CCTV Density ",y="Felony")+
@@ -284,21 +288,23 @@ ggplot(data=CCTV_VS_Felony,mapping= aes(x=density_perc,y=FelonyPerCapitaPerArea)
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
 
-<div align="center">
-```{r echo=FALSE, results = 'asis'}
+
+```{r}
 #Misdemeanors
 
 CCTV_VS_misdemeanors <- CCTV_per_area %>% 
   left_join(MisdemeanorStats,by="Community")
 
 regression6 <- lm(CCTV_VS_misdemeanors$MisdemeanorPerCapitaPerArea~CCTV_VS_misdemeanors$density_perc)
-
+```
+<div align="center">
+```{r echo=FALSE, results = 'asis'}
 stargazer(regression6,
           title = "CCTV vs Misdemeanor",
           type = "html")
 ```
 </div>
-
+<br><br>
 ```{r results='markup'}
 ggplot(data=CCTV_VS_misdemeanors,mapping= aes(x=density_perc,y=MisdemeanorPerCapitaPerArea)) + 
    labs(title = "As CCTV density increases, misdemeanor tends to increase as well.", x="CCTV Density ",y="Misdemeanor")+
@@ -308,21 +314,21 @@ ggplot(data=CCTV_VS_misdemeanors,mapping= aes(x=density_perc,y=MisdemeanorPerCap
 
 We are in the exact same situation as with crime. In order to comment on the effectiveness of CCTVs on felonies and/or misdemeanors, we must analyse felony/misdemeanor evolution over time in areas with/without CCTVs. We start with felonies. 
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 fviz_nbclust(sc.Community_data_Clustering[,c(5,3)], kmeans, method="wss")+
   geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
   labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
 ```
 <br><br>
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 set.seed(40)
 km.clust5 <- kmeans(sc.Community_data_Clustering[,c(5,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-print(km.clust5) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
+
 fviz_cluster(km.clust5, data=sc.Community_data_Clustering[,c(5,3)], repel=TRUE) + labs(x="Felony per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.1% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high felony, high CCTV density cluster as well as those in the lower felony, high CCTV density cluster"),width=90))
 ```
 <br><br>
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 Downtown_Seton_Hill_evolution_Felony <- as.vector(t(Community_data[14,c(73,71,69,67,65,63,61)]))
 
@@ -369,7 +375,7 @@ knitr::kable(Felony_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],col.names = c('Commu
   kable_styling(position = "center")
 ```
 <br><br>
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 Poppleton_evolution_Felony <- as.vector(t(Community_data[46,c(73,71,69,67,65,63,61)]))
 
@@ -416,8 +422,7 @@ knitr::kable(Felony_Evolution_VS_CCTV[c(10,33,36,46),c(1,5)],col.names = c('Comm
 
 We see that in both clusters, felony has increased for three out of four members, regardless of CCTV density. This might indicate that CCTVs are not effective when it comes to felonies either. By plotting the felony evolution over time in Baltimore, we  observe that felony has also slightly increased comparing the 2014 and the 2019 level. Again, it makes it difficult to interpret these results as they are not statistically significant. Still, computing a regression between CCTV density and felony per capita gives the intuition that there only exists a very weak correlation between CCTV density and felony per capita, suggesting that surveillance cameras are not effective in preventing felonies either.
 
-<div align="center">
-```{r results='asis'}
+```{r results='markup'}
 
 Felony_Yearly_evolution_map <- crime_data_with_areas %>%
   filter(Category=="Felony") %>% 
@@ -427,7 +432,10 @@ Felony_Yearly_evolution_map <- crime_data_with_areas %>%
   labs(title = "Comparing the 2014 felony level with the 2019 felony level, one observes that felony has slightly increased",subtitle=str_wrap(("This further explains why we should be careful when considering CCTV effectiveness in deterring felonies"),width=80),x="Year",y="Felony occurences")
 
 Felony_Yearly_evolution_map
-
+```
+<br><br>
+<div align="center">
+```{r echo=FALSE,results='asis'}
 regression10 <- lm(Felony_Evolution_VS_CCTV$change_perc~Felony_Evolution_VS_CCTV$density_perc)
 stargazer(regression10,
           title = "CCTV density VS Felony evolution",
@@ -438,15 +446,16 @@ stargazer(regression10,
 
 We continue with misdemeanors. We do the exact same thing.
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 fviz_nbclust(sc.Community_data_Clustering[,c(6,3)], kmeans, method="wss")+
   geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
   labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
-
+```
+<br><br>
+```{r results = 'markup'}
 set.seed(50)
 km.clust6 <- kmeans(sc.Community_data_Clustering[,c(6,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-print(km.clust6) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
 fviz_cluster(km.clust6, data=sc.Community_data_Clustering[,c(6,3)], repel=TRUE) + labs(x="Misdemeanor per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 84.41% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high misdemeanor, high CCTV density cluster as well as those in the lower misdemeanor, high CCTV density cluster"),width=90))
 
 Downtown_Seton_Hill_evolution_Misdemeanor <- as.vector(t(Community_data[14,c(89,87,85,83,81,79,77)]))
@@ -490,8 +499,10 @@ grid.arrange(Downtown_Seton_Hill_map_Misdemeanor,Oldtown_Middle_East_map_Misdeme
 Misdemeanor_Evolution_VS_CCTV <- Community_data[,c(1,79,89,4)] %>% 
   mutate(change_perc=((Community_data$MisdemeanorPer1000inhabitants19/Community_data$MisdemeanorPer1000inhabitants14)-1)*100)
 
-knitr::kable(Misdemeanor_Evolution_VS_CCTV[c(14,41,47,53),c(1,5)],col.names = c('Community','Misdemeanor per Capita % change')) %>%
-  kable_styling(position = "center")
+knitr::kable(Misdemeanor_Evolution_VS_CCTV[c(14,41,47,53),c(1,5)],col.names = c('Community','Misdemeanor per Capita % change')) %>% kable_styling(position = "center")
+```
+<br><br>
+```{r results = 'markup'}
 
 Washington_Village_Pigtown_evolution_Misdemeanor <- as.vector(t(Community_data[54,c(89,87,85,83,81,79,77)]))
 
@@ -548,7 +559,9 @@ Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
   labs(title = "In Baltimore, Misdemeanor started to decrease as from 2017",subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring misdemenors"),width=80),x="Year",y="Misdemeanor occurences")
 
 Misdemeanor_Yearly_evolution_map
+```
 
+```{r echo=FALSE,results='asis'}
 regression11 <- lm(Misdemeanor_Evolution_VS_CCTV$change_perc~Misdemeanor_Evolution_VS_CCTV$density_perc)
 stargazer(regression11,
           title = "CCTV density VS Misdemeanor evolution",
@@ -560,52 +573,66 @@ stargazer(regression11,
 
 It seems that the severity of the crime (i. e. whether it is a felony or a misdemeanor) does not influence the crime-deterring potential of CCTVs. It is now interesting to see whether we observe a difference when decomposing crime into violent and property crime. We first perform one simple linear regression between CCTV density and violent crime and another between CCTV density and property crime. The first interesting thing one can observe is that we observe a much stronger correlation between between CCTV density and violent crime than between CCTV density and property crime. The $R^2$ of the first regression is at 51.5%, more than any other $R^2$ obtained until now. This suggests that violent crime per capita is a considerable determinant of CCTV density.
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 CCTV_VS_ViolentCrime <- CCTV_per_area %>% 
   left_join(ViolentStats,by="Community")
 
 regression21 <- lm(CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea~CCTV_VS_ViolentCrime$density_perc)
+```
 
+```{r results = 'asis'}
 stargazer(regression21,
           title = "CCTV vs Violent Crime",
           type = "html")
-
+```
+<br><br>
+```{r results = 'markup'}
 CCTV_VS_PropertyCrime <- CCTV_per_area %>% 
   left_join(PropertyStats,by="Community")
 
 regression22 <- lm(CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea~CCTV_VS_PropertyCrime$density_perc)
+```
 
+```{r results = 'asis'}
 stargazer(regression22,
           title = "CCTV vs Property Crime",
           type = "html")
 
 #We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
-
+```
+<br><br>
+```{r results = 'markup'}
 ggplot(Community_data,aes(x=density_perc,y=ViolentCrimePerCapitaPerArea))+
   geom_point()+
    geom_smooth(method = lm,color="blue",size=0.3)+
   labs(x="CCTV Density per Area",y="Violent crime (per 1000 inhabitants)",title="Violent crime increases with CCTV density",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas might influence our results."),width=45)
-
+```
+<br><br>
+```{r results = 'markup'}
 ggplot(Community_data,aes(x=density_perc,y=PropertyCrimePerCapitaPerArea))+
   geom_point()+
    geom_smooth(method = lm,color="blue",size=0.3)+
   labs(x="CCTV Density per Area",y="Property crime (per 1000 inhabitants)",title="Property crime is weakly correlated with CCTV intensity",subtitle = str_wrap("The correlation is weaker than between violent crime and CCTV density"),width=45)
 
 ```
+
 Yet, as in past sections, we have to analyse how violent and property crime evolved over time in areas with different CCTV densities to be in position to comment on CCTV effectiveness. We start with violent crime.
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 fviz_nbclust(sc.Community_data_Clustering[,c(7,3)], kmeans, method="wss")+
   geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
   labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
-
+```
+<br><br>
+```{r results = 'markup'}
 set.seed(20)
 km.clust3 <- kmeans(sc.Community_data_Clustering[,c(7,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-print(km.clust3) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
 fviz_cluster(km.clust3, data=sc.Community_data_Clustering[,c(7,3)], repel=TRUE) + labs(x="Violent crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.4% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high violent crime, high CCTV density cluster as well as those in the lower violent crime, high CCTV density cluster"),width=90))
-
+```
+<br><br>
+```{r results = 'markup'}
 Downtown_Seton_Hill_evolution_Violent <- as.vector(t(Community_data[14,c(41,39,37,35,33,31,29)]))
 
 Downtown_Seton_Hill_Violent <- data.frame(Downtown_Seton_Hill_evolution_Violent,Year)
@@ -653,6 +680,9 @@ Violent_Crime_Evolution_VS_CCTV[c(7,14,41,47),c(-3)]
 
 knitr::kable(Violent_Crime_Evolution_VS_CCTV[c(7,14,41,47),c(1,5)],col.names = c('Community','Violent Crime per Capita % change')) %>% kable_styling(position = "center")
 
+```
+<br><br>
+```{r results = 'markup'}
 Clifton_Berea_evolution_Violent <- as.vector(t(Community_data[10,c(41,39,37,35,33,31,29)]))
 
 Clifton_Berea_Violent <- data.frame(Clifton_Berea_evolution_Violent,Year)
@@ -709,25 +739,32 @@ Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
 Violent_Crime_Yearly_evolution_map
 
 regression8 <- lm(Violent_Crime_Evolution_VS_CCTV$change_perc~Violent_Crime_Evolution_VS_CCTV$density_perc)
+```
+<div align="center">
+
+```{r echo=FALSE, results='asis'}
 stargazer(regression8,
           title = "CCTV density VS Violent Crime evolution",
           type = "html")
-
 ```
+</div>
 
 The last type of crime we must consider is property crime.
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 fviz_nbclust(sc.Community_data_Clustering[,c(8,3)], kmeans, method="wss")+
   geom_vline(xintercept = 5, linetype = 2) + # add line for better visualisation
   labs(subtitle = "Elbow method")  #We can determine the optimal number of cluster, 5 clusters seems to be reasonable
-
+```
+<br><br>
+```{r results = 'markup'}
 set.seed(30)
 km.clust4 <- kmeans(sc.Community_data_Clustering[,c(8,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-print(km.clust4) #The ratio between the between sum of square and the within sum of square is good, the higher this value the better. Indeed, we want the variation to come from Between Groups and not Within Groups.
-fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=90))
-
+viz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=90))
+```
+<br><br>
+```{r results = 'markup'}
 Downtown_Seton_Hill_evolution_Property <- as.vector(t(Community_data[14,c(57,55,53,51,49,47,45)]))
 
 Downtown_Seton_Hill_Property <- data.frame(Downtown_Seton_Hill_evolution_Property,Year)
@@ -770,7 +807,9 @@ Property_Crime_Evolution_VS_CCTV <- Community_data[,c(1,57,47,4)] %>%
   mutate(change_perc=((Community_data$PropertyCrimePer1000inhabitants19/Community_data$PropertyCrimePer1000inhabitants14)-1)*100)
 
 knitr::kable(Property_Crime_Evolution_VS_CCTV[c(14,41,47,53),c(1,5)],col.names = c('Community','Property Crime per Capita % change')) %>% kable_styling(position = "center")
-
+```
+<br><br>
+```{r results = 'markup'}
 Washington_Village_Pigtown_evolution_Property <- as.vector(t(Community_data[54,c(57,55,53,51,49,47,45)]))
 
 Washington_Village_Pigtown_Property <- data.frame(Washington_Village_Pigtown_evolution_Property,Year)
@@ -811,7 +850,6 @@ grid.arrange(Washington_Village_Pigtown_map_Property,Harbor_East_Little_Italy_ma
 
 knitr::kable(Property_Crime_Evolution_VS_CCTV[c(5,26,49,54),c(1,5)],col.names = c('Community','Property Crime per Capita % change')) %>% kable_styling(position = "center")
 
-
 ```
 
 With regard to property crime, it more often increaed in areas with high CCTV density. This is despite the fact that property crime has declined city-wide. Again, these results are not statistically significant. They simply allow us to see if a trend is observable. However, when looking at the regression results between CCTV density and property crime evolution, we again find a lack of correlation confirming that CCTVs do not seem to be effective in reducing property crime. 
@@ -828,18 +866,21 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
 Property_Crime_Yearly_evolution_map
 
 regression9 <- lm(Property_Crime_Evolution_VS_CCTV$change_perc~Property_Crime_Evolution_VS_CCTV$density_perc)
+```
+<br><br>
+```{r echo=FALSE, results='asis'}
 stargazer(regression9,
           title = "CCTV density VS Property Crime evolution",
           type = "html")
-
 ```
+
 None of the comparisons between CCTV density and different crime type evolution seem to indicate significant relationships. Thus, it seems reasonable to conclude that in addition to being ineffective in reducing crime in general, CCTVs do not seem particularly effective in preventing any particular type of crime. However, from this analysis we found that violent crime appears to be an important determinant of CCTV density. This finding will be used to answer our fourth research question.
 
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
 As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas have evolved over time.
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 Evolution_VS_poverty <- Community_data[,c(25,15,5)] %>% 
   mutate(change=(Community_data$CrimePer1000inhabitants19/Community_data$CrimePer1000inhabitants14)-1)
@@ -852,10 +893,13 @@ ggplot(data=Evolution_VS_poverty,mapping= aes(x=change,y=hhpov19))+
 
 Evolution_VS_poverty_regr <- lm(Evolution_VS_poverty$hhpov19~Evolution_VS_poverty$change)
 
+```
+
+<br><br>
+```{r echo=FALSE, results='asis'}
 stargazer(Evolution_VS_poverty_regr,
           title = "Crime evolution VS poverty level",
           type = "html")
-
 ```
 
 The very poor $R^2$ (6.48%) indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used. Inequalities in terms of security do not seem to have evolved
@@ -864,13 +908,15 @@ The very poor $R^2$ (6.48%) indicates that there is a poor correlation between t
 
 We went to see whether there is a correlation between CCTV density and poverty level As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ (24.4%) and a poor $R^2$ (25.8%). The next sub-section illustrates this phenomenon in a map.
 
-```{r echo=FALSE, results = 'markup'}
+```{r results = 'markup'}
 
 CCTV_VS_poverty <- CCTV_per_area %>% 
   left_join(poverty_data,by=c("Community"="CSA2010"))
 
 regression2 <- lm(CCTV_VS_poverty$density_perc~CCTV_VS_poverty$hhpov19)
-
+```
+<br><br>
+```{r echo=FALSE, results='asis'}
 stargazer(regression2,
           title = "CCTV vs poverty ",
           type = "html")
@@ -885,18 +931,23 @@ ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) +
 
 The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. First thing we see it that areas with no CCTVs often are quite wealthy (e.g. in the northern part of Baltimore). The map also enables one to see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the center of Baltimore and that the poverty level is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. This might have contributed to the poor $R^2$ we obtained before.
 
-```{r echo=FALSE, results = 'markup'}
+```{r}
 
 baltimore$community %in% poverty_data$CSA2010 #We see that we have a perfect match
 
 baltimore@data <- left_join(baltimore@data, poverty_data, by = c('community' = 'CSA2010'))
 
-Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="% of people living below the poverty line",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black") 
+```
 
+```{r}
+Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="% of people living below the poverty line",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black") 
+```
+<div align="center">
+```{r echo=FALSE, results = 'markup'}
 tmap_mode("view")
 Wealth_and_CCTV_map
-
 ```
+</div>
 
 #### 4.4.2 An attempt to understand what determines CCTV density
 
@@ -914,7 +965,7 @@ _Source of the data sets:_
 [https://arcg.is/1vqyTu0] <br>
 
 
-```{r echo=FALSE,results = 'markup'}
+```{r}
 
 #Socio-economic indicators:
 
@@ -953,18 +1004,24 @@ Community_data <- Community_data %>%
   left_join(Unemployment[,c(2,12)],by=c("Community"="CSA2010"))%>% 
   left_join(Caucasian_perc[,c(2,9)],by=c("Community"="CSA2010"))%>% 
   left_join(AfroAm_perc[,c(2,9)],by=c("Community"="CSA2010"))
+```
 
+```{r}
 fullmod <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19+Community_data$ready13+Community_data$unempr19+Community_data$pwhite20+Community_data$paa20)
 
 nullmod <- lm(Community_data$density_perc~1)
 
 selAIC <- step(nullmod,scope=list(lower=nullmod,upper=fullmod),direction="forward")
 #We have a satisfactory R-Squared
-
+```
+<div align="center">
+```{r echo=FALSE,results='asis'}
 stargazer(selAIC,
           title = "Selected model after a forward stepwise regression, 4 independent variables are retained",
           type = "html")
-
+```
+</div>
+```{r}
 library(car)
 vif(selAIC) #Yet, the issue is that we have multicollinearity
 
@@ -979,37 +1036,37 @@ summary(lm(Community_data$density_perc~Community_data$pwhite20))
 
 lm(Community_data$density_perc~Community_data$paa20)
 summary(lm(Community_data$density_perc~Community_data$paa20)) #Overall, this enables us to conclude that the race does not seem to be such a good predictor
+```
 
+```{r}
 fullmod2 <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea + Community_data$hhpov19 +Community_data$hsagov14 + Community_data$nohhint19 + Community_data$ready13 + Community_data$unempr19)
 
 nullmod <- lm(Community_data$density_perc~1)
 
 selAIC2 <- step(nullmod,scope=list(lower=nullmod,upper=fullmod2),direction="forward")
 summary(selAIC2) 
-
-stargazer(Evolution_VS_poverty_regr,
+```
+<div align="center">
+```{r echo=FALSE,results='asis'}
+stargazer(selAIC2,
           title = "Second selected model after a forward stepwise regression, 4 independent variables are retained",
           type = "html")
-
+```
+</div>
+```{r}
 #We see that internet access information and readiness are not even included and that among the included variables, only two are significant: violent crime and unemployment rate. This enables us to conclude that like racial metrics, educational metrics are poor predictors of CCTV levels.
 
 library(car)
 vif(selAIC2) #We can try to make a multiple regression containing the only two significant variables: 
 
 CCTV_VS_ViolentCrime_and_Unemp <- lm(Community_data$density_perc~Community_data$ViolentCrimePerCapitaPerArea+Community_data$unempr19)
-
-summary(CCTV_VS_ViolentCrime_and_Unemp) 
-
-stargazer(Evolution_VS_poverty_regr,
-          title = "Multiplre regression with only unemployement and violent crime",
-          type = "html")
-
-#We see that unemployment becomes insignificant
-
-#Overall, it really seems that the main predictor of CCTV density that we could observe is violent crime. Racial metrics, educational metrics and socio economic indicators are quite poor predictors. We must note that linear regressions with 56 observations might also be problematic to yield great results.
-
-#Yet, this statement must be mitigated. Indeed, with R-squared of approximatnely 50%, we are in situation where we can only explain 50% of the  variation. This means that thee approximantely is 50% of the variation whose origin is unknown to us. 
-
 ```
 
-Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certian types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed of less educated people.
+<div align="center">
+```{r echo=FALSE,results='asis'}
+stargazer(CCTV_VS_ViolentCrime_and_Unemp,
+          title = "Multiple regression with only unemployement and violent crime",
+          type = "html")
+```
+
+Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certain types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed of less educated people.et, this statement must be mitigated. Indeed, with R-squared of approximately 50%, we are in situation where we can only explain 50% of the  variation. This means that thee approximately is 50% of the variation whose origin is unknown to us. 
