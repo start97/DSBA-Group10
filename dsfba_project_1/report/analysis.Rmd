@@ -761,7 +761,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(8,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(30)
 km.clust4 <- kmeans(sc.Community_data_Clustering[,c(8,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-viz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=90))
+fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=80),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=90))
 ```
 <br><br>
 ```{r results = 'markup'}
