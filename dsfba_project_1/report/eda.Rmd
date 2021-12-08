@@ -256,7 +256,7 @@ Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerA
 
 #### 3.3.3 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
 
-It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
+It is always interesting to see whether we can spot patterns in crime data. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
 
 <div align="center">
 ```{r echo=FALSE, results = 'asis'}
@@ -274,16 +274,20 @@ stargazer(regression4,
           no.space = TRUE)
 
 Downtown_label <- Felony_VS_Misdemeanor[14,]
+```
+</div>
+<br><br><br>
+```{r echo=FALSE, results = 'asis'}
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
-  labs(title = "Misdemeanors and felonies are rather equally distributed in Baltimore", x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
+  labs(title = str_wrap(("Misdemeanors and felonies are rather equally distributed in Baltimore"),width=75), x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
   geom_point(data=Downtown_label) +
   ggrepel::geom_label_repel(aes(label=Community),data = Downtown_label,min.segment.length = 0.5)+
   geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 
 ```
-</div>
+
 #### 3.3.4 Violent crime and Property crime
 
 As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by 'type' of crime. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim. Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder.
@@ -363,7 +367,9 @@ crime_data_with_areas %>%  filter(CrimeDateTime < as.Date("2014-01-01")) #We see
 Crime_Monthly_evolution_map <- crime_data_with_areas %>% 
   count(month=floor_date(CrimeDateTime,"month")) %>% 
   ggplot(aes(month,n))+geom_line()+
-  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2021-08-31"))) #This enables us to see how crime evolve, month after month
+  scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2021-08-31")))+
+  labs(title = "Crime seasonality observation: crime tends to decrease in winter.")
+#This enables us to see how crime evolve, month after month
 
 Crime_Monthly_evolution_map
 ```
@@ -641,7 +647,7 @@ Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = "Overall, violent crime seems to have decreased for the 2017 to 2020 period",x="Year",y="Violent crime occurences")
+  labs(title = str_wrap(("Overall, violent crime seems to have decreased for the 2017 to 2020 period"),width=75),x="Year",y="Violent crime occurences")
 
 Violent_Crime_Yearly_evolution_map
 
@@ -744,11 +750,12 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = "Overall, property crime seems to have decreased for the 2017 to 2020 period",x="Year",y="Property crime occurences")
+  labs(title = str_wrap(("Overall, property crime seems to have decreased for the 2017 to 2020 period"),width=75),x="Year",y="Property crime occurences")
 
 Property_Crime_Yearly_evolution_map
 
 ```
+
 #### 3.4.2 Calculation of felony and misdemeanor evolution
 
 We can make the exact same computation to calculate felony and misdemeanor evolution.
@@ -975,11 +982,13 @@ regression3 <- lm(Crime_VS_Poverty$CrimePer1000inhabitants~Crime_VS_Poverty$hhpo
 stargazer(regression3,
           title = "CrimePer1000Inhabitants vs Poverty",
           type = "html")
+```
+</div>
 
+```{r echo=FALSE, results = 'asis'}
 ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
   labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
   geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 
 ```
-</div>
