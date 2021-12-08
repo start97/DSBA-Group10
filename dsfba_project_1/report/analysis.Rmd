@@ -856,7 +856,19 @@ Wealth_and_CCTV_map
 
 #### 4.4.2 An attempt to understand what determines CCTV density
 
-We have seen that the level of poverty does not really seem to be a major determinant of CCTV density in an area. Therefore, we decided to construct a multiple regression model containing various variables. This enables us to see whether city officials make decisions regarding where to implement CCTVs based on, for example, socio-economic factors, educational factors or racial factors. We retrieved six new datasets on Baltimore's open data portal. The first one provides information about the percent of persons between the ages of 16 and 64 who are currently unemployed. The second one provides information about ... to be continued, I had to go to lunch - Augustin
+We have seen that poverty level does not really seem to be a major determinant of CCTV density in an area. Therefore, we decided to built a multiple regression model containing various variables to investigate what could actually be the main determinant of CCTV density. This enables us to see whether city officials make decisions regarding where to implement CCTVs based on, for example, socio-economic factors, educational factors or racial factors. We retrieved six new data sets on Baltimore's open data portal. All these data sets were already tidied and constructed in the same way: they contained one observation for each area for several time periods. The first one provides information about the percent of persons between the ages of 16 and 64 who are currently unemployed. The second one provides information about the percentage of households without an internet subscription at home. Then, we retrieved some data sets about education. `HSAexam` data set provides information about the percentage of high school students who have successfully passed the H.S.A. exams while `Readiness` indicates  percentage of children whose composite score indicates full school readiness out of all kindergarten school children tested within an area in a school year. Finally, we retrieved two data sets regarding the  total number of persons that identify themselves as being racially white, respectively black or African American, out of the total number of persons living in an area. 
+
+After importing all the data sets, we created an object called `fullmod` which is a multiple regression containing 8 independent variables to predict CCTV density: the six above-mentioned data sets, poverty level and violent crime per capita. We also create `nullmod`, this model only contain an intercept at 1. Having these two models, we performed a forward stepwise regression based on AIC criteria using  `step`. This function starts with the null model, which is technically the "worst" and "simplest" model we can imagine and adds independent variables until we are better off not adding anything (meaning: when adding a variable increase the AIC score). We then use `vif` to check whether we have a mutlicollinearity issue. This happens when one or several variable explain the same variance. A VIF score above 5 is considered severe multicollinearity. In the case at hand, two independent variables have a VIF score above 5: the two racial indicators seem to explain the same variance. By creating a simple linear regression between percentage of white people and percentage of black people, we indeed see that these two variables explain each other very well. Finally, we also tried to plot a linear regression between percentage of white people and CCTV density and saw that this really seemed to be a poor predictor of CCTV density. We therefore got rid of these two racial metrics and performed another stepwise regression. The results of this stepwise regression indicate that only violent crime, unemployment, HSA passing and poverty level should be included as independent variables and that we should not even include the rest. We have no multicollinearity this time and obtain a $R^2$ of 58.6%. Yet we also observe that out of the four partial regression coefficients, only two of them are statistically significant from zero: violent crime and unemployment. Therefore, the very last thing we did was to perform another multiple linear regression solely containing these two variables. When doing so, we obtain a satisfying $R^2$ of 53.1%, yet, unemployment in turn becomes insignificant.
+
+_Source of the data sets:_ 
+
+[https://arcg.is/0KOH1q]
+[https://arcg.is/1znCqm0]
+[https://arcg.is/1LiHnn0]
+[https://arcg.is/1nOK9X]
+[https://arcg.is/05LyTO]
+[https://arcg.is/1vqyTu0]
+
 
 ```{r echo=FALSE, results = 'markup'}
 
@@ -944,16 +956,4 @@ summary(CCTV_VS_ViolentCrime_and_Unemp) #We see that unemployment becomes insign
 
 ```
 
-Overall, it really seems that the main predictor of CCTV density that we could observe is violent crime. Racial metrics, educational metrics and socio economic indicators are quite poor predictors.
-
-### 4.67 Next steps after feedback on project update
-
-+ Adjust accroding to the feedback 
-+ Create new models (potentially multiple linear regression ?)
-+ Finalise interpetations and answer research questions
-+ Compare results to other researches 
-+ Create some more visualisations (if useful and needed)
-+ Include Executive summary at the beginning
-+ Add additional data if needed
-+ Create bibliography
-+ hello guys
+Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certian types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed of less educated people.
