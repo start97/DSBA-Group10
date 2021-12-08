@@ -280,7 +280,7 @@ Downtown_label <- Felony_VS_Misdemeanor[14,]
 ```{r echo=FALSE, results = 'asis'}
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
-  labs(title = str_wrap(("Misdemeanors and felonies are rather equally distributed in Baltimore"),width=75), x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
+  labs(title = str_wrap(("Misdemeanors and felonies are rather equally distributed in Baltimore"),width=70), x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
   geom_point(data=Downtown_label) +
   ggrepel::geom_label_repel(aes(label=Community),data = Downtown_label,min.segment.length = 0.5)+
   geom_point() + 
