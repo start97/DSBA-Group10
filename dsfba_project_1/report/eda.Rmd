@@ -984,7 +984,7 @@ stargazer(regression3,
           type = "html")
 ```
 </div>
-
+<br><br><br>
 ```{r echo=FALSE, results = 'asis'}
 ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
   labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
