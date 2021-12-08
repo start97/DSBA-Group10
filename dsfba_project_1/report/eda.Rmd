@@ -131,11 +131,11 @@ Crime_per_capita_map
 
 #### 3.2.2 Creation of a distorted map
 
-To observe crime per capita per community repartition in Baltimore visually, we decided to use a distorted map. Again, we use the `tmap` package together with the `cartogram_ncont` function which basically distort the map based on intensity of crime per capita in each community. Concretely, we want to show that the crime per capita is higher in the city center, compared to the suburban areas. This can be shown quite neatly graphically. 
+To observe crime per capita per community distribution in Baltimore visually, we decided to use a distorted map. Again, we use the `tmap` package together with the `cartogram_ncont` function which basically distort the map based on intensity of crime per capita in each community. Concretely, we want to show that the crime per capita is higher in the city center, compared to the suburban areas. This can be shown quite neatly graphically. 
 
 ```{r}
 
-Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.07) #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "Crime tends to be higher in the city center of Balimore",title.size =1 ,title.position= c("center","top")) #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
 
 tmap_mode("plot")
 Distorted_Crime_map
@@ -152,7 +152,7 @@ Prison_area <-  st_bbox(c(xmin = -8529169.92, xmax = -8526465.97,
                       ymin =4764196.55, ymax = 4765056.50),
                     crs = st_crs(baltimore)) %>% st_as_sfc()
  
-Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,title = "Zoom on Baltimore Prison",title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
+Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,main.title = "We have no data about crime committed in prison, this explains this crime-free zone.",main.title.position = c('left', 'top'),main.title.size = 1)+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
 
 
 Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
@@ -164,10 +164,11 @@ print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By ru
 
 ### 3.3 Calculation of crime per capita by type of crime
 
+There exists different ways to categorise crime by type. Crime can fore example be catogorised by severity. The law typically consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies**. Yet crimes can also be categorised by their nature, one usually differentiates **property crime** from **violent crime**. We are going to differentiate the crimes contained in the `crime_data_with_areas` element both in terms of severity and in terms of their nature.
+
 #### 3.3.1 Felonies and Misdemeanors
 
-First thing we do here is to compute the unique values of the description column of the crime data set. We see that we have 14 types of crime. We want to observe crimes by types, therefore we want to make new classifications. The law consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies**. 
-In our data set, we have no infractions. The 14 types of crime are divided in this way into the two remaining categories.
+First thing we do here is to compute the unique values of the description column of the crime data set. We see that we have 14 types of crime. In our data set, we have no infractions. The 14 types of crime are divided in this way into the two remaining categories.
 
   + **Misdemeanor:** LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
   + **Felony:** RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
@@ -181,7 +182,7 @@ unique(crime_data_with_areas$Description)
 #Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
 ```
 
-Next we create a data set which is called crime_cat and basically tells you which recorded crime type belongs to which crime category. This data set will be used later to make a left joint with the crime_data_per_area. Finally, we are left with the crime data sets with the area datas et with a new column which concerns whether the crime was a felony or a misdemeanor. 
+Next we create a data set which is called crime_cat and basically tells  which recorded crime type belongs to which crime type. This data set will be used to make a left joint with the crime_data_per_area. Finally, we end up our initial `crime_data_with_areas` element with an extra column indicating whether the crime comitted is a felony or a misdemeanor.
 
 ```{r}
 crime_cat <- data.frame(Category=c("Misdemeanor","Felony"), Description=c(c("LARCENY FROM AUTO,COMMON ASSAULT,ROBBERY - COMMERCIAL,LARCENY"),c("RAPE,ARSON,HOMICIDE,BURGLARY,AUTO THEFT,ROBBERY - CARJACKING,AGG. ASSAULT,ROBBERY - STREET,ROBBERY - RESIDENCE,SHOOTING")))
@@ -194,7 +195,7 @@ crime_data_with_areas <- crime_data_with_areas %>%
   left_join(crime_cat,by="Description") #We had a new variable to our crime data set
 ```
 
-Next, we compute the Crime_PerCategory_PerArea. Here we use the piping operator and this time we group by the community and category and obtain the results. Again, we check that we indeed have 349482 observations. Moreover, from that we compute both felony and misdemeanors per capita in each community and (again) add the prison line into the newly created data sets.  
+Next, we compute the `Crime_PerCategoryPerArea`. Here, we use the piping operator and this time we group by the community and category and obtain the results. Again, we check that we indeed have 349482 observations. Moreover, from that we compute both felony and misdemeanor per capita in each community and (again) add the prison line into the newly created data sets.  
 
 ```{r echo=TRUE}
 CrimePerCategoryPerArea <- crime_data_with_areas %>% 
@@ -237,7 +238,7 @@ baltimore$community %in% FelonyStats$Community
 
 baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'Community'))
 
-Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyPerCapitaPerArea", title ="Felony per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyPerCapitaPerArea", title ="Felony per 1000 inhabitants",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title="Felony tends to be more located in the western part of the city",title.size =1 ,title.position= c("center","top"))
 
 Felony_map
 
@@ -247,7 +248,7 @@ baltimore$community %in% MisdemeanorStats$Community
 
 baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community' = 'Community'))
 
-Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)
+Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per 1000 inhabitants",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title="Misdemeanor tends to be more located in the eastern part of the city",title.size =1 ,title.position= c("center","top"))
 
 Misdemeanor_map
 
@@ -255,7 +256,7 @@ Misdemeanor_map
 
 #### 3.3.3 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
 
-It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore. This might **suggest** the idea that richer areas are more impacted by less severe crimes.
+It is always interesting to see whether we can spot patterns in crime date. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
 
 ```{r echo=FALSE, results = 'asis'}
 
@@ -271,14 +272,16 @@ stargazer(regression4,
           ci = FALSE, 
           no.space = TRUE)
 
+Downtown_label <- Felony_VS_Misdemeanor[14,]
+
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
-  labs(title = "Misdemeanor VS Felony", x="Felons per capita",y="Misdemeanor per capita")+
-  geom_point(shape=1) + 
+  labs(title = "Misdemeanors and felonies are rather equally distributed in Baltimore", x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
+  geom_point(data=Downtown_label) +
+  ggrepel::geom_label_repel(aes(label=Community),data = Downtown_label,min.segment.length = 0.5)+
+  geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 
-#Still, we see that there seems ot be some outliers. I don't know if it is relevant but the biggest outlier is Downtown/Seton Hill, is turns out it also is one of the richest area in Baltimore.
 ```
-
 
 #### 3.3.4 Violent crime and Property crime
 
@@ -528,7 +531,9 @@ animated_crime_map <- tm_shape(baltimore_alias,bbox = bbox, projection = crs.geo
 
 tmap_animation(animated_crime_map, delay=100)
 
-#maybe write.gif
+library(magick)
+
+magick::image_read("animated_crime_map.gif")
 
 ```
 
@@ -971,7 +976,7 @@ stargazer(regression3,
 
 ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
   labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
-  geom_point(shape=1) + 
+  geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 
 ```
