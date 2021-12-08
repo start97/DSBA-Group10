@@ -152,7 +152,7 @@ Prison_area <-  st_bbox(c(xmin = -8529169.92, xmax = -8526465.97,
                       ymin =4764196.55, ymax = 4765056.50),
                     crs = st_crs(baltimore)) %>% st_as_sfc()
  
-Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,main.title = str_wrap(("We have no data about crime committed in prison, this explains this crime-free zone."),width=60),main.title.position = c('left', 'top'),main.title.size = 1)+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
+Prison_map <- tm_shape(Prison_area) + tm_borders(col="black",alpha=0.3)+ tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita",style = "quantile") + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,main.title = str_wrap(("We have no data about crime committed in prison, this explains this crime-free zone."),width=75),main.title.position = c('left', 'top'),main.title.size = 1)+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_dots(col="black") #This map zooms on the prison. This "Area" is special. We have no data on crime there, we can also see that the there is a huge concentration of CCTVs directly next to the prison.
 
 
 Baltimore_map <- tm_shape(baltimore) + tm_borders()+ tm_shape(Prison_area) + tm_borders(lwd = 3,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
@@ -250,7 +250,7 @@ baltimore@data <- left_join(baltimore@data, MisdemeanorStats, by = c('community'
 
 Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerArea", title ="Misdemeanor per 1000 inhabitants",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title="Misdemeanor tends to be more located in the eastern part of the city",title.size =1 ,title.position= c("center","top"))
 
-Misdemeanor_map
+Misdemeanor_map + Felony_map
 
 ```
 
@@ -964,6 +964,7 @@ Misdemeanor_Yearly_evolution_map
 
 We want to investigate whether or not wealthier areas are more or less impacted by crime. To do so, we once more compute a simple linear regression. We again see that the $R^2$ is quite poor.
 
+<div align="center">
 ```{r echo=FALSE, results = 'asis'}
 
 Crime_VS_Poverty <- CrimeStatsPerArea %>% 
@@ -981,3 +982,4 @@ ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) 
   geom_smooth(method = lm,color="blue",size=0.3)
 
 ```
+</div>
