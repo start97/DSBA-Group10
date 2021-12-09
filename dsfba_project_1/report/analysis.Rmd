@@ -227,7 +227,7 @@ August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3
 ```
 <div align="center">
 Crimes committed in August 2021 (in red) VS CCTVs (in black)
-```{r results='markup',fig.width=7,fig.height=1}
+```{r results='markup',dpi=72}
 tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
 ```
@@ -972,7 +972,7 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="% of
 ```
 <div align="center">
 We see a high concentration of CCTVs in the centre.
-```{r echo=FALSE, results = 'markup',,fig.width=7,fig.height=1}
+```{r echo=FALSE,dpi=72}
 tmap_mode("view")
 Wealth_and_CCTV_map
 ```
