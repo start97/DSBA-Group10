@@ -59,7 +59,7 @@ tmap_mode("view") #Use this command to have interactive maps
 Crime_and_CCTV_map
 ```
 </div>
-
+<br>
 However, even though this correlation is interesting and worth mentioning, it does not allow one to say much about the effectiveness of CCTVs. We are stuck in a sort of chicken-and-egg problem. In order to get in position to comment on the crime-deterring potential of CCTVs, we decided to analyse the crime per capita evolution of certain areas in relation with their respective CCTV density. Our goal is to observe how crime per capita behaved since 2014 in areas with high CCTV density compared to areas with low CCTV density. In order to select our areas of interest, we performed a k-means clustering based on two dimensions:  CCTV density and crime per capita. We first scale the data and add the names of each area as row name. We then use the elbow method to determine the optimal number of cluster using `fviz_nbclust`. When performing the kmeans clustering, we specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the data set as initial centers. We end up with 5 clusters that we represent using `fviz_cluster`. The ratio between the between sum of square and the within sum of square is good (85%), the higher this value the better. Indeed, we want the variation to come from between groups and not within groups.
 
 
@@ -233,7 +233,7 @@ tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
 ```
 </div>
-
+<br>
 To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime incidence in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
 
 So following this we take a closer look at the Downtown area.
@@ -607,6 +607,13 @@ stargazer(regression21,
 </div>
 <br><br>
 ```{r results = 'markup'}
+ggplot(Community_data,aes(x=density_perc,y=ViolentCrimePerCapitaPerArea))+
+  geom_point()+
+   geom_smooth(method = lm,color="blue",size=0.3)+
+  labs(x="CCTV Density per Area",y="Violent crime (per 1000 inhabitants)",title="Violent crime increases with CCTV density",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas might influence our results."),width=45)
+```
+<br><br>
+```{r results = 'markup'}
 CCTV_VS_PropertyCrime <- CCTV_per_area %>% 
   left_join(PropertyStats,by="Community")
 
@@ -621,13 +628,6 @@ stargazer(regression22,
 #We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
 ```
 </div>
-<br><br>
-```{r results = 'markup'}
-ggplot(Community_data,aes(x=density_perc,y=ViolentCrimePerCapitaPerArea))+
-  geom_point()+
-   geom_smooth(method = lm,color="blue",size=0.3)+
-  labs(x="CCTV Density per Area",y="Violent crime (per 1000 inhabitants)",title="Violent crime increases with CCTV density",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas might influence our results."),width=45)
-```
 <br><br>
 ```{r results = 'markup'}
 ggplot(Community_data,aes(x=density_perc,y=PropertyCrimePerCapitaPerArea))+
