@@ -135,7 +135,7 @@ To observe crime per capita per community distribution in Baltimore visually, we
 
 ```{r}
 
-Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime per capita per Area in %",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "Crime tends to be higher in the city center of Balimore",title.size =1 ,title.position= c("center","top")) #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "Crime tends to be higher in the city center of Balimore",title.size =1 ,title.position= c("center","top")) #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
 
 tmap_mode("plot")
 Distorted_Crime_map
@@ -240,8 +240,6 @@ baltimore@data <- left_join(baltimore@data, FelonyStats, by = c('community' = 'C
 
 Felony_map <- tm_shape(baltimore) + tm_fill(col = "FelonyPerCapitaPerArea", title ="Felony per 1000 inhabitants",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title="Felony tends to be more located in the western part of the city",title.size =1 ,title.position= c("center","top"))
 
-Felony_map
-
 #Misdemeanor
 
 baltimore$community %in% MisdemeanorStats$Community
@@ -253,7 +251,7 @@ Misdemeanor_map <- tm_shape(baltimore) + tm_fill(col = "MisdemeanorPerCapitaPerA
 tmap_arrange(Felony_map,Misdemeanor_map)
 
 ```
-
+<br>
 #### 3.3.3 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
 
 It is always interesting to see whether we can spot patterns in crime data. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
@@ -280,7 +278,7 @@ stargazer(regression4,
 Downtown_label <- Felony_VS_Misdemeanor[14,]
 
 ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=MisdemeanorPerCapitaPerArea)) + 
-  labs(title = str_wrap(("Misdemeanors and felonies are rather equally distributed in Baltimore"),width=70), x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
+  labs(title = str_wrap(("Misdemeanors and felonies are rather equally distributed in Baltimore"),width=65), x="Felony (per 1000 inhabitants)",y="Misdemeanor (per 1000 inhabitants)")+
   geom_point(data=Downtown_label) +
   ggrepel::geom_label_repel(aes(label=Community),data = Downtown_label,min.segment.length = 0.5)+
   geom_point() + 
@@ -541,10 +539,10 @@ tmap_animation(animated_crime_map, delay=100)
 ```
 
 <div align="center">
-<img src="animated_crime_map.gif" width="700" height="400" name="animated_crime_map"> 
+<img src="animated_crime_map.gif" width="720" height="576" name="animated_crime_map"> 
 </div>
 
-### 3.4.1 Calculation of violent crime and property crime evolution
+#### 3.4.1 Calculation of violent crime and property crime evolution
 
 We can make the exact same computation to calculate violent crime and property crime evolution.
 
@@ -647,11 +645,13 @@ Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = str_wrap(("Overall, violent crime seems to have decreased for the 2017 to 2020 period"),width=75),x="Year",y="Violent crime occurences")
+  labs(title = str_wrap(("Overall, violent crime seems to have decreased for the 2017 to 2020 period"),width=70),x="Year",y="Violent crime occurences")
 
 Violent_Crime_Yearly_evolution_map
 
-#______________
+```
+<br>
+```{r echo=TRUE}
 
 Property_Crime_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31")) %>% filter(VIO_PROP_CFS=="PROPERTY")
 
@@ -750,7 +750,7 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = str_wrap(("Overall, property crime seems to have decreased for the 2017 to 2020 period"),width=75),x="Year",y="Property crime occurences")
+  labs(title = str_wrap(("Overall, property crime seems to have decreased for the 2017 to 2020 period"),width=70),x="Year",y="Property crime occurences")
 
 Property_Crime_Yearly_evolution_map
 
@@ -862,8 +862,9 @@ Felony_Yearly_evolution_map <- crime_data_with_areas %>%
   labs(title = "In Baltimore, Felony started to decrease as from 2017",x="Year",y="Felony occurences")
 
 Felony_Yearly_evolution_map
-
-#___________
+```
+<br>
+```{r echo=TRUE}
 
 Misdemeanor_in_2021 <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-01-01") & CrimeDateTime <= as.Date("2021-12-31")) %>% filter(Category=="Misdemeanor")
 
@@ -986,7 +987,7 @@ stargazer(regression3,
           type = "html")
 ```
 </div>
-<br><br>
+<br>
 ```{r results = 'markup'}
 ggplot(data=Crime_VS_Poverty,mapping= aes(x=hhpov19,y=CrimePer1000inhabitants)) + 
   labs(title = "Crime per Capita VS poverty rate", x="Poverty rate",y="Crime per Capita")+
