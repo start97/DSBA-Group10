@@ -38,7 +38,7 @@ Another interesting way to illustrate this correlation is by using a map depicti
 
 ```{r results='markup'}
 
-Crime_per_capita_VS_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crime seems to be higher in areas with more CCTVs") + tm_shape(balt_dat) + tm_dots(col="black") 
+Crime_per_capita_VS_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1, title="Crime seems to be higher in areas with more CCTVs") + tm_shape(balt_dat) + tm_dots(col="black")
 
 tmap_mode("plot")
 
@@ -50,7 +50,7 @@ Crime_per_capita_VS_CCTV_map
 ```{r results='markup',fig.width=7,fig.height=1}
 baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we see the name of the Community when using an interactive map
 
-Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
+Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")+tmap_options(output.size = 5)
 
 tmap_mode("view") #Use this command to have interactive maps
 
@@ -210,13 +210,12 @@ stargazer(regression7,
 ```
 </div>
 <br><br>
+
 #### 4.1.2 Analysis of where crime took place: August 2021
 
 However, still in an effort to observe how CCTVs impact on crime, we set out to locate crimes committed and compare these locations to those of the surveillance cameras. Knowing that a surveillance camera captures activities within 256ft (~2 blocks), it is interesting to observe whether or not there are "crime-free zones" around the cameras. We will only select crime committed in August 2021 to have interpretable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time point from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place (in red) compared to the CCTV location (in black). By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
 
-<div align="center">
-Crimes committed in August 2021 (in red) VS CCTVs (in black)
-```{r results='markup',fig.width=7,fig.height=1}
+```{r results='markup'}
 
 crime_spatial <- as.data.table(crime_data_with_areas %>%  filter(CrimeDateTime >= as.Date("2021-08-01") & CrimeDateTime <= as.Date("2021-08-31")))
 coordinates(crime_spatial) <-  c("Longitude","Latitude")
@@ -224,7 +223,10 @@ proj4string(crime_spatial) <-  CRS("+init=epsg:4326")
 crime_spatial <- spTransform(crime_spatial,crs.geo1)
 
 August21Crimes_VS_CCTV <- tm_shape(baltimore) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,frame.lwd = 5)+ tm_shape(balt_dat) + tm_dots(col="black")+tm_shape(crime_spatial)+tm_dots(col="red",alpha=0.5)
-
+```
+<div align="center">
+Crimes committed in August 2021 (in red) VS CCTVs (in black)
+```{r results='markup',fig.width=7,fig.height=1}
 tmap_mode("view") #Use this command to have interactive maps
 August21Crimes_VS_CCTV
 ```
@@ -582,6 +584,7 @@ stargazer(regression11,
 ```
 </div>
 <br><br>
+
 #### 4.2.2 CCTVs VS Violent and Property Crime
 
 It seems that the severity of the crime (i. e. whether it is a felony or a misdemeanor) does not influence the crime-deterring potential of CCTVs. It is now interesting to see whether we observe a difference when decomposing crime into violent and property crime. We first perform one simple linear regression between CCTV density and violent crime and another between CCTV density and property crime. The first interesting thing one can observe is that we observe a much stronger correlation between between CCTV density and violent crime than between CCTV density and property crime. The $R^2$ of the first regression is at 51.5%, more than any other $R^2$ obtained until now. This suggests that violent crime per capita is a considerable determinant of CCTV density.
@@ -594,7 +597,7 @@ CCTV_VS_ViolentCrime <- CCTV_per_area %>%
 regression21 <- lm(CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea~CCTV_VS_ViolentCrime$density_perc)
 ```
 <div align="center">
-```{r results = 'asis'}
+```{r echo=FALSE,results = 'asis'}
 stargazer(regression21,
           title = "CCTV vs Violent Crime",
           type = "html")
@@ -608,7 +611,7 @@ CCTV_VS_PropertyCrime <- CCTV_per_area %>%
 regression22 <- lm(CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea~CCTV_VS_PropertyCrime$density_perc)
 ```
 <div align="center">
-```{r results = 'asis'}
+```{r echo=FALSE,results = 'asis'}
 stargazer(regression22,
           title = "CCTV vs Property Crime",
           type = "html")
@@ -883,11 +886,13 @@ Property_Crime_Yearly_evolution_map
 regression9 <- lm(Property_Crime_Evolution_VS_CCTV$change_perc~Property_Crime_Evolution_VS_CCTV$density_perc)
 ```
 <br><br>
+<div align="center">
 ```{r echo=FALSE, results='asis'}
 stargazer(regression9,
           title = "CCTV density VS Property Crime evolution",
           type = "html")
 ```
+</div>
 <br><br>
 None of the comparisons between CCTV density and different crime type evolution seem to indicate significant relationships. Thus, it seems reasonable to conclude that in addition to being ineffective in reducing crime in general, CCTVs do not seem particularly effective in preventing any particular type of crime. However, from this analysis we found that violent crime appears to be an important determinant of CCTV density. This finding will be used to answer our fourth research question.
 
@@ -939,15 +944,16 @@ stargazer(regression2,
           title = "CCTV vs poverty ",
           type = "html")
 ```
-<br
+</div>
+<br>
 ```{r results='markup'}
 ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) + 
   labs(title = str_wrap(("As poverty level incrases, one tend to see subtle tendency for CCTV density to increase as well"),width = 80), x="% of people living below the poverty line",y="CCTV Density")+
   geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
-</div>
 <br><br>
+
 #### 4.4.1 Mapping of CCTVs and wealth
 
 The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. First thing we see it that areas with no CCTVs often are quite wealthy (e.g. in the northern part of Baltimore). The map also enables one to see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the center of Baltimore and that the poverty level is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. This might have contributed to the poor $R^2$ we obtained before.
@@ -971,6 +977,7 @@ Wealth_and_CCTV_map
 ```
 </div>
 <br>
+
 #### 4.4.2 An attempt to understand what determines CCTV density
 
 We have seen that poverty level does not really seem to be a major determinant of CCTV density in an area. Therefore, we decided to built a multiple regression model containing various variables to investigate what could actually be the main determinant of CCTV density. This enables us to see whether city officials make decisions regarding where to implement CCTVs based on, for example, socio-economic factors, educational factors or racial factors. We retrieved six new data sets on Baltimore's open data portal. All these data sets were already tidied and constructed in the same way: they contained one observation for each area for several time periods. The first one provides information about the percent of persons between the ages of 16 and 64 who are currently unemployed. The second one provides information about the percentage of households without an internet subscription at home. Then, we retrieved some data sets about education. `HSAexam` data set provides information about the percentage of high school students who have successfully passed the H.S.A. exams while `Readiness` indicates  percentage of children whose composite score indicates full school readiness out of all kindergarten school children tested within an area in a school year. Finally, we retrieved two data sets regarding the  total number of persons that identify themselves as being racially white, respectively black or African American, out of the total number of persons living in an area. 
