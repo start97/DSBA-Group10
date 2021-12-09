@@ -950,7 +950,7 @@ stargazer(regression2,
 <br>
 ```{r results='markup'}
 ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) + 
-  labs(title = str_wrap(("As poverty level incrases, one tend to see subtle tendency for CCTV density to increase as well"),width = 70), x="% of people living below the poverty line",y="CCTV Density")+
+  labs(title = str_wrap(("As poverty level incrases, one tend to see subtle tendency for CCTV density to increase as well"),width = 65), x="% of people living below the poverty line",y="CCTV Density")+
   geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
