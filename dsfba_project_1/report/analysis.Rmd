@@ -52,7 +52,7 @@ baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we se
 Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
 ```
 <div align="center">
-```{r results='markup',out.width = "50%"}
+```{r results='markup',out.width = "50%",out.height="50%}
 tmap_mode("view") #Use this command to have interactive maps
 
 Crime_and_CCTV_map
