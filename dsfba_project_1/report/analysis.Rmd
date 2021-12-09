@@ -19,7 +19,9 @@ regression <- lm(CCTV_VS_crimes$CrimePer1000inhabitants~CCTV_VS_crimes$density_p
 ```{r echo=FALSE,results='asis'}
 stargazer(regression,
           title = "Crime VS CCTVs",
-          type = "html")
+          type = "html",
+          dep.var.labels="Crime (per 1000 inhabitants)",
+          covariate.labels = c("CCTV Density","intercept"))
 
 ```
 </div>
@@ -208,7 +210,9 @@ regression7 <- lm(Crime_Evolution_VS_CCTV$change_perc~Crime_Evolution_VS_CCTV$de
 ```{r echo=FALSE,results='asis'}
 stargazer(regression7,
           title = "CCTV density VS Crime evolution",
-          type = "html")
+          type = "html",
+          dep.var.labels="Crime per Capita % change",
+          covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
 <br><br>
@@ -289,7 +293,9 @@ regression5 <- lm(CCTV_VS_Felony$FelonyPerCapitaPerArea~CCTV_VS_Felony$density_p
 
 stargazer(regression5,
           title = "CCTV vs Felony",
-          type = "html")
+          type = "html",
+          dep.var.labels="Felony (per 1000 inhabitants",
+          covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
 <br><br>
@@ -313,7 +319,9 @@ regression6 <- lm(CCTV_VS_misdemeanors$MisdemeanorPerCapitaPerArea~CCTV_VS_misde
 ```{r echo=FALSE, results = 'asis'}
 stargazer(regression6,
           title = "CCTV vs Misdemeanor",
-          type = "html")
+          type = "html",
+          dep.var.labels="Misdemeanor (per 1000 inhabitants",
+          covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
 <br><br>
@@ -451,7 +459,9 @@ Felony_Yearly_evolution_map
 regression10 <- lm(Felony_Evolution_VS_CCTV$change_perc~Felony_Evolution_VS_CCTV$density_perc)
 stargazer(regression10,
           title = "CCTV density VS Felony evolution",
-          type = "html")
+          type = "html",
+          dep.var.labels="Felony per Capita % change",
+          covariate.labels = c("CCTV Density","intercept"))
 
 ```
 </div>
@@ -581,7 +591,9 @@ Misdemeanor_Yearly_evolution_map
 regression11 <- lm(Misdemeanor_Evolution_VS_CCTV$change_perc~Misdemeanor_Evolution_VS_CCTV$density_perc)
 stargazer(regression11,
           title = "CCTV density VS Misdemeanor evolution",
-          type = "html")
+          type = "html",
+          dep.var.labels="Misdemeanor per Capita % change",
+          covariate.labels = c("CCTV Density","intercept"))
 
 ```
 </div>
@@ -602,7 +614,9 @@ regression21 <- lm(CCTV_VS_ViolentCrime$ViolentCrimePerCapitaPerArea~CCTV_VS_Vio
 ```{r echo=FALSE,results = 'asis'}
 stargazer(regression21,
           title = "CCTV vs Violent Crime",
-          type = "html")
+          type = "html",
+          dep.var.labels="Violent Crime (per 1000 inhabitants)",
+          covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
 <br><br>
@@ -623,7 +637,9 @@ regression22 <- lm(CCTV_VS_PropertyCrime$PropertyCrimePerCapitaPerArea~CCTV_VS_P
 ```{r echo=FALSE,results = 'asis'}
 stargazer(regression22,
           title = "CCTV vs Property Crime",
-          type = "html")
+          type = "html",
+          dep.var.labels="Property Crime (per 1000 inhabitants)",
+          covariate.labels = c("CCTV Density","intercept"))
 
 #We observe a stronger correlation between Violent Crime and CCTV density compared to Property crime and CCTV density
 ```
