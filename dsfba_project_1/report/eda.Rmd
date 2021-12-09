@@ -25,7 +25,7 @@ proj4string(balt_dat) <-  crs.geo1
 
 Then we plot to see the output: as cloud of points which represent all the CCTVs in baltimore.
 
-```{r, fig.cap=""}
+```{r}
 
 plot(balt_dat, pch = 20, col = "steelblue") #We can use the plot function to quickly plot the SpatialPointDataFrame that we created. We see a bunch of points which represent the CCTV location in Baltimore.
 ```
