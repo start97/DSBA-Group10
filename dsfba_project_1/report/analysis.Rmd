@@ -16,7 +16,6 @@ CCTV_VS_crimes <- CCTV_per_area %>%
 regression <- lm(CCTV_VS_crimes$CrimePer1000inhabitants~CCTV_VS_crimes$density_perc)
 ```
 <div align="center">
-This map allows one to see CCTV location precisely and to obtain exact crime per capita figures.
 ```{r echo=FALSE,results='asis'}
 stargazer(regression,
           title = "Crime VS CCTVs",
@@ -53,6 +52,7 @@ baltimore@data[["fid"]]<-baltimore@data[["community"]] #We do that so that we se
 Crime_and_CCTV_map <- tm_shape(baltimore) + tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.05)+ tm_shape(balt_dat) + tm_dots(col="black")
 ```
 <div align="center">
+This map allows one to see CCTV location precisely and to obtain exact crime per capita figures.
 ```{r echo=FALSE,results='markup',dpi=72}
 tmap_mode("view") #Use this command to have interactive maps
 
@@ -79,7 +79,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(1,3)], kmeans, method="wss")+
 ```{r}
 set.seed(10)
 km.clust2 <- kmeans(sc.Community_data_Clustering[,c(1,3)], 5, nstart = 25)
-fviz_cluster(km.clust2, data=sc.Community_data_Clustering[,c(1,3)], repel=TRUE)+labs(x="Crime (per 1000 inhabitants)",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 85% between between and within SS"),width=70),subtitle=str_wrap(("We will focus on areas in the high crime, high CCTV density cluster as well as those in the lower crime, high CCTV density cluster"),width=80))
+fviz_cluster(km.clust2, data=sc.Community_data_Clustering[,c(1,3)], repel=TRUE)+labs(x="Crime (per 1000 inhabitants)",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 85% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high crime, high CCTV density cluster as well as those in the lower crime, high CCTV density cluster"),width=80))
 
 ```
 <br>
@@ -337,7 +337,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(5,3)], kmeans, method="wss")+
 set.seed(40)
 km.clust5 <- kmeans(sc.Community_data_Clustering[,c(5,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
 
-fviz_cluster(km.clust5, data=sc.Community_data_Clustering[,c(5,3)], repel=TRUE) + labs(x="Felony per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.1% between between and within SS"),width=70),subtitle=str_wrap(("We will focus on areas in the high felony, high CCTV density cluster as well as those in the lower felony, high CCTV density cluster"),width=85))
+fviz_cluster(km.clust5, data=sc.Community_data_Clustering[,c(5,3)], repel=TRUE) + labs(x="Felony per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.1% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high felony, high CCTV density cluster as well as those in the lower felony, high CCTV density cluster"),width=80))
 ```
 <br>
 ```{r results = 'markup'}
@@ -469,7 +469,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(6,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(50)
 km.clust6 <- kmeans(sc.Community_data_Clustering[,c(6,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-fviz_cluster(km.clust6, data=sc.Community_data_Clustering[,c(6,3)], repel=TRUE) + labs(x="Misdemeanor per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 84.41% between between and within SS"),width=70),subtitle=str_wrap(("We will focus on areas in the high misdemeanor, high CCTV density cluster as well as those in the lower misdemeanor, high CCTV density cluster"),width=85))
+fviz_cluster(km.clust6, data=sc.Community_data_Clustering[,c(6,3)], repel=TRUE) + labs(x="Misdemeanor per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 84.41% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high misdemeanor, high CCTV density cluster as well as those in the lower misdemeanor, high CCTV density cluster"),width=80))
 ```
 <br>
 ```{r results = 'markup'}
@@ -649,7 +649,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(7,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(20)
 km.clust3 <- kmeans(sc.Community_data_Clustering[,c(7,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-fviz_cluster(km.clust3, data=sc.Community_data_Clustering[,c(7,3)], repel=TRUE) + labs(x="Violent crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a good ratio of 87.4% between between and within SS"),width=75),subtitle=str_wrap(("We will focus on areas in the high violent crime, high CCTV density cluster as well as those in the lower violent crime, high CCTV density cluster"),width=85))
+fviz_cluster(km.clust3, data=sc.Community_data_Clustering[,c(7,3)], repel=TRUE) + labs(x="Violent crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a good ratio of 87.4% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high violent crime, high CCTV density cluster as well as those in the lower violent crime, high CCTV density cluster"),width=80))
 ```
 <br><br>
 ```{r results = 'markup'}
@@ -781,7 +781,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(8,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(30)
 km.clust4 <- kmeans(sc.Community_data_Clustering[,c(8,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=75),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=90))
+fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=80))
 ```
 <br><br>
 ```{r results = 'markup'}
@@ -881,7 +881,7 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = str_wrap(("Overall, property crime seems to have decreased for the 2017 to 2020 period"),width=65),subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring property crime"),width=80),x="Year",y="Property crime occurences")
+  labs(title = str_wrap(("Overall, property crime seems to have decreased for the 2017 to 2020 period"),width=60),subtitle=str_wrap(("This explains why we should be careful when considering CCTV effectiveness in deterring property crime"),width=75),x="Year",y="Property crime occurences")
 
 Property_Crime_Yearly_evolution_map
 
@@ -911,7 +911,7 @@ Evolution_VS_poverty <- Community_data[,c(25,15,5)] %>%
 ggplot(data=Evolution_VS_poverty,mapping= aes(x=change,y=hhpov19))+
   geom_point()+
   geom_smooth(method = lm,color="blue",size=0.3)+
-  labs(x="Change in crime per capita between 2014 and 2019",y="% of people living below the poverty line",title = str_wrap(("Change in crime per capita and poverty do not really seem to be correlated"),width = 60),subtitle = str_wrap(("Altough the regression line might indicate a sort tendency indicating that crime might have reduced more in richer areas compared to poorer areas, the regression output below indicates a very poor correlation"),width = 75))
+  labs(x="Change in crime per capita between 2014 and 2019",y="% of people living below the poverty line",title = str_wrap(("Change in crime per capita and poverty do not really seem to be correlated"),width = 60),subtitle = str_wrap(("Altough the regression line might indicate a sort tendency indicating that crime might have reduced more in richer areas compared to poorer areas, the regression output below indicates a very poor correlation"),width = 70))
 
 Evolution_VS_poverty_regr <- lm(Evolution_VS_poverty$hhpov19~Evolution_VS_poverty$change)
 
@@ -950,7 +950,7 @@ stargazer(regression2,
 <br>
 ```{r results='markup'}
 ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) + 
-  labs(title = str_wrap(("As poverty level incrases, one tend to see subtle tendency for CCTV density to increase as well"),width = 75), x="% of people living below the poverty line",y="CCTV Density")+
+  labs(title = str_wrap(("As poverty level incrases, one tend to see subtle tendency for CCTV density to increase as well"),width = 70), x="% of people living below the poverty line",y="CCTV Density")+
   geom_point() + 
   geom_smooth(method = lm,color="blue",size=0.3)
 ```
