@@ -972,7 +972,7 @@ Wealth_and_CCTV_map <- tm_shape(baltimore)+tm_fill(col = "hhpov19", title ="% of
 ```
 <div align="center">
 We see a high concentration of CCTVs in the centre.
-```{r echo=FALSE,dpi=72}
+```{r results='markup',dpi=72}
 tmap_mode("view")
 Wealth_and_CCTV_map
 ```

@@ -252,6 +252,7 @@ tmap_arrange(Felony_map,Misdemeanor_map)
 
 ```
 <br>
+
 #### 3.3.3 Felonies VS Misdemeanors - Do we have an equal crime type distribution?
 
 It is always interesting to see whether we can spot patterns in crime data. The idea here is to analyse whether  we tend to observe an equal distribution of felony and misdemeanors in each area. By computing a simple linear regression, we see that the two types of crime seems rather equally distributed in each area. Still, it is interesting to observe that the biggest outline on the scatter plot is Downtown/Seton Hill. In Downtown, misdemeanor per capita is much larger than the felony per capita We don't know whether this finding is relevant, yet, it must be mentioned that this area also is one of the richest area in Baltimore.
