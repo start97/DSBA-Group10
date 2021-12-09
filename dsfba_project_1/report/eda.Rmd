@@ -271,7 +271,9 @@ stargazer(regression4,
           title = "Felony vs Misdemeanor",
           type = "html",
           ci = FALSE, 
-          no.space = TRUE)
+          no.space = TRUE,
+          dep.var.labels="Felony per capita",
+          column.labels = c("Misdemeanor per capita","intercept"))
 ```
 </div>
 <br><br>
