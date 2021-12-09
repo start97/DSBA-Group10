@@ -262,18 +262,18 @@ It is always interesting to see whether we can spot patterns in crime data. The 
 Felony_VS_Misdemeanor <- FelonyStats %>% 
   left_join(MisdemeanorStats,by="Community")
 
-regression4 <- lm(Felony_VS_Misdemeanor$FelonyPerCapitaPerArea~Felony_VS_Misdemeanor$MisdemeanorPerCapitaPerArea)
+regression4 <- lm(Felony_VS_Misdemeanor$MisdemeanorPerCapitaPerArea~Felony_VS_Misdemeanor$FelonyPerCapitaPerArea)
 #This allows us to see whether Felony and Misdemeanors are correlated. This seems to be the case
 ```
 <div align="center">
 ```{r echo=FALSE, results = 'asis'}
 stargazer(regression4,
-          title = "Felony vs Misdemeanor",
+          title = "Felony VS Misdemeanor",
           type = "html",
           ci = FALSE, 
           no.space = TRUE,
-          dep.var.labels="Felony per capita",
-          column.labels = c("Misdemeanor per capita","intercept"))
+          dep.var.labels="Felony (per 1000 inhabitants)",
+          covariate.labels = c("Misdemeanor (per 1000 inhabitants)","intercept"))
 ```
 </div>
 <br><br>
@@ -988,8 +988,10 @@ regression3 <- lm(Crime_VS_Poverty$CrimePer1000inhabitants~Crime_VS_Poverty$hhpo
 <div align="center">
 ```{r echo=FALSE, results = 'asis'}
 stargazer(regression3,
-          title = "CrimePer1000Inhabitants vs Poverty",
-          type = "html")
+          title = "Poverty VS Crime",
+          type = "html",
+          dep.var.labels="Crime (per 1000 inhabitants)",
+          covariate.labels = c("Poverty level","intercept"))
 ```
 </div>
 <br>
