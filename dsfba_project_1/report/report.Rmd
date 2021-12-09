@@ -3,7 +3,7 @@ title: "Investigative research of the impact of CCTV installations on crime rate
 author: "Renaudineau Marine, Welz Daniel and Oltramare Augustin"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
 output:
-  html_document:
+  bookdown::html_document2:
     theme: united
     highlight: tango
     toc: true
