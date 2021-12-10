@@ -781,7 +781,10 @@ regression8 <- lm(Violent_Crime_Evolution_VS_CCTV$change_perc~Violent_Crime_Evol
 ```{r echo=FALSE, results='asis'}
 stargazer(regression8,
           title = "CCTV density VS Violent Crime evolution",
-          type = "html")
+          type = "html",
+          dep.var.labels="Violent Crime per Capita % change",
+          covariate.labels = c("CCTV Density","intercept"))
+
 ```
 </div>
 <br>
@@ -908,7 +911,9 @@ regression9 <- lm(Property_Crime_Evolution_VS_CCTV$change_perc~Property_Crime_Ev
 ```{r echo=FALSE, results='asis'}
 stargazer(regression9,
           title = "CCTV density VS Property Crime evolution",
-          type = "html")
+          type = "html",
+          dep.var.labels="Property Crime per Capita % change",
+          covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
 <br><br>
@@ -938,7 +943,9 @@ Evolution_VS_poverty_regr <- lm(Evolution_VS_poverty$hhpov19~Evolution_VS_povert
 ```{r echo=FALSE, results='asis'}
 stargazer(Evolution_VS_poverty_regr,
           title = "Crime evolution VS poverty level",
-          type = "html")
+          type = "html",
+          dep.var.labels="Poverty level",
+          covariate.labels = c("Crime per Capita % change","intercept"))
 ```
 </div>
 <br><br>
@@ -960,7 +967,9 @@ regression2 <- lm(CCTV_VS_poverty$density_perc~CCTV_VS_poverty$hhpov19)
 ```{r echo=FALSE, results='asis'}
 stargazer(regression2,
           title = "CCTV vs poverty ",
-          type = "html")
+          type = "html",
+          dep.var.labels="CCTV Density",
+          covariate.labels = c("Poverty level","intercept"))
 ```
 </div>
 <br>
@@ -1065,7 +1074,9 @@ selAIC <- step(nullmod,scope=list(lower=nullmod,upper=fullmod),direction="forwar
 ```{r echo=FALSE,results='asis'}
 stargazer(selAIC,
           title = "First selected model after a forward stepwise regression, 4 independent variables are retained",
-          type = "html")
+          type = "html",
+          dep.var.labels="CCTV Density",
+          covariate.labels = c("Violent Crime (per 1000 inhabitants","HS exam passing","% of Caucasian","% of Afro-American","intercept"))
 ```
 </div>
 ```{r}
@@ -1097,7 +1108,9 @@ summary(selAIC2)
 ```{r echo=FALSE,results='asis'}
 stargazer(selAIC2,
           title = "Second selected model after a forward stepwise regression, 4 independent variables are retained",
-          type = "html")
+          type = "html",
+          dep.var.labels="CCTV Density",
+          covariate.labels = c("Violent Crime (per 1000 inhabitants","HS exam passing","Unemployment rate","Poverty level","intercept"))
 ```
 </div>
 ```{r}
@@ -1113,7 +1126,9 @@ CCTV_VS_ViolentCrime_and_Unemp <- lm(Community_data$density_perc~Community_data$
 ```{r echo=FALSE,results='asis'}
 stargazer(CCTV_VS_ViolentCrime_and_Unemp,
           title = "Multiple regression with only unemployement and violent crime",
-          type = "html")
+          type = "html",
+          dep.var.labels="CCTV Density",
+          covariate.labels = c("Violent Crime (per 1000 inhabitants","Unemployment rate","intercept"))
 ```
 </div>
 <br><br>
