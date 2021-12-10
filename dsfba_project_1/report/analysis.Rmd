@@ -267,6 +267,7 @@ tmap_mode("plot")
 Downtown_map
 print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain the map with an additional overview
 ```
+<br>
 
 The fact that we observe crimes committed right next to surveillance cameras reinforces the hypothesis put forward so far and allows us to answer our first research question once and for all: it does not seem that CCTVs reduce crime.
 
@@ -320,7 +321,7 @@ regression6 <- lm(CCTV_VS_misdemeanors$MisdemeanorPerCapitaPerArea~CCTV_VS_misde
 stargazer(regression6,
           title = "CCTV vs Misdemeanor",
           type = "html",
-          dep.var.labels="Misdemeanor (per 1000 inhabitants",
+          dep.var.labels="Misdemeanor (per 1000 inhabitants)",
           covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
@@ -1110,7 +1111,7 @@ stargazer(selAIC2,
           title = "Second selected model after a forward stepwise regression, 4 independent variables are retained",
           type = "html",
           dep.var.labels="CCTV Density",
-          covariate.labels = c("Violent Crime (per 1000 inhabitants","HS exam passing","Unemployment rate","Poverty level","intercept"))
+          covariate.labels = c("Violent Crime (per 1000 inhabitants)","HS exam passing","Unemployment rate","Poverty level","intercept"))
 ```
 </div>
 ```{r}
@@ -1128,7 +1129,7 @@ stargazer(CCTV_VS_ViolentCrime_and_Unemp,
           title = "Multiple regression with only unemployement and violent crime",
           type = "html",
           dep.var.labels="CCTV Density",
-          covariate.labels = c("Violent Crime (per 1000 inhabitants","Unemployment rate","intercept"))
+          covariate.labels = c("Violent Crime (per 1000 inhabitants)","Unemployment rate","intercept"))
 ```
 </div>
 <br><br>
