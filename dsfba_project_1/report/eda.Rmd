@@ -135,7 +135,7 @@ To observe crime per capita per community distribution in Baltimore visually, we
 
 ```{r}
 
-Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,title = "Crime tends to be higher in the city center of Balimore",title.size =1 ,title.position= c("center","top")) #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = "Crime tends to be higher in the city center of Balimore",title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
 
 tmap_mode("plot")
 Distorted_Crime_map
