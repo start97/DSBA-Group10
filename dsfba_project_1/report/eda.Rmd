@@ -578,7 +578,7 @@ animated_crime_map <- tm_shape(baltimore_alias,bbox = bbox, projection = crs.geo
   tm_polygons("CrimeRate",breaks=pb,title ="Crime") +
   tm_facets(free.scales.fill = F,along = "Year")+tm_shape(baltimore)+tm_borders()
 
-tmap_animation(animated_crime_map, filename ="animated_crime_map.gif", delay=100)
+tmap_animation(animated_crime_map, filename ="animated_crime_map.gif", delay=85)
 
 ```
 <div align="center">
