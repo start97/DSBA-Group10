@@ -590,7 +590,7 @@ We can see that crime first increases in most areas before decreasing as from 20
 
 We see that crime peaks in 2017, before decreasing in most areas, except areas in the city center such as Downtown/Seton Hill.
 <br>
-
+<br>
 #### 3.4.1 Calculation of violent crime and property crime evolution
 
 We can make the exact same computations as before to calculate violent crime and property crime evolution.
