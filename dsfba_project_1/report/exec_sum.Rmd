@@ -1,14 +1,12 @@
 # Executive summary {.tabset}
 
-### Overview and motivation
-
 ```{r, echo = FALSE, message = FALSE, warning = FALSE}
 source(here::here("scripts/setup.R"))
 ```
 
 ### Research goal 
 
-The aim of this analysis is to first evaluate the effectiveness of surveillance cameras in reducing crime in general and certain types of crime in particular. Over a second phase, what determines the CCTV density of a given area is considered.
+The aim of this analysis is to first evaluate the effectiveness of surveillance cameras in reducing crime as well as certain types of crimes. Over a second phase, what determines the CCTV density of a given area is considered.
 
 ### Methodology
 
@@ -16,12 +14,12 @@ We carried out our analyses using mainly 5 data sets retrieved on Baltimore's op
 
 ### Main Takeaways
 
-  + Analysing crime in Baltimore, we found that CCTV cameras were mostly concentrated in the city centre. Crime per capita was also highest in the inner city, suggesting a correlation between crime per capita and CCTV. Over the 2014-2019 period, crime (in absolute numbers) has increased slightly, although there has been a downward trend since a peak in 2017.
+  + Analysing our data sets, we found that CCTVs were mostly concentrated in the city centre. Crime per capita was also highest in the inner city, suggesting a correlation between crime per capita and CCTV. Over the 2014-2019 period, crime (in absolute numbers) has increased slightly, although there has been a downward trend since a peak in 2017.
   
-  + CCTVs are not significantly correlated with crime reduction. Furthermore, it is observed that some crimes are sometimes committed right in front of the surveillance cameras leading us to believe that CCTVs are not effective crime deterrents. A similar conclusion is found for all types of crime..
+  + CCTVs are not significantly correlated with crime reduction. Furthermore, it is observed that crimes are sometimes committed right in front of the surveillance cameras leading us to believe that CCTVs are not effective crime deterrents. A similar conclusion is found for all soecific types of crime.
   
   + The most important determinant of CCTV density in a given area is not race, nor education or socio-economic condition but violent crime per capita.
 
 ### Conclusion
 
-Our analysis does not demonstrate that CCTVs can effectively deter crime in general, or any specific type of crime in particular. We also find that the CCTV density of an area is not significantly correlated with the poverty level of the area, nor with any of the other educational, socio-economic or racial indicators we considered. We have determined that violent crime per capita appears to be a good indicator of the CCTV of a given area.
+Our analysis does not demonstrate that CCTVs can effectively deter crime in general, or any specific type of crime in particular. We also find that the CCTV density of an area is not significantly correlated with the poverty level of the area, nor with any of the other educational, socio-economic or racial indicators we considered. We have determined that violent crime per capita appears to be a good indicator of the CCTV density of a given area.
