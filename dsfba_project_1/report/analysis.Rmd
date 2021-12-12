@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### 4.1 CCTVs VS Crime - Does the presence of CCTV deter crime?
 
-In order to be in position to comment on the effectiveness of CCTVs on crime deterrence, one is first going to investigate the relationship between CCTV density and crime per capita. To do so, we  create a simple linear regression model. We first create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The linear regression indicates a moderate correlation between higher CCTV density and higher crime per capita. The $R^2$ is at 42.9%. Plotting the observations enables one to see this tendency. The blue line represents the regression line.
+In order to be in position to comment on the effectiveness of CCTVs on crime deterrence, one is first going to investigate the relationship between CCTV density and crime per capita. Based on our EDA, we have already seen that both crime and CCTV **seemed** to be highly concentrated in the city center which might have indicated a correlation. To verify this observation, we create a simple linear regression model. We first create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The results of linear regression indicates a moderate correlation between higher CCTV density and higher crime per capita. The $R^2$ is at 42.9%. Plotting the observations enables one to see this tendency. The blue line represents the regression line.
 
 ```{r}
 
@@ -35,7 +35,7 @@ ggplot(data=CCTV_VS_crimes,mapping= aes(x=density_perc,y=CrimePer1000inhabitants
 
 #### 4.1.1 Mapping of CCTVs and crime per capita
 
-Another interesting way to illustrate this correlation is by using a map depicting crime per capita in each area and adding an extra layer to represent CCTVs. The method is the same as before with the `tmap` package. However, this time we have two different shapes: `tm_shape(baltimore)` which constitutes the base map and `tm_shape(balt_dat)` which adds a layer containing points. If we take a look at this map we see that it gives an intuition about the phenomenon we illustrated before. It seems as if where crime per capita is the lowest, there seems to be less CCTVs. There seems to be a correlation between the dark red areas and the highest CCTV concentrations. Looking at the north-western and south-western areas of the map, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous. We can also use an interactive map. The benefit of using such map is that it enables to get precise information about crime per capita in a given area by clicking on it.
+Another interesting way to illustrate this correlation is by using a map depicting crime per capita in each area and adding an extra layer to represent CCTVs. The method is the same as before with the `tmap` package. However, this time we have two different shapes: `tm_shape(baltimore)` which constitutes the base map and `tm_shape(balt_dat)` which adds a layer containing points. If we take a look at this map we see that it confirms the intuition about the phenomenon we illustrated before. It seems as if where crime per capita is the lowest, there seems to be less CCTVs. There also seems to be a correlation between the dark red areas and the highest CCTV concentrations. Looking at the north-western and south-western areas of the map, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous. We can also use an interactive map. The benefit of using such map is that it enables to get precise information about crime per capita in a given area by clicking on it.
 
 
 ```{r results='markup'}
@@ -62,7 +62,7 @@ Crime_and_CCTV_map
 ```
 </div>
 <br>
-However, even though this correlation is interesting and worth mentioning, it does not allow one to say much about the effectiveness of CCTVs. We are stuck in a sort of chicken-and-egg problem. In order to get in position to comment on the crime-deterring potential of CCTVs, we decided to analyse the crime per capita evolution of certain areas in relation with their respective CCTV density. Our goal is to observe how crime per capita behaved since 2014 in areas with high CCTV density compared to areas with low CCTV density. In order to select our areas of interest, we performed a k-means clustering based on two dimensions:  CCTV density and crime per capita. We first scale the data and add the names of each area as row name. We then use the elbow method to determine the optimal number of cluster using `fviz_nbclust`. When performing the kmeans clustering, we specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the data set as initial centers. We end up with 5 clusters that we represent using `fviz_cluster`. The ratio between the between sum of square and the within sum of square is good (85%), the higher this value the better. Indeed, we want the variation to come from between groups and not within groups.
+However, even though this correlation is interesting and worth mentioning, it does not allow one to say much about the effectiveness of CCTVs. We are stuck in a sort of chicken-and-egg problem. In order to get in position to comment on the crime-deterring potential of CCTVs, we decided to analyse the crime per capita evolution of certain areas in relation with their respective CCTV density. Our goal is to observe how crime per capita behaved since 2014 in areas with high CCTV density compared to areas with low CCTV density to see whether a clear tendency is noticeable. Indeed, if CCTVs were truly effective, crime should decrease more (or at least increase less) in areas with high CCTV density compared to areas with low CCTV density. In order to select our areas of interest, we performed a k-means clustering based on two dimensions:  CCTV density and crime per capita. We first scale the data and add the names of each area as row name. We then use the elbow method to determine the optimal number of cluster using `fviz_nbclust`. When performing the kmeans clustering, we specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the data set as initial centers. We end up with 5 clusters that we represent using `fviz_cluster`. The ratio between the between sum of square and the within sum of square is good (85%), the higher this value the better. Indeed, we want the variation to come from between groups and not within groups.
 
 
 ```{r}
@@ -81,7 +81,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(1,3)], kmeans, method="wss")+
 ```{r}
 set.seed(10)
 km.clust2 <- kmeans(sc.Community_data_Clustering[,c(1,3)], 5, nstart = 25)
-fviz_cluster(km.clust2, data=sc.Community_data_Clustering[,c(1,3)], repel=TRUE)+labs(x="Crime (per 1000 inhabitants)",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 85% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high crime, high CCTV density cluster as well as those in the lower crime, high CCTV density cluster"),width=80))
+fviz_cluster(km.clust2, data=sc.Community_data_Clustering[,c(1,3)], repel=TRUE)+labs(x="Crime (per 1000 inhabitants)",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 85% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high crime, high CCTV density cluster as well as those in the high crime, low CCTV density cluster"),width=80))
 
 ```
 <br>
@@ -186,9 +186,9 @@ knitr::kable(Crime_Evolution_VS_CCTV[c(26,33,51,54),c(1,5)],col.names = c('Commu
 
 ```
 
-When comparing the four members of the high crime, high CCTV density cluster with the four members of the high crime, low CCTV density cluster, we observe that for three members of the low CCTV density cluster, crime per capita has increased while crime per capita has decreased for two members of the high CCTV density cluster. While this could potentially indicate that crime decreased more often in areas with high CCTV density compared to areas with low CCTV density and therefore indicate that CCTV may be effective crime deterrent, it is **absolutely crucial** to temper this statement with statistically significance. Indeed, the decrease we observe in Cherry Hill and Sandtown-Winchester/Harlem Park could be the result of pure luck/coincidence or could be attributed to many other factors. In addition, the extremely small number of data items analysed makes it particularly difficult to draw conclusions.  It should also be noted that although crime has fallen in two high crime, high CCTV areas, in one case it has fallen only slightly (Cherry Hill).
+When comparing the four members of the high crime, high CCTV density cluster with the four members of the high crime, low CCTV density cluster, we observe that for three members of the low CCTV density cluster, crime per capita has increased while crime per capita has decreased for only two members of the high CCTV density cluster. While this could potentially indicate that crime decreased more often in areas with high CCTV density compared to areas with low CCTV density and therefore indicate that CCTV may be effective crime deterrent, it is **absolutely crucial** to temper this statement with statistically significance. Indeed, the decrease we observe in Cherry Hill and Sandtown-Winchester/Harlem Park could be the result of pure luck/coincidence or could be attributed to many other factors. In addition, the extremely small number of data items analysed makes it particularly difficult to draw conclusions.  It should also be noted that although crime has fallen in two high crime, high CCTV areas, in one case it has fallen only slightly (Cherry Hill).
 
-Looking at how crime per capita has evolved throughout Baltimore City, one observes a general downward trend since 2017. This further highlights the fact that the downward results one observes in areas belonging to the HIGH crime, HIGH CCTV density cluster should be interpreted with caution because other factors than CCTVs might be the reason for these decreases. Finally, we computed a simple linear regression model between CCTV density and crime per capita evolution. We found out no significant correlation.
+Looking at how crime per capita has evolved throughout Baltimore City, one observes a general downward trend since 2017. This further highlights the fact that the downward results one observes in areas belonging to the HIGH crime, HIGH CCTV density cluster should be interpreted with caution because other factors than CCTVs might be the reason for these decreases. Finally, we computed a simple linear regression model between CCTV density and crime per capita evolution. We found out no significant correlation, $R^2$ is extremely poor (3.3%).
 
 All this leads us to believe that it is difficult to attribute real effectiveness to CCTVs.
 
@@ -219,7 +219,7 @@ stargazer(regression7,
 
 #### 4.1.2 Analysis of where crime took place: August 2021
 
-However, still in an effort to observe how CCTVs impact on crime, we set out to locate crimes committed and compare these locations to those of the surveillance cameras. Knowing that a surveillance camera captures activities within 256ft (~2 blocks), it is interesting to observe whether or not there are "crime-free zones" around the cameras. We will only select crime committed in August 2021 to have interpretable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time point from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place (in red) compared to the CCTV location (in black). By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
+However, still in an effort to observe how CCTVs impact  crime, we set out to locate crimes committed and compare these locations to those of the surveillance cameras. Knowing that a surveillance camera captures activities within 256ft (~2 blocks), it is interesting to observe whether or not there are "crime-free zones" around the cameras. We will only select crime committed in August 2021 to have interpretable data (choosing a larger time frame would make the map unreadable). We choose August 2021 because it is the latest full month which we have in our data set. Taking the latest time point from the data assures us that most of the CCTVs presented in the data set were already there (since we have no information of when exactly these CCTVs were added). Again, as before, we create a data table, assign coordinates, define CRS (in this case the CRS is "EPDS4326", which we needed to transform using `spTransform`). Again, we create a map with `tm_shape` to visualise the results. The output shows where crime takes place (in red) compared to the CCTV location (in black). By zooming on the map, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. 
 
 ```{r results='markup'}
 
@@ -238,7 +238,7 @@ August21Crimes_VS_CCTV
 ```
 </div>
 <br>
-To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime incidence in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
+To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime per capita in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
 
 So following this we take a closer look at the Downtown area.
 
@@ -273,7 +273,7 @@ The fact that we observe crimes committed right next to surveillance cameras rei
 
 ### 4.2 What types of crimes may be deterred by surveillance cameras?
 
-Although it is impossible to prove the effectiveness of surveillance cameras on crime in general, it is interesting to investigate whether different results are obtained when crime is broken down by type. The methodology we will use is the same as with crime in general.We start with felonies and misdemeanors, then we analyse violent and property crimes.
+Although it is impossible to prove the effectiveness of surveillance cameras on crime in general, it is interesting to investigate whether different results are obtained when crime is broken down by type. The methodology we will use is the same as with crime in general. We start with felonies and misdemeanors, then we analyse violent and property crimes.
 
 #### 4.2.1 CCTVs VS Felonies and Misdemeanors
 
@@ -295,7 +295,7 @@ regression5 <- lm(CCTV_VS_Felony$FelonyPerCapitaPerArea~CCTV_VS_Felony$density_p
 stargazer(regression5,
           title = "CCTV vs Felony",
           type = "html",
-          dep.var.labels="Felony (per 1000 inhabitants",
+          dep.var.labels="Felony (per 1000 inhabitants)",
           covariate.labels = c("CCTV Density","intercept"))
 ```
 </div>
@@ -346,7 +346,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(5,3)], kmeans, method="wss")+
 set.seed(40)
 km.clust5 <- kmeans(sc.Community_data_Clustering[,c(5,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
 
-fviz_cluster(km.clust5, data=sc.Community_data_Clustering[,c(5,3)], repel=TRUE) + labs(x="Felony per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.1% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high felony, high CCTV density cluster as well as those in the lower felony, high CCTV density cluster"),width=80))
+fviz_cluster(km.clust5, data=sc.Community_data_Clustering[,c(5,3)], repel=TRUE) + labs(x="Felony per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 87.1% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high felony, high CCTV density cluster as well as those in the high felony, low CCTV density cluster"),width=80))
 ```
 <br>
 ```{r results = 'markup'}
@@ -441,7 +441,7 @@ knitr::kable(Felony_Evolution_VS_CCTV[c(10,33,36,46),c(1,5)],col.names = c('Comm
 
 ```
 
-We see that in both clusters, felony has increased for three out of four members, regardless of CCTV density. This might indicate that CCTVs are not effective when it comes to felonies either. By plotting the felony evolution over time in Baltimore, we  observe that felony has also slightly increased comparing the 2014 and the 2019 level. Again, it makes it difficult to interpret these results as they are not statistically significant. Still, computing a regression between CCTV density and felony per capita gives the intuition that there only exists a very weak correlation between CCTV density and felony per capita, suggesting that surveillance cameras are not effective in preventing felonies either.
+We see that in both clusters, felony has increased for three out of four members, regardless of CCTV density. This might indicate that CCTVs are not effective when it comes to felonies either. By plotting the felony evolution over time in Baltimore, we  observe that felony has also slightly increased comparing the 2014 and the 2019 level. Again, it makes it difficult to interpret these results as they are not statistically significant. Still, computing a regression between CCTV density and felony per capita evolution gives the intuition that there only exists a very weak correlation between CCTV density and felony per capita evolution ($R^2$ is equal to 8.06%), confirming the idea that surveillance cameras are not effective in preventing felonies either.
 
 ```{r results='markup'}
 
@@ -480,7 +480,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(6,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(50)
 km.clust6 <- kmeans(sc.Community_data_Clustering[,c(6,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-fviz_cluster(km.clust6, data=sc.Community_data_Clustering[,c(6,3)], repel=TRUE) + labs(x="Misdemeanor per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 84.41% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high misdemeanor, high CCTV density cluster as well as those in the lower misdemeanor, high CCTV density cluster"),width=80))
+fviz_cluster(km.clust6, data=sc.Community_data_Clustering[,c(6,3)], repel=TRUE) + labs(x="Misdemeanor per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 84.41% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high misdemeanor, high CCTV density cluster as well as those in the high misdemeanor, low CCTV density cluster"),width=80))
 ```
 <br>
 ```{r results = 'markup'}
@@ -625,7 +625,7 @@ stargazer(regression21,
 ggplot(Community_data,aes(x=density_perc,y=ViolentCrimePerCapitaPerArea))+
   geom_point()+
    geom_smooth(method = lm,color="blue",size=0.3)+
-  labs(x="CCTV Density per Area",y="Violent crime (per 1000 inhabitants)",title="Violent crime increases with CCTV density",subtitle = str_wrap("Yet, we observe that the lack of data about CCTV in some areas might influence our results."),width=45)
+  labs(x="CCTV Density per Area",y="Violent crime (per 1000 inhabitants)",title="Violent crime increases with CCTV density",subtitle = str_wrap("We observe that the lack of data about CCTV in some areas might influence our results."),width=45)
 ```
 <br><br>
 ```{r results = 'markup'}
@@ -650,7 +650,7 @@ stargazer(regression22,
 ggplot(Community_data,aes(x=density_perc,y=PropertyCrimePerCapitaPerArea))+
   geom_point()+
    geom_smooth(method = lm,color="blue",size=0.3)+
-  labs(x="CCTV Density per Area",y="Property crime (per 1000 inhabitants)",title="Property crime is weakly correlated with CCTV intensity",subtitle = str_wrap("The correlation is weaker than between violent crime and CCTV density"),width=45)
+  labs(x="CCTV Density per Area",y="Property crime (per 1000 inhabitants)",title="Property crime is slightly correlated with CCTV intensity",subtitle = str_wrap("The correlation is weaker than between violent crime and CCTV density"),width=45)
 
 ```
 
@@ -666,7 +666,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(7,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(20)
 km.clust3 <- kmeans(sc.Community_data_Clustering[,c(7,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-fviz_cluster(km.clust3, data=sc.Community_data_Clustering[,c(7,3)], repel=TRUE) + labs(x="Violent crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a good ratio of 87.4% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high violent crime, high CCTV density cluster as well as those in the lower violent crime, high CCTV density cluster"),width=80))
+fviz_cluster(km.clust3, data=sc.Community_data_Clustering[,c(7,3)], repel=TRUE) + labs(x="Violent crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a good ratio of 87.4% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high violent crime, high CCTV density cluster as well as those in the high violent crime, low CCTV density cluster"),width=80))
 ```
 <br><br>
 ```{r results = 'markup'}
@@ -801,7 +801,7 @@ fviz_nbclust(sc.Community_data_Clustering[,c(8,3)], kmeans, method="wss")+
 ```{r results = 'markup'}
 set.seed(30)
 km.clust4 <- kmeans(sc.Community_data_Clustering[,c(8,3)], 5, nstart = 25) #It is important to specify a nstart parameter. Indeed, if we fail to do so, there is only one choice of random set of rows chosen in the dataset as initial centers.
-fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the lower property crime, high CCTV density cluster"),width=80))
+fviz_cluster(km.clust4, data=sc.Community_data_Clustering[,c(8,3)], repel=TRUE) + labs(x="Property crime per capita",y="CCTV density",title = str_wrap(("With 5 clusters, we have a rather good ratio of 82.8% between between and within SS"),width=65),subtitle=str_wrap(("We will focus on areas in the high property crime, high CCTV density cluster as well as those in the high property crime, low CCTV density cluster"),width=80))
 ```
 <br><br>
 ```{r results = 'markup'}
@@ -922,7 +922,7 @@ None of the comparisons between CCTV density and different crime type evolution 
 
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
-As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas have evolved over time.
+As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas appeared over time.
 
 ```{r results = 'markup'}
 
@@ -950,11 +950,11 @@ stargazer(Evolution_VS_poverty_regr,
 ```
 </div>
 <br><br>
-The very poor $R^2$ (6.48%) indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used. Inequalities in terms of security do not seem to have evolved
+The very poor $R^2$ (6.48%) indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used. Inequalities in terms of security do not seem to have appeared.
 
 ### 4.4 Research question 4 - Are there more public cameras in poorer areas compared to wealthier areas?
 
-We went to see whether there is a correlation between CCTV density and poverty level As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ (24.4%) and a poor $R^2$ (25.8%). The next sub-section illustrates this phenomenon in a map.
+We want to see whether there is a correlation between CCTV density and poverty level As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ (24.4%) and a poor $R^2$ (25.8%). The next sub-section illustrates this phenomenon in a map.
 
 ```{r results = 'markup'}
 
@@ -984,7 +984,7 @@ ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) +
 
 #### 4.4.1 Mapping of CCTVs and wealth
 
-The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. First thing we see it that areas with no CCTVs often are quite wealthy (e.g. in the northern part of Baltimore). The map also enables one to see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the center of Baltimore and that the poverty level is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. This might have contributed to the poor $R^2$ we obtained before.
+Again, looking at things from a map perspective is always interesting. The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. First thing we see it that areas with no CCTVs often are quite wealthy (e.g. in the northern part of Baltimore). The map also enables one to see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the center of Baltimore and that the poverty level is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. This might have contributed to the poor $R^2$ we obtained before.
 
 ```{r}
 
@@ -1010,7 +1010,7 @@ Wealth_and_CCTV_map
 
 We have seen that poverty level does not really seem to be a major determinant of CCTV density in an area. Therefore, we decided to built a multiple regression model containing various variables to investigate what could actually be the main determinant of CCTV density. This enables us to see whether city officials make decisions regarding where to implement CCTVs based on, for example, socio-economic factors, educational factors or racial factors. We retrieved six new data sets on Baltimore's open data portal. All these data sets were already tidied and constructed in the same way: they contained one observation for each area for several time periods. The first one provides information about the percent of persons between the ages of 16 and 64 who are currently unemployed. The second one provides information about the percentage of households without an internet subscription at home. Then, we retrieved some data sets about education. `HSAexam` data set provides information about the percentage of high school students who have successfully passed the H.S.A. exams while `Readiness` indicates  percentage of children whose composite score indicates full school readiness out of all kindergarten school children tested within an area in a school year. Finally, we retrieved two data sets regarding the  total number of persons that identify themselves as being racially white, respectively black or African American, out of the total number of persons living in an area. 
 
-After importing all the data sets, we created an object called `fullmod` which is a multiple regression containing 8 independent variables to predict CCTV density: the six above-mentioned data sets, poverty level and violent crime per capita. We also create `nullmod`, this model only contain an intercept at 1. Having these two models, we performed a forward stepwise regression based on AIC criteria using  `step`. This function starts with the null model, which is technically the "worst" and "simplest" model we can imagine and adds independent variables until we are better off not adding anything (meaning: when adding a variable increase the AIC score). We then use `vif` to check whether we have a mutlicollinearity issue. This happens when one or several variable explain the same variance. A VIF score above 5 is considered severe multicollinearity. In the case at hand, two independent variables have a VIF score above 5: the two racial indicators seem to explain the same variance. By creating a simple linear regression between percentage of white people and percentage of black people, we indeed see that these two variables explain each other very well. Finally, we also tried to plot a linear regression between percentage of white people and CCTV density and saw that this really seemed to be a poor predictor of CCTV density. We therefore got rid of these two racial metrics and performed another stepwise regression. The results of this stepwise regression indicate that only violent crime, unemployment, HSA passing and poverty level should be included as independent variables and that we should not even include the rest. We have no multicollinearity this time and obtain a $R^2$ of 58.6%. Yet we also observe that out of the four partial regression coefficients, only two of them are statistically significant from zero: violent crime and unemployment. Therefore, the very last thing we did was to perform another multiple linear regression solely containing these two variables. When doing so, we obtain a satisfying $R^2$ of 53.1%, yet, unemployment in turn becomes insignificant.
+After importing all the data sets, we created an object called `fullmod` which is a multiple regression containing 8 independent variables to predict CCTV density: the six above-mentioned data sets, poverty level and violent crime per capita. We also create `nullmod`, this model only contain an intercept at 1. Having these two models, we performed a forward stepwise regression based on AIC criteria using  `step`. This function starts with the null model, which is technically the "worst" and "simplest" model we can imagine and adds independent variables until we are better off not adding anything (meaning: when adding a variable increases the AIC score). We then use `vif` to check whether we have a mutlicollinearity issue. This happens when one or several variable explain the same variance. A VIF score above 5 is considered severe multicollinearity. In the case at hand, two independent variables have a VIF score above 5: the two racial indicators seem to explain the same variance. By creating a simple linear regression between percentage of white people and percentage of black people, we indeed see that these two variables explain each other very well. Finally, we also tried to plot a linear regression between percentage of white people and CCTV density and saw that this really seemed to be a poor predictor of CCTV density. We therefore got rid of these two racial metrics and performed another stepwise regression. The results of this stepwise regression indicate that only violent crime, unemployment, HSA passing and poverty level should be included as independent variables and that we should not even include the rest. We have no multicollinearity this time and obtain a $R^2$ of 58.6%. Yet we also observe that out of the four partial regression coefficients, only two of them are statistically significant from zero: violent crime and unemployment. Therefore, the very last thing we did was to perform another multiple linear regression solely containing these two variables. When doing so, we obtain a satisfying $R^2$ of 53.1%, yet, unemployment in turn becomes insignificant.
 
 _Source of the data sets:_ 
 
@@ -1133,4 +1133,4 @@ stargazer(CCTV_VS_ViolentCrime_and_Unemp,
 ```
 </div>
 <br><br>
-Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certain types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed of less educated people.et, this statement must be mitigated. Indeed, with R-squared of approximately 50%, we are in situation where we can only explain 50% of the  variation. This means that thee approximately is 50% of the variation whose origin is unknown to us. 
+Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certain types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed or less educated people.Yet, this statement must be mitigated. Indeed, with a R-squared of approximately 50%, we are in a situation where we can only explain 50% of the variation. This means that there approximately is 50% of the variation whose origin is unknown to us. 
