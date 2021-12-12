@@ -190,7 +190,7 @@ When comparing the four members of the high crime, high CCTV density cluster wit
 
 Looking at how crime per capita has evolved throughout Baltimore City, one observes a general downward trend since 2017. This further highlights the fact that the downward results one observes in areas belonging to the HIGH crime, HIGH CCTV density cluster should be interpreted with caution because other factors than CCTVs might be the reason for these decreases. Finally, we computed a simple linear regression model between CCTV density and crime per capita evolution. We found out no significant correlation, $R^2$ is extremely poor (3.3%).
 
-All this leads us to believe that it is difficult to attribute real effectiveness to CCTVs.
+All this leads us to believe that it is difficult to attribute real effectiveness to CCTVs. Indeed, would it have been the case, one would observe a strong relationship between CCTV density and Crime per Capita % change.
 
 
 ```{r results='markup'}
@@ -238,7 +238,7 @@ August21Crimes_VS_CCTV
 ```
 </div>
 <br>
-To further prove that point we decided to focus on one specific area. We arbitrarily decided to focus on the area which had the highest crime per capita in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
+To further prove that point we decided to zoom on one specific area. We arbitrarily decided to focus on the area which had the highest crime per capita in August. Thus, we needed to calculate the crime rate for August per area to see where crime per capita was highest. The results show that they are in Downtown. 
 
 So following this we take a closer look at the Downtown area.
 
@@ -602,7 +602,7 @@ stargazer(regression11,
 
 #### 4.2.2 CCTVs VS Violent and Property Crime
 
-It seems that the severity of the crime (i. e. whether it is a felony or a misdemeanor) does not influence the crime-deterring potential of CCTVs. It is now interesting to see whether we observe a difference when decomposing crime into violent and property crime. We first perform one simple linear regression between CCTV density and violent crime and another between CCTV density and property crime. The first interesting thing one can observe is that we observe a much stronger correlation between between CCTV density and violent crime than between CCTV density and property crime. The $R^2$ of the first regression is at 51.5%, more than any other $R^2$ obtained until now. This suggests that violent crime per capita is a considerable determinant of CCTV density.
+It seems that the severity of the crime (i. e. whether it is a felony or a misdemeanor) does not influence the crime-deterring potential of CCTVs. It is now interesting to see whether we observe a difference when decomposing crime into violent and property crime. We first perform one simple linear regression between CCTV density and violent crime and another between CCTV density and property crime. The first interesting thing one can observe is that we observe a much stronger correlation between CCTV density and violent crime than between CCTV density and property crime. The $R^2$ of the first regression is at 51.5%, more than any other $R^2$ obtained until now. This suggests that violent crime per capita is a considerable determinant of CCTV density.
 
 ```{r results = 'markup'}
 
@@ -922,7 +922,7 @@ None of the comparisons between CCTV density and different crime type evolution 
 
 ### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
-As the actual effectiveness of CCTV is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas appeared over time.
+As the actual effectiveness of CCTV in preventing crime is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas exist.
 
 ```{r results = 'markup'}
 
@@ -950,11 +950,11 @@ stargazer(Evolution_VS_poverty_regr,
 ```
 </div>
 <br><br>
-The very poor $R^2$ (6.48%) indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used. Inequalities in terms of security do not seem to have appeared.
+The very poor $R^2$ (6.48%) indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used. We cannot claim that inequalities in terms of security over that period exist.
 
 ### 4.4 Research question 4 - Are there more public cameras in poorer areas compared to wealthier areas?
 
-We want to see whether there is a correlation between CCTV density and poverty level As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ (24.4%) and a poor $R^2$ (25.8%). The next sub-section illustrates this phenomenon in a map.
+We want to see whether there is a correlation between CCTV density and poverty level. As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ (24.4%) and a poor $R^2$ (25.8%). The next sub-section illustrates this phenomenon in a map.
 
 ```{r results = 'markup'}
 
@@ -984,7 +984,7 @@ ggplot(data=CCTV_VS_poverty,mapping= aes(x=hhpov19,y=density_perc)) +
 
 #### 4.4.1 Mapping of CCTVs and wealth
 
-Again, looking at things from a map perspective is always interesting. The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. First thing we see it that areas with no CCTVs often are quite wealthy (e.g. in the northern part of Baltimore). The map also enables one to see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the center of Baltimore and that the poverty level is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. This might have contributed to the poor $R^2$ we obtained before.
+Again, looking at things from a map perspective is always interesting. The methodology to create the map is always the same: we ensure a perfect match, then merge the data using `left_join` and finally create the map using `tmap`. While the simple linear regression was not so conclusive, it seems like the map enables one to grasp interesting patterns and partially explain why we obtained such a poor result. First thing we see is that areas with no CCTVs often are quite wealthy (e.g. in the northern part of Baltimore). The map also enables one to see that many CCTVs are located in Downtown/Seton Hill and in Inner Harbor/Federal Hill, namely in the center of Baltimore and that the poverty level is very low in these two regions. This makes sense as centers of city are typically not a city's poorest areas. This might have contributed to the poor $R^2$ we obtained before.
 
 ```{r}
 
@@ -1133,4 +1133,4 @@ stargazer(CCTV_VS_ViolentCrime_and_Unemp,
 ```
 </div>
 <br><br>
-Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certain types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed or less educated people.Yet, this statement must be mitigated. Indeed, with a R-squared of approximately 50%, we are in a situation where we can only explain 50% of the variation. This means that there approximately is 50% of the variation whose origin is unknown to us. 
+Overall, this leads us to think that violent crime per capita in a given area is the main element that determines CCTV density. Racial metrics, educational metrics and socio-economic indicators all turned out being quite poor indicators. The results of the multiple regressions therefore allow us to conclude that the government does not seem to specifically target certain types of people and most importantly, it does not seem to specifically target least privileged society members like poorer, unemployed or less educated people. Yet, this statement must be mitigated. Indeed, with a R-squared of approximately 50%, we are in a situation where we can only explain 50% of the variation. This means that there approximately is 50% of the variation whose origin is unknown to us. 
