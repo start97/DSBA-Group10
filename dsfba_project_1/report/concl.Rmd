@@ -14,8 +14,9 @@ Some of the fears of leading human rights advocates seem to be justified, others
 <br>
 Based on the results of our analysis, we believe that it would be essential for the Baltimore Police Department to offer transparency to their citizens. Indeed, we believe that the latter would be legitimate to demand the following from their authorities :
 
-- a report demonstrating that surveillance cameras and the massive collection of its citizen's data can still have a positive impact 
-- a detailed report explaining the criteria on which the government bases its decision to implement a surveillance camera
+  + a report demonstrating that surveillance cameras and the massive collection of its citizen's data can still have a positive impact. Indeed, it is likely that although surveillance cameras are not effective in deterring crime, they could potentially have other positive effects such as facilitating the arrest of criminals. It would be necessary to verify such potential effects.
+
+  + a detailed report explaining the criteria on which the government bases its decision to implement a surveillance camera
 
 **Limitations:** <br><br>
 Obviously, our work has its limitations. The main one is the limited number of surveillance cameras in our original data set. As mentioned in section 2.2, one of the columns of our data set is called "CAM_NUM", not having all the camera numbers contained in our data set, it seems to suggest that only a fraction of the surveillance cameras installed in Baltimore are mentioned in the data set. This would make sense that the Baltimore Police Department does nto discolse publicly the exact location of **all** its CCTVs. Furthermore, based on our common sense, it does seem that 836 cameras is a bit too few for a city the size of Baltimore. Some communities do not even have CCTVs according to the data set. This is problematic because it limits the significance of our regressions for example. It is also worth mentioning that the fact that we ran our regressions with only 56 values at a time makes it difficult to get very significant results and makes our conclusions more fragile. A higher number of observations would have been desirable. 

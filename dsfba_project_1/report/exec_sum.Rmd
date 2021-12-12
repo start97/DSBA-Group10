@@ -8,25 +8,20 @@ source(here::here("scripts/setup.R"))
 
 ### Research goal 
 
-How do governments decide where and how to install CCTVs? The goals of this project is an investigation of i) finding the root causes and criteria which -backed up by data - determine CCTV installment in Baltimore, ii) the crime deterrent potential of CCTVs in the Amercian city of Balimore and iii) the impact on the communities themselves. 
+The aim of this analysis is to first evaluate the effectiveness of surveillance cameras in reducing crime in general and certain types of crime in particular. Over a second phase, what determines the CCTV density of a given area is considered.
 
 ### Methodology
 
-Using six datasets, we found and combined relevant data about crimes committed in Baltimore, CCTV locations in the city, poverty rates, the are of Baltimore, the population and the households with internet access.
+We carried out our analyses using mainly 5 data sets retrieved on Baltimore's open data portal allowing us to calculate, among other things, values about crime and different types of crime committed in Baltimore as well as information about location of surveillance cameras. In addition to graphically representing this information in the form of charts and tables, we have made extensive use of maps, allowing us to visualise this information in a more contextual way.
 
 ### Main Takeaways
 
-First, our analysis shows quite well that CCTV placement seems to follow areas where crime per capita is highest. Looking at the North-western and South-western areas of Baltimore, it can be seen that the placement of CCTVs aligns rather well with the areas considered dangerous.
-
-Second, CCTCs capture activities within 256ft (~2 blocks). Nevertheless, we see that some crimes are committed directly in front of CCTVs. Although this is not conclusive evidence, this observation goes against the idea that CCTVs are effective crime deterrents. MOreover, for August 2021 the crime rate per area was highest in the Downtown area.  Looking deeply into the Downtown area, we quite clearly see that some crimes are committed right next to some CCTVs. 
-
-Third, regarding crime types our analysis and results of a simple linear regression show a weak $R^2$ for both felonies and misdemeanors. It therefore does not seem like the presence of CCTV has a particularly strong impact on a certain type of crime. 
-
-Fourth, regarding wealth and CCTVs our data shows a poor $adjusted R^2$ and correlation between CCTV density and wealth. One of our initial hypothesis was that the government respected more the privacy of wealthier people, which turned out to be proven wrongly by data. However, we are not sure whether wealth is the only influential factor. Again, in the northern parts we see less CCTV, less crime, and also a more wealthier population.
-
-Fifth, regarding the distribution and pattern of crime types in Baltimore. The idea here is to analyse whetherwe tend to observe an equal distribution of felony and misdemeanors in each area with one outlier: In Downtown, misdemeanor per capita is much larger than the felony per capita and it must be mentioned that this area also is one of the richest area in Baltimore. This suggests that richer areas are more impacted by less severe crimes.
-
+  + Analysing crime in Baltimore, we found that CCTV cameras were mostly concentrated in the city centre. Crime per capita was also highest in the inner city, suggesting a correlation between crime per capita and CCTV. Over the 2014-2019 period, crime (in absolute numbers) has increased slightly, although there has been a downward trend since a peak in 2017.
+  
+  + CCTVs are not significantly correlated with crime reduction. Furthermore, it is observed that some crimes are sometimes committed right in front of the surveillance cameras leading us to believe that CCTVs are not effective crime deterrents. A similar conclusion is found for all types of crime..
+  
+  + The most important determinant of CCTV density in a given area is not race, nor education or socio-economic condition but violent crime per capita.
 
 ### Conclusion
 
-Overall, we see much more through our multiple regression that the main determining and significant variable influencing the CCTV placement decisions of the government officials are the felonies committed in a community. Thus, we can trust that unfair considerations such as the wealth level of the neighborhoods, the race or educational level. In that way, the trust against government shoud and can be reduced in Baltimore. 
+Our analysis does not demonstrate that CCTVs can effectively deter crime in general, or any specific type of crime in particular. We also find that the CCTV density of an area is not significantly correlated with the poverty level of the area, nor with any of the other educational, socio-economic or racial indicators we considered. We have determined that violent crime per capita appears to be a good indicator of the CCTV of a given area.
