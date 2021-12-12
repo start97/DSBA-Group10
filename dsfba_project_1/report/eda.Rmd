@@ -88,17 +88,17 @@ Next, we perform a `left_join` between the Baltimore spatial polygons data frame
 ```{r results='markup'}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
-CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = "We tend to have high CCTV density in the city center",title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
+CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density (in %)", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("We tend to have high CCTV density in the city center"),width=45),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
 
 tmap_mode("plot")
 CCTV_dens_map
 ```
 
-One of the very first interesting observation we are in position to make is that CCTV density seems to be higher in the city center.
+One of the very first interesting observation we are in position to derive is that CCTV density seems to be higher in the city center.
 
 ### 3.2 Calculation of the crime per capita per community
 
-We want to calculate crime per 1000 inhabitants per community. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime frequency for each area. Then, using the population data, we can divide the crime frequency by the number of inhabitants in each area. We finally multiply this by 1000 to obtain the crime per 1000 inhabitants as this value is apparently often used when calculating crime statistics. Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeFrequency column to see whether it equals to 349482. This is the case. We can therefore go further confidently. We also create a data frame called `Community_data` which will contain all the values we compute which concern the communities.
+We want to calculate crime per 1000 inhabitants per community. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime occurence for each area. Then, using the population data, we can divide the crime occurence per area by the number of inhabitants in each area. We finally multiply this by 1000 to obtain the crime per 1000 inhabitants as this value is apparently often used when calculating crime metrics Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeFrequency column to see whether it equals to 349482. This is the case. We can therefore go further confidently. We also create a data frame called `Community_data` which will contain all the values we compute which concern the communities.
 
 ```{r}
 CrimeStatsPerArea <- crime_data_with_areas %>% 
@@ -136,15 +136,16 @@ Crime_per_capita_map
 
 #### 3.2.2 Creation of a distorted map
 
-To observe crime per capita per community distribution in Baltimore visually, we decided to use a distorted map. Again, we use the `tmap` package together with the `cartogram_ncont` function which basically distort the map based on intensity of crime per capita in each community. Concretely, we want to show that the crime per capita is higher in the city center, compared to the suburban areas. This can be shown quite neatly graphically. 
+To observe crime per capita per community distribution in Baltimore visually, we decided to use a distorted map. Again, we use the `tmap` package together with the `cartogram_ncont` function which simply distorts the map based on intensity of crime per capita in each community. Concretely, we want to show that the crime per capita is higher in the city center, compared to the suburban areas. This can be shown quite neatly graphically. 
 
 ```{r}
 
-Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("Crime tends to be higher in the city center of Balimore"),width = 70),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("Crime tends to be higher in the city center of Balimore"),width = 45),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
 
 tmap_mode("plot")
 Distorted_Crime_map
 ```
+<br>
 
 #### 3.2.3 The prison anomaly
 
@@ -167,11 +168,11 @@ Prison_map
 print(Baltimore_map, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By running these two lines together, we obtain 
 ```
 
-By creating these maps we are in position to tell that both CCTV density and Crime per capita seem to be higher in the city center. We will investigate on that relationship in the chapter "Analysis".
+By creating these maps we are in position to tell that both CCTV density and Crime per capita seem to be higher in the city center. We will further investigate that relationship in the chapter "Analysis".
 
 ### 3.3 Calculation of crime per capita by type of crime
 
-There exists different ways to categorise crime by type. Crime can for example be catogorised by severity. The law typically consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies**. Yet crimes can also be categorised by their nature, one usually differentiates **property crime** from **violent crime**. We are going to differentiate the crimes contained in the `crime_data_with_areas` element both in terms of severity and in terms of their nature.
+There exists different ways to categorise crime by type. Crime can for example be catogorised by severity. The law typically consists of three basic classifications of criminal offenses including **infractions**, **misdemeanors**, and **felonies** in ascending order of severity. Yet crimes can also be categorised by their nature, one usually differentiates **property crime** from **violent crime**. We are going to differentiate the crimes contained in the `crime_data_with_areas` element both in terms of severity and in terms of their nature.
 
 #### 3.3.1 Felonies and Misdemeanors
 
@@ -189,7 +190,7 @@ unique(crime_data_with_areas$Description)
 #Felony: RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
 ```
 
-Next we create a data set called `crime_cat` which basically tells which recorded crime type belongs to which crime type. This data set will be used to make a left joint with the crime_data_per_area. Finally, we add to our initial `crime_data_with_areas` element an extra column indicating whether the crime committed is a felony or a misdemeanor.
+Next we create a data set called `crime_cat` which basically tells which recorded crime type belongs to which crime type. This data set will be used to make a left joint with  `crime_data_with_areas`. Indeed, we finally add to our initial `crime_data_with_areas` element an extra column indicating whether the crime committed is a felony or a misdemeanor.
 
 ```{r}
 crime_cat <- data.frame(Category=c("Misdemeanor","Felony"), Description=c(c("LARCENY FROM AUTO,COMMON ASSAULT,ROBBERY - COMMERCIAL,LARCENY"),c("RAPE,ARSON,HOMICIDE,BURGLARY,AUTO THEFT,ROBBERY - CARJACKING,AGG. ASSAULT,ROBBERY - STREET,ROBBERY - RESIDENCE,SHOOTING")))
@@ -202,7 +203,7 @@ crime_data_with_areas <- crime_data_with_areas %>%
   left_join(crime_cat,by="Description") #We had a new variable to our crime data set
 ```
 
-Finally, we compute the crime statistics per type, per area. Here, we again use the piping operator but this time, we group by both the community and the category. Again, we check that we indeed have 349482 observations. Afterward, we compute both felony and misdemeanor per capita in each community and (again) add the prison line into the newly created data sets.  
+We then compute the crime statistics per type, per area. Here, we again use the piping operator but this time, we group by both the community and the category. Again, we check that we indeed have 349482 observations. Afterward, we compute both felony and misdemeanor per capita in each community and (again) add the prison line into the newly created data sets.  
 
 ```{r echo=TRUE}
 CrimePerCategoryPerArea <- crime_data_with_areas %>% 
@@ -260,7 +261,7 @@ tmap_arrange(Felony_map,Misdemeanor_map)
 ```
 <br>
 
-There we tend to observe some slight differences compared to overall crime. Indeed, we see that more severe crime tend to be slightly more concentrated in the western part of the city while less severe crimes are slightly more concentrated in the eastern part of Baltimore.
+There, we tend to observe some slight differences compared to overall crime. Indeed, we see that more severe crime tend to be slightly more concentrated in the western part of the city while less severe crimes are slightly more concentrated in the eastern part of Baltimore.
 
 <br>
 
@@ -379,12 +380,13 @@ tmap_mode("plot")
 tmap_arrange(Violent_Crime_map,Property_Crime_map)
 
 ```
+<br>
 Interestingly, we also observe a difference in terms of distribution of crime by their nature compared to crime overall. Like felony and misdemeanor, violent crime tends to be more severe in the western part of the city while property crime is more severe in the estern part of Baltimore
 
 ### 3.4 Calculation of crime evolution
 
-The idea is that we want to get information about how crime evolves. We therefore have created a data set for each year. The results are interesting. If we compare how many observations we have in each crime-per year data set, we see that we have ~40.000ish cases a year except from 2020 (which is certainly due to COVID) and the year 2021 (which is not finished. We don't make any datasets for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
-The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in winter. The effect of colder temperatures and snow on crime in Baltimore is known by the Baltimore Police Department who yet admits that "snow's effect on crime can be hard to predict" as its effect might depend on the type of crime. Domestic violence for example often increase as temperature decreases.
+The idea is that, after having analysed crime spatially, we now want to get information about how crime evolves temporally. We therefore have created a data set for each year. The results are interesting. If we compare how many observations we have in each crime-per year fata frame, we see that we have ~40.000ish cases a year except from 2020 (which is certainly due to COVID) and the year 2021 (which is not finished). We don't make any data frame for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
+The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in winter. The effect of colder temperatures and snow on crime in Baltimore is known by the Baltimore Police Department who yet admits that "snow's effect on crime can be hard to predict" as its effect might depend on the type of crime. Domestic violence for example often increase as temperature decreases while aggravated assault decrease.
 
 Interesting article on the effect of snow on crime in Baltimore:<br>
 [https://www.baltimoresun.com/maryland/baltimore-city/bal-md.ci.snowcrime09feb09-story.html]
@@ -419,7 +421,7 @@ Crime_Monthly_evolution_map <- crime_data_with_areas %>%
 Crime_Monthly_evolution_map
 ```
 
-Next, we calculate the crime per capita for each year using the piping operator, grouping by community and summarize the frequencies. In the end we create the crime evolution data sets which is a combination of all the data. 
+Next, we calculate the crime per capita for each year using the piping operator, grouping by community and summarizing the occurrences. In the end we create the `crime_evolution` data sets which is a combination of all the data. 
 
 ```{r echo=TRUE}
 #_____ Calculations of the crime rates
@@ -504,7 +506,7 @@ Community_data <- Community_data %>%
 
 Another interesting way to visualise how crime evolved is by using an animated map. Indeed, this allows one to see the respective evolution of crime in each communtiy.  We can create animated maps using the `tmap_animation` function and the `tm_facets` argument while building the map. Yet, in order to be in position to use it, we have to create a very particular tibble. In the case at hand, we want our animated map to display crime per capita evolution over 7 years (from 2014 to 2020, we get ride of 2021 as the year is not complete). Therefore, we must have 7 x 56 observations, one crime per capita value for each year, for each 56 area. Yet, the tibble becomes a bit more peculiar as for each observation, we have to add  in a separate column, a polygon (which is an S4 element) corresponding to the area in question. It is not possible to use a function like the `rep` function to replicate S4 elements, therefore, we had to do that manually.
 
-Once the tibble is built, we want to merge the data contained in it in a SpatialPolygonsDataFrame. We want to use the `baltimore` SpatialPolygonsDataFrame.However, as the tibble contains 392 observations, this will enlarge our our SpatialPolygonsDataFrame. As the `baltimore` object is also used for other purposes, we create an alias. Then, we merge the newly created tibble with the newly created alias, simply using `left_join`. We create the `bbox` object as well as an object called `pb`. The first element allows us to delimit the geographical area of interest and the second allows us to create custom classes. Finally, we crate a map using the `tm_shape` function. We finally create a gif using `tmap_animation`.
+Once the tibble is built, we want to merge the data contained in it in a SpatialPolygonsDataFrame. We want to use the `baltimore` SpatialPolygonsDataFrame. However, as the tibble contains 392 observations, this will enlarge our our SpatialPolygonsDataFrame. As the `baltimore` object is also used for other purposes, we create an alias. Then, we merge the newly created tibble with the newly created alias, simply using `left_join`. We create the `bbox` object as well as an object called `pb`. The first element allows us to delimit the geographical area of interest and the second allows us to create custom classes. Finally, we create a map using the `tm_shape` function and the `tm_facets` argument. We finally create a gif using `tmap_animation`.
 
 ```{r echo=TRUE}
 
@@ -594,6 +596,7 @@ We can see that crime first increases in most areas before decreasing as from 20
 We see that crime peaks in 2017, before decreasing in most areas, except areas in the city center such as Downtown/Seton Hill.
 <br>
 <br>
+
 #### 3.4.1 Calculation of violent crime and property crime evolution
 
 We can make the exact same computations as before to calculate violent crime and property crime evolution.
@@ -697,7 +700,7 @@ Violent_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = str_wrap(("Overall, violent crime seems to have increased for the 2017 to 2020 period"),width=65),x="Year",y="Violent crime occurences")
+  labs(title = str_wrap(("Overall, violent crime has increased for the 2014 to 2019 period"),width=65),x="Year",y="Violent crime occurences")
 
 Violent_Crime_Yearly_evolution_map
 
@@ -802,7 +805,7 @@ Property_Crime_Yearly_evolution_map <- crime_data_with_areas %>%
   count(year=floor_date(CrimeDateTime,"year")) %>% 
   ggplot(aes(year,n))+geom_line()+
   scale_x_date(limits = c(as.Date("2014-01-01"), as.Date("2020-12-31"))) +
-  labs(title = str_wrap(("Overall, property crime seems to have decreased for the 2017 to 2020 period"),width=65),x="Year",y="Property crime occurences")
+  labs(title = str_wrap(("Overall, property crime has decreased for the 2014 to 2019 period"),width=65),x="Year",y="Property crime occurences")
 
 Property_Crime_Yearly_evolution_map
 
@@ -1020,11 +1023,12 @@ Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
 Misdemeanor_Yearly_evolution_map
 ```
 <br>
-Over the 2014-2019 one can observe a rather worrying tendency as more violent and severe crimes increased (in absolute terms)  while less severe and property crime decreased.
+Over the 2014-2019 period, one can observe a rather worrying tendency as violent and more severe crimes increased (in absolute terms) while less severe and property crime decreased.
 <br>
+
 ### 3.5 Comparison of crimes and wealth
 
-We want to investigate whether or not wealthier areas are more impacted by crime. To do so, we once more compute a simple linear regression. We see that the $R^2$ is quite poor indicating a rather poor correlation, Yet, it must be said that looking at the scatter plot, one can still notice a **tendency** for poorer areas to be more strongly impacted by crime. One noticeable outlier is Downtown/Seton Hill. This is the area right in the city center of Baltimore. This area is special as crime there is extremly high but this also is one of the less poor area of Baltimore. This can typically be explained by the fact that city centers are typically not the poorest areas of a city.
+We want to investigate whether or not wealthier areas are more impacted by crime. To do so, we compute a simple linear regression. We see that the $R^2$ is quite poor indicating a rather poor correlation, Yet, it must be said that looking at the scatter plot, one can still notice a **tendency** for poorer areas to be more strongly impacted by crime. One noticeable outlier is Downtown/Seton Hill. This is the area right in the city center of Baltimore. This area is special as crime there is extremly high but this also is one of the less poor area of Baltimore. This can typically be explained by the fact that city centers are typically not the poorest areas of a city.
 
 
 ```{r}

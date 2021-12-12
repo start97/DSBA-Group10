@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Research goal 
 
-The aim of this analysis is to first evaluate the effectiveness of surveillance cameras in reducing crime as well as certain types of crimes. Over a second phase, what determines the CCTV density of a given area is considered.
+The aim of this analysis is to first evaluate the effectiveness of surveillance cameras in reducing crime as well as certain types of crimes. Over a second phase, we investigate what determines the CCTV density of a given area.
 
 ### Methodology
 
