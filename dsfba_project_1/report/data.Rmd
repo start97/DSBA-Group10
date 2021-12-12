@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
-We have five main raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty level. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together. Finally, we also obtained a data set containing respective population of each community.
+We have five main raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty level. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together. Finally, we also obtained a data set containing the respective population of each community.
 
 ### Raw Data sets
 
@@ -126,7 +126,7 @@ _Source of the data set:_<br>  [https://arcg.is/01eimm0]
 
 #### 2.6.1 Data Wrangling: Area
 
-Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge.To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to a lowercase string.
+Here, the main goal is the transformation of the area data set into a new data set, which contains one observation per **neighborhood**. Indeed, it is important to distinguish neighborhoods which are smaller areas from communities, which are larger and often contain several neighborhoods. We achieve that by first creating a new data set with each neighborhood being assigned to a community using  `separate_rows` and second establishing a new columns with lower case letter for later merge. To do so, we combine the `mutate` function with  `tolower` which convert the uppercase letters of string to a lowercase string.
 
 ```{r echo=TRUE}
 
@@ -201,7 +201,7 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 
 #### 2.6.3 Data Wrangling: Poverty
 
-56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we only have 55 statistical areas provided, as we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for South Baltimore in the year 2019: we decided to take the average of the past years as it seemed realtively stable over past years.
+56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we only have 55 statistical areas provided, as we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for South Baltimore in the year 2019: we decided to take the average of the past years as it seemed relatively stable over the past years.
 
 ```{r}
 poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
@@ -212,7 +212,7 @@ poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5]
 
 #### 2.6.4 Data Wrangling: CCTV
 
-This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore, we still need to make sure to not have any missing values in these two columns. We do so by combining the `which`and the `is.na`function and by filtering for potential empty observations. By doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
+This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore, we only need to make sure to not have any missing values in these two columns. We do so by combining the `which`and the `is.na` function and by filtering for potential empty observations. By doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
 
 ```{r results='markup'}
 

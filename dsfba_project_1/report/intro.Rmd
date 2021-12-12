@@ -46,4 +46,4 @@ We have summarised our objectives in these four research questions:
 1)    Does the presence of CCTVs in a given area actually deter crime?
 2)    What types of crimes may be deterred by surveillance cameras?
 3)    Is the impact of CCTV installation on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
-4)    Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (Does the government respect privacy issues depending on your income level?) 
+4)    Are there more public cameras in lower income/higher unemployment areas compared to higher income/employment areas? (i.e Does the government respect privacy issues depending on your income level?) 
