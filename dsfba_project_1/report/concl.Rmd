@@ -46,3 +46,6 @@ We think that it would be interesting to carry out the same analyses as we did w
 Secondly, it would be of particular interest to do similar analyses with other cities and to analyse whether it is possible to create a model capable of 'predicting' CCTV density as a function of crime levels. Indeed, one could build a model on our Baltimore data set and treat it as test set, and then apply this model on another data set of a different city.
 <br><br>
 Finally, we believe that it would be very important to analyse the impact that alternative and less privacy-threatening measures to deter crime could have. For example, prevention campaigns aimed at nudging people in doing good through showing some poster with some motivational verses - i.e. "Do to others how you yourself want to be treated", the establishment of youth centers aimed at preventing juvenile crime and gang enrollment, or the establishment of "neighbourhood watch" crime prevention programmes.
+
+### 5.5 References 
+
