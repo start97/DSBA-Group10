@@ -384,7 +384,10 @@ Interestingly, we also observe a difference in terms of distribution of crime by
 ### 3.4 Calculation of crime evolution
 
 The idea is that we want to get information about how crime evolves. We therefore have created a data set for each year. The results are interesting. If we compare how many observations we have in each crime-per year data set, we see that we have ~40.000ish cases a year except from 2020 (which is certainly due to COVID) and the year 2021 (which is not finished. We don't make any datasets for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
-The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in winter.
+The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in winter. The effect of colder temperatures and snow on crime in Baltimore is known by the Baltimore Police Department who yet admits that "snow's effect on crime can be hard to predict" as its effect might depend on the type of crime. Domestic violence for example often increase as temperature decreases.
+
+Interesting article on the effect of snow on crime in Baltimore:<br>
+[https://www.baltimoresun.com/maryland/baltimore-city/bal-md.ci.snowcrime09feb09-story.html]
 
 ```{r echo=TRUE}
 
@@ -1016,7 +1019,9 @@ Misdemeanor_Yearly_evolution_map <- crime_data_with_areas %>%
 
 Misdemeanor_Yearly_evolution_map
 ```
-
+<br>
+Over the 2014-2019 one can observe a rather worrying tendency as more violent and severe crimes increased (in absolute terms)  while less severe and property crime decreased.
+<br>
 ### 3.5 Comparison of crimes and wealth
 
 We want to investigate whether or not wealthier areas are more impacted by crime. To do so, we once more compute a simple linear regression. We see that the $R^2$ is quite poor indicating a rather poor correlation, Yet, it must be said that looking at the scatter plot, one can still notice a **tendency** for poorer areas to be more strongly impacted by crime. One noticeable outlier is Downtown/Seton Hill. This is the area right in the city center of Baltimore. This area is special as crime there is extremly high but this also is one of the less poor area of Baltimore. This can typically be explained by the fact that city centers are typically not the poorest areas of a city.
