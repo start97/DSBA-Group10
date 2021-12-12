@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
-We have five raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty rates, and the population. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together.
+We have five main raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty level. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together. Finally, we also obtained a data set containing respective population of each community.
 
 ### Raw Data sets
 
@@ -24,8 +24,6 @@ This dataset represents the location and characteristics of major crime against 
   
    + **Description** = Textual description of the crime committed corresponding to a CrimeCode.
   
-   + **Inside/Outside** = Provides information on whether crime was committed inside or outside
-  
    + **Weapon** = Provides details on what weapon has been used, if any
 
    + **Post** = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here:
@@ -42,7 +40,7 @@ This dataset represents the location and characteristics of major crime against 
     
    + **GeoLocation** = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84
   
-   + **Premise** = Information on the premise where the crime was committed. One counts more than 120'000 observations in the streets.
+   + **Premise** = Information on the premise where the crime was committed.
    
 ```{r}
 crime_data <- read.csv(file = here::here("data/Baltimore_Part1_Crime_data.csv"))
@@ -82,7 +80,7 @@ This dataset provides information about the percent of family households living 
 
 Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
-  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.
 
@@ -96,9 +94,9 @@ _Source of the data set:_<br> [https://arcg.is/1qOrnH]
 
 ### 2.4 Area Data set
 
-This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 55 observations, one for each of area. The most relevant variables are the following:
+This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 56 observations, one for each of area. The most relevant variables are the following:
 
-  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **neigh** = name of the neighbourhoods contained in the area. 
 
@@ -112,9 +110,9 @@ _Source of the data set:_ <br> [https://data.baltimorecity.gov/datasets/communit
 
 ### 2.5 Population Data set
 
-This data set provides information about the population in each Community Statistical Area. Information about the total population in 2010 and 2020 are provided. It will be useful to calculate values per capita in each community.The most relevant variables are the following:
+This data set provides information about the population in each Community Statistical Area. Information about the total population in 2010 and 2020 are provided. It will be useful to calculate values per capita in each community. The most relevant variables are the following:
 
-  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 55 CSAs. These 55 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
+  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **tpop20** = total population in for each Community Statistical Area in 2020
   
@@ -140,7 +138,7 @@ area_data2 <- mutate(area_data2,neigh=tolower(Neigh)) #Creation of new column wi
 
 #### 2.6.2 Data Wrangling: Crime
 
-As in the crime data set the neighborhood names are written in lower case letters we again create a column with lower case letters to join the two data sets. We join the area data set and the crime data set using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
+As neighborhood names in the crime data set contain higher case letter, we again use the `tolower` function to be able to match this data set with the area data set. We then do so by using `left_join`. Next, we use the `anti_join` function to understand which observation has not matched. The outcome shows all the neighborhoods which did not match. As shown below, the issues mostly come from spelling difference (e.g.: Mount written Mt.). As we have very few observations which do not match, we change the names manually.
 
   + mount washington $→$ Mt. Washington 
   + carroll - camden industrial area $→$ Caroll-Camden Industrial Area 
@@ -183,9 +181,9 @@ crime_data["neigh"][crime_data["neigh"]=="mt pleasant park"] <- "mt. pleasant pa
 
 ```
   
-We get rid of the 764 remaining observations which had no information about neighborhood. This represent a very tiny portion of our total number of observations. Finally, we use the `semi join` function to create the final data sets which in total is basically the same data set as the original one minus the 764 observations. 
+We get rid of the 764 remaining observations which had no information about neighborhood. This represent a very tiny portion of our total number of observations. Then, we use the `semi join` function to create the final data sets which in total is basically the same data set as the original one minus the 764 observations that we got rid of. 
 
-Finally, we want to get rid of the observations dating before 2000, as the the Baltimore CCTV program started in the year 2000. We first check the structure of the data set using the `str` function. We notice that the CrimeDateTime column is not a date. We change that and finally filter the information we want to keep using `filter`.
+We also want to get rid of observations dating back before the year 2000 as the the Baltimore CCTV program started in the year 2000. We first check the structure of the data set using the `str` function. We notice that the CrimeDateTime column is not a date. We change that and finally filter the information we want to keep using `filter`.
 
 ```{r}
 
@@ -203,18 +201,18 @@ crime_data_with_areas <- crime_data_with_areas %>%  filter(CrimeDateTime >= as.D
 
 #### 2.6.3 Data Wrangling: Poverty
 
-56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we obviously have only 55 statistical areas provided, since we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for Baltimore in the year 2019: Here we took the average of the past years. 
+56 areas are included in the standard community statistical area system. However, within these 56 statistical areas is also jail included. For the poverty data however, we only have 55 statistical areas provided, as we obviously do not have data about poverty in jail. To solve this inconsistency, we add a new line. Moreover we needed to fill a missing value for South Baltimore in the year 2019: we decided to take the average of the past years as it seemed realtively stable over past years.
 
 ```{r}
 poverty_data <- rbind(poverty_data,list(56,"Unassigned -- Jail",0,0,0,0,0,0,0))
 
-poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5],poverty_data[48,6]) %>% mean() #The poverty rate of South Baltimore in 19 was missing. This area's rate over the past years seems to be stable (always one of the richest area), that's why we compute the mean of the past 4 years to replace the missing value.
+poverty_data[48,7] <- c(poverty_data[48,3],poverty_data[48,4],poverty_data[48,5],poverty_data[48,6]) %>% mean() #The poverty level of South Baltimore in 19 was missing. This area's level over the past years seems to be stable (always one of the richest area), that's why we compute the mean of the past 4 years to replace the missing value.
 
 ```
 
 #### 2.6.4 Data Wrangling: CCTV
 
-This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore,we still need to make sure to not have any missing values in these two columns. We do so by combination the `which`and the `is.na`function and by filtering for potential empty observations.
+This data set seems rather tidy, we will mostly use the first two columns which contain information about the location of each CCTV. Therefore, we still need to make sure to not have any missing values in these two columns. We do so by combining the `which`and the `is.na`function and by filtering for potential empty observations. By doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
 
 ```{r results='markup'}
 
@@ -223,5 +221,4 @@ which(is.na(cctv_data$Y))
 filter(cctv_data, cctv_data$X=="")
 filter(cctv_data, cctv_data$Y=="") 
 
-#We are not sure it is the proper technique but by doing so we ensure that we have no NAs neither empty values and so that our data set is tidy.
 ```
