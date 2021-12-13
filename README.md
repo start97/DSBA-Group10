@@ -3,7 +3,9 @@ Data Science for Business Analytics
 
 ## Welcome to our project ! Here is our knit guideline. 
 
-If you encounter any issue while knitting our project, it might potentially be because you are missing one of the package we used. Our file is made so that it loads all the required packages, yet, if any of these packages is not installed on your computer, you will encounter an issue.
+Before knitting our file, please run our setup file R file located in the report folder. This will, among other things load the packages required to knit our file.
+
+Yet, if you still encounter any issue while knitting our project, it might potentially be because you are missing one of the package we used. Our setup file is made so that it loads all the required packages, yet, if any of these packages is not installed on your computer, you will encounter an issue.
 
 Here is the list of all the packages required to properly knit our file.
 
