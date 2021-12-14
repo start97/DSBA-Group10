@@ -45,7 +45,7 @@ We can now plot these two spatial files together to see the spread of CCTVs over
 
 ```{r echo=TRUE}
 #plot
-plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
+plot(baltimore,main="The placement seems to follow interesting patterns")
 plot(balt_dat,pch=20, col="steelblue" , add=TRUE) #If we plot these two lines together, what we obtain is a map of baltimore, we have the 56 community statistical areas and the CCTVs on top of the map.
 ```
 
@@ -88,7 +88,7 @@ Next, we perform a `left_join` between the Baltimore spatial polygons data frame
 ```{r results='markup'}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
-CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density (in %)", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("We tend to have high CCTV density in the city center"),width=30),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
+CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density (in %)", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("We tend to have high CCTV density in the city center"),width=35),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
 
 tmap_mode("plot")
 CCTV_dens_map
@@ -140,7 +140,7 @@ To observe crime per capita per community distribution in Baltimore visually, we
 
 ```{r}
 
-Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("Crime tends to be higher in the city center of Balimore"),width = 30),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("Crime tends to be higher in the city center of Balimore"),width = 35),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
 
 tmap_mode("plot")
 Distorted_Crime_map

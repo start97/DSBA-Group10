@@ -259,7 +259,7 @@ Downtown_area <-  st_bbox(c(xmin = -8531335.08, xmax = -8526873.06,
                       ymin =4765236.47, ymax = 4762527.65),
                     crs = st_crs(baltimore)) %>% st_as_sfc()
  
-Downtown_map <- tm_shape(Downtown_area) + tm_borders(col="white")+ tm_shape(baltimore) + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,main.title = "Crimes are committed right in front of the cameras",main.title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_symbols(shape = 2, col = "black", size = 0.07)+tm_shape(crime_spatial)+tm_dots(col="red")
+Downtown_map <- tm_shape(Downtown_area) + tm_borders(col="white")+ tm_shape(baltimore) + tm_borders(col="black") + tm_layout(inner.margins = 0.05,frame.lwd = 5,main.title = "Some crimes are right in front of the CCTVs",main.title.position = c('left', 'top'))+tm_scale_bar(position = c("left", "top"))+ tm_shape(balt_dat) + tm_symbols(shape = 2, col = "black", size = 0.07)+tm_shape(crime_spatial)+tm_dots(col="red")
 
 Baltimore_map_2 <- tm_shape(baltimore) + tm_borders()+ tm_shape(Downtown_area) + tm_borders(lwd = 1.5,col = "red") + tm_layout(frame.lwd = 6,inner.margins = 0.05)
 
