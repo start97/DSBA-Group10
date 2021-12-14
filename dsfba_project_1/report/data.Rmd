@@ -98,15 +98,9 @@ _Source of the data set:_<br> [https://arcg.is/1qOrnH]
 
 This data set provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each data set's observations together. This data set contains 56 observations, one for each of area. The most relevant variables are the following:
 
-  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
-
-  + **neigh** = name of the neighbourhoods contained in the area. 
-
-  + **tracts** = census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available            online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).
-
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**community**","**neih**","**tracts**"),c("name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.","name of the neighbourhoods contained in the area.","census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available            online (http://planning.baltimorecity.gov/sites/default/files/Neighborhood%20Statistical%20Areas%20with%20Census%20Tracts.pdf?__cf_chl_captcha_tk__=pmd_5qD.WnCEfWnEa5h1muEPfTVDhN2uheRFagwmglbtKxg-1634299783-0-gqNtZGzNAzujcnBszQO9).")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**community**","**neigh**","**tracts**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ name of the neighbourhoods contained in the area."," $→$ census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (shorturl.at/drvGL).")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 ```
 
 
