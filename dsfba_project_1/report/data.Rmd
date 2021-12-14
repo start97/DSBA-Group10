@@ -69,6 +69,11 @@ This data set represents closed circuit camera locations capturing activity with
   + **XCCORD** = Longitude, Coordinate system: EPSG:4326 WGS 84
 
   + **YCOORD** = Latitude, Coordinate system: EPSG:4326 WGS 84
+  
+```{r results='markup'}
+
+knitr::kable(cbind(c("**X**","**Y**","**OBJECTID**","**CAM_NUM**","*LOCATION**","**PROJ**","**XCCORD**","**YCOORD**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019."," $→$ standard fields to determine the area and the perimeter of a polygon")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+```  
 
 ```{r}
 cctv_data <- read.csv(file = here::here("data/Baltimore_CCTV_Locations_Crime_Cameras.csv"))
@@ -88,6 +93,11 @@ Federal and state governments use such estimates to allocate funds to local comm
 
   + **Shape_Area - Shape_Length** = standard fields to determine the area and the perimeter of a polygon
 
+```{r results='markup'}
+
+knitr::kable(cbind(c("**CSA2010**","**hhpov15 - hhpov19**","**Shape_Area - Shape_Length**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019."," $→$ standard fields to determine the area and the perimeter of a polygon")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+```
+
 ```{r}
 poverty_data <- read.csv(file = here::here("data/Percent_of_Family_Households_Living_Below_the_Poverty_Line.csv"))
 ```
@@ -100,7 +110,7 @@ This data set provides information about the Community Statistical Area geograph
 
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**community**","**neigh**","**tracts**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ name of the neighbourhoods contained in the area."," $→$ census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (shorturl.at/drvGL).")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**community**","**neigh**","**tracts**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ name of the neighbourhoods contained in the area."," $→$ census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (https://shorturl.at/drvGL).")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 ```
 
 
@@ -117,6 +127,11 @@ This data set provides information about the population in each Community Statis
   + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
   + **tpop20** = total population in for each Community Statistical Area in 2020
+  
+```{r results='markup'}
+
+knitr::kable(cbind(c("**community**","**tpop20**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ total population in for each Community Statistical Area in 2020")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+```
   
 ```{r echo=TRUE}
 population_data <- read.csv(file = here::here("data/Total_Population.csv"))
