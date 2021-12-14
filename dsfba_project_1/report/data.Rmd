@@ -6,13 +6,15 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
+We considered investigating three US cities such as Buffalo, Washington and Baltimore. This preliminary selection was based on the fact that these were the only three cities for which we found interesting CCTV data. After a more thorough analysis of the data sets we could retrieve for each of these respective cities, we ended up choosing Baltimore as their CCTV data set seemed to be the most complete and interesting and because their open data portal offered a lot of seemingly interesting other information.
+<br>
 We have five main raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty level. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together. Finally, we also obtained a data set containing the respective population of each community.
 
 ### Raw Data sets
 
 ### 2.1 Crime Data set
 
-This dataset represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the city of Baltimore. This data set contains 350'294 observations.
+This data set represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the city of Baltimore. This data set contains 350'294 observations.
 
    + **RowID** = ID of the row, 350'294 in total
    
@@ -32,7 +34,7 @@ This dataset represents the location and characteristics of major crime against 
    + **District** = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: 
      North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.
 
-   + **Neighborhood** = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the dataset about       Community Statistical Areas.
+   + **Neighborhood** = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the data set about       Community Statistical Areas.
 
    + **Latitude** = Latitude, Coordinate system: EPSG:4326 WGS 84
   
@@ -50,7 +52,7 @@ _Source of the data set:_ <br> [https://data.baltimorecity.gov/datasets/part1-cr
 
 ### 2.2 CCTV Data set
 
-This dataset represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
+This data set represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
 
   + **X = Longitude:** Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
 
@@ -76,9 +78,9 @@ _Source of the data set:_ <br>  [https://data.baltimorecity.gov/datasets/cctv-lo
 
 ### 2.3 Poverty Data set
 
-This dataset provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. 
+This data set provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. 
 
-Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This dataset contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
+Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This data set contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
 
   + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
@@ -94,7 +96,7 @@ _Source of the data set:_<br> [https://arcg.is/1qOrnH]
 
 ### 2.4 Area Data set
 
-This dataset provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each dataset's observations together. This dataset contains 56 observations, one for each of area. The most relevant variables are the following:
+This data set provides information about the Community Statistical Area geographies for Baltimore City. Based on aggregations of Census tract (2010) geographies. It will serve as a geographical point of reference for us to match each data set's observations together. This data set contains 56 observations, one for each of area. The most relevant variables are the following:
 
   + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
 
@@ -183,7 +185,7 @@ crime_data["neigh"][crime_data["neigh"]=="mt pleasant park"] <- "mt. pleasant pa
   
 We get rid of the 764 remaining observations which had no information about neighborhood. This represent a very tiny portion of our total number of observations. Then, we use the `semi join` function to create the final data sets which in total is basically the same data set as the original one minus the 764 observations that we got rid of. 
 
-We also want to get rid of observations dating back before the year 2000 as the the Baltimore CCTV program started in the year 2000. We first check the structure of the data set using the `str` function. We notice that the CrimeDateTime column is not a date. We change that and finally filter the information we want to keep using `filter`.
+We also want to get rid of observations dating back before the year 2000 as the the Baltimore CCTV program started in the year 2000 (Youth.gov, n.d). We first check the structure of the data set using the `str` function. We notice that the CrimeDateTime column is not a date. We change that and finally filter the information we want to keep using `filter`.
 
 ```{r}
 

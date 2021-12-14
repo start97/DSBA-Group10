@@ -8,7 +8,7 @@ source(here::here("scripts/setup.R"))
 
 The  CCTV data set which we retrieved had a slight challenge: although it contained some neighborhood names, most of them were not matching the "standard neighborhood" names. There, to solve that issue we decided to  involve geospatial counting. 
 
-Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates of the newly created spatial file. Here we have several types of coordinates, we use X and Y which use the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Spatial files must have coordinate systems assigned to them. In the case at hand, we will work with the above mentioned EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system for all the spatial files that we are going to use. Therefore, to ensure consistency, we create a crs object called `crs.geo1` that is going to be assigned to all the spatial files we will use. In order to assign a known crs to spatial data, we use the `proj4string` function, to which we assign `crs.geo1`.
+Our procedure included the following steps. After reading the table and converting the data into a data table, we define what will be the coordinates of the newly created spatial file. Here we have several types of coordinates, we use X and Y which use the EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system. Spatial files must have coordinate systems assigned to them. In the case at hand, we will work with the above mentioned EPSG:3857 WGS 84 / Pseudo-Mercator coordinate system for all the spatial files that we are going to use. Therefore, to ensure consistency, we create a crs object called `crs.geo1` that is going to be assigned to all the spatial files we will use. In order to assign a crs to spatial data, we use the `proj4string` function, to which we assign `crs.geo1`.
 
 ```{r echo=TRUE}
 #read in data table
@@ -30,7 +30,7 @@ Then, we can use `plot`to quickly visualise the cloud of points which represent 
 plot(balt_dat, pch = 20, col = "steelblue") #We can use the plot function to quickly plot the SpatialPointDataFrame that we created. We see a bunch of points which represent the CCTV location in Baltimore.
 ```
 
-Next, we have to work with a shapefile object which is another special type of file. It basically is a set of polygons which represents different areas of the city of Baltimore. We downloaded this file on the city's open data portal. We read it in and assign to this file our crs.geo1 coordinate system. In this way we ensure that our files have the same coordinate system.
+Next, we have to work with a shapefile object which is another special type of file. It basically is a set of polygons which represents different areas of the city of Baltimore. We downloaded this file on the city's open data portal. We read it in and assign to this file our crs.geo1 coordinate system. In this way we ensure that both of our files have the same coordinate system.
 
 ```{r echo=TRUE}
 #read in shapefile of baltimore
@@ -49,7 +49,7 @@ plot(baltimore,main="Spread of CCTVs in different communities of Baltimore")
 plot(balt_dat,pch=20, col="steelblue" , add=TRUE) #If we plot these two lines together, what we obtain is a map of baltimore, we have the 56 community statistical areas and the CCTVs on top of the map.
 ```
 
-To illustrate these results numerically, we need R to count for us how many CCTV belongs to which area. Here, the function `over` counts how many CCTVs are layed over a certain polygon frame. Next, we create a new object called `counts` and  make it into a data frame (so that it is easier for us to work with it). We use  `sum` to ensure that we well and truly have 836 observations which were counted. This is the case so we are happy. Still we notice that we only have 41 rows, meaning that only 41 out of 56 areas contain some CCTVs. 
+To illustrate these results numerically, we need R to count for us how many CCTV belongs to which area. Here, the function `over` counts how many CCTVs are layed over a certain polygon frame. We create a new object called `counts` and  make it into a data frame (so that it is easier for us to work with it). We use  `sum` to ensure that we well and truly have 836 observations which were counted. This is the case so we are happy. Still we notice that we only have 41 rows, meaning that only 41 out of 56 areas contain some CCTVs. 
 
 ```{r echo=TRUE}
 #Perform the count
@@ -76,19 +76,19 @@ CCTV_per_area <- mutate(CCTV_per_area, density_perc=(CCTV_per_area$Freq/(sum(CCT
 
 #### 3.1.1 Mapping of CCTV density
 
-We now want to map CCTV density on the Baltimore map. We first have to use the piping operator to ensure that the community names that we have in the Baltimore data set are the same as the one we are having in the CCTV per area data set. As this only returns true values that means that it works and is good for further analysis. 
+We now want to map CCTV density on the Baltimore map. We first have to use the %in% operator to ensure that the community names that we have in the Baltimore data set are the same as the one we are having in the CCTV per area data set. As this only returns true values that means that it works and is good for further analysis. 
 
 ```{r}
 library(tmap)
 baltimore$community %in% CCTV_per_area$Community
 ```
 
-Next, we perform a `left_join` between the Baltimore spatial polygons data frame and the CCTV per area data set. To hedge against the different writing styles (once "community" it is written with a capital letter and one time with a small letter), we use a vector in the end. Finally, we create the map with the `tmap` package. The `tmap` package somehow works as the `ggplot2` package: First, we need to define a shape, it always starts with the `tm_shape` argument, and then you can add with the plus operator as many arguments as you wish. We used the Baltimore shape file, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
+Next, we perform a `left_join` between the Baltimore spatial polygons data frame and the CCTV per area data set. To hedge against the different writing styles (once "community" is written with a capital letter and once with a small letter), we use a vector in the end. Finally, we create the map with the `tmap` package. The `tmap` package somehow works as the `ggplot2` package: First, we need to define a shape, it always starts with the `tm_shape` argument, and then you can add with the plus operator as many arguments as you wish. We used the Baltimore shape file, filled it with the density percentage, defined some breaks, set the borders and the finally the layout. 
 
 ```{r results='markup'}
 baltimore@data <- left_join(baltimore@data, CCTV_per_area, by = c('community' = 'Community'))
 
-CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density (in %)", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("We tend to have high CCTV density in the city center"),width=45),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
+CCTV_dens_map <- tm_shape(baltimore) + tm_fill(col = "density_perc", title ="CCTV density (in %)", breaks=c(0,1,2,3,4,5,6,7,8,9,10,11)) + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("We tend to have high CCTV density in the city center"),width=30),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right")
 
 tmap_mode("plot")
 CCTV_dens_map
@@ -98,7 +98,7 @@ One of the very first interesting observation we are in position to derive is th
 
 ### 3.2 Calculation of the crime per capita per community
 
-We want to calculate crime per 1000 inhabitants per community. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime occurence for each area. Then, using the population data, we can divide the crime occurence per area by the number of inhabitants in each area. We finally multiply this by 1000 to obtain the crime per 1000 inhabitants as this value is apparently often used when calculating crime metrics Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeFrequency column to see whether it equals to 349482. This is the case. We can therefore go further confidently. We also create a data frame called `Community_data` which will contain all the values we compute which concern the communities.
+We want to calculate crime per 1000 inhabitants per community. To achieve that we group the `crime_data_with_areas` data set by community and then use `summarize` which enables us to compute the crime occurence for each area. Then, using the population data, we can divide the crime occurence per area by the number of inhabitants in each area. We finally multiply this by 1000 to obtain the crime per 1000 inhabitants as this value is apparently often used when calculating crime metrics. Again, we added one more row in the calculations because we have no values for the prison. To make sure we made no mistake, we add up the CrimeFrequency column to see whether it equals to 349482. This is the case. We can therefore go further confidently. We also create a data frame called `Community_data` which will contain all the values we compute which concern the communities.
 
 ```{r}
 CrimeStatsPerArea <- crime_data_with_areas %>% 
@@ -140,7 +140,7 @@ To observe crime per capita per community distribution in Baltimore visually, we
 
 ```{r}
 
-Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("Crime tends to be higher in the city center of Balimore"),width = 45),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
+Distorted_Crime_map <- tm_shape(cartogram_ncont(baltimore, "CrimePer1000inhabitants"))+tm_fill(col = "CrimePer1000inhabitants", title ="Crime (per 1000 inhabitants)",style = "quantile") + tm_borders(col="black",alpha=0.3) + tm_layout(inner.margins = 0.1,main.title = str_wrap(("Crime tends to be higher in the city center of Balimore"),width = 30),title.size =1 ,title.position= c("center","top"), legend.outside=T,legend.outside.position="right") #This map distorts the size of each area depending on their respective crime per capita It is interesting as it enables one to see that higher crime per capita tends to be concentrated in the city center.
 
 tmap_mode("plot")
 Distorted_Crime_map
@@ -176,7 +176,7 @@ There exists different ways to categorise crime by type. Crime can for example b
 
 #### 3.3.1 Felonies and Misdemeanors
 
-First thing we do here is to compute the unique values of the "description" column of the crime data set. We see that we have 14 types of crime. In our data set, we have no infractions. The 14 types of crime are divided in this way into the two remaining categories.
+First thing we do here is to compute the unique values of the "description" column of the crime data set. We see that we have 14 types of crime. In our data set, we have no infractions. The 14 types of crime are divided in this way into the two remaining categories (Attorney.com, n.d).
 
   + **Misdemeanor:** LARCENY FROM AUTO,COMMON ASSAULT, ROBBERY - COMMERCIAL, LARCENY
   + **Felony:** RAPE, ARSON, HOMICIDE, BURGLARY, AUTO THEFT, ROBBERY - CARJACKING, AGG. ASSAULT, ROBBERY - STREET, ROBBERY - RESIDENCE, SHOOTING
@@ -303,7 +303,7 @@ ggplot(data=Felony_VS_Misdemeanor,mapping= aes(x=FelonyPerCapitaPerArea,y=Misdem
 
 #### 3.3.4 Violent crime and Property crime
 
-As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by their nature. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim. Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder.
+As mentioned earlier, it is also possible to divide the crimes committed in Baltimore by their nature. A distinction is generally made between property crime and violent crime. In a property crime, a victim's property is stolen or destroyed, without the use or threat of force against the victim (NIJ, n.d). Property crimes include burglary and theft as well as vandalism and arson. In a violent crime, a victim is harmed by or threatened with violence. Violent crimes include rape and sexual assault, robbery, assault and murder(NIJ (2), n.d).
 
 In order determine whether the crimes contained in our `crime_data_with_area` is a violent or a property crime, we will use a data set once again provided by the Baltimore open data portal. This data set provides information about the crime codes used by the police to categorize crimes. We first import the data set. Then, we compare whether codes are well and truly similar, three crime codes are written with an extra blank space afterward. We correct that. Then, using the `left_join` function, we add a new column to our `crime_data_with_area` data frame. We then wish to create data frames for both violent and property crime. The methodology is the same as we used for felonies and misdemeanors.
 
@@ -385,8 +385,8 @@ Interestingly, we also observe a difference in terms of distribution of crime by
 
 ### 3.4 Calculation of crime evolution
 
-The idea is that, after having analysed crime spatially, we now want to get information about how crime evolves temporally. We therefore have created a data set for each year. The results are interesting. If we compare how many observations we have in each crime-per year fata frame, we see that we have ~40.000ish cases a year except from 2020 (which is certainly due to COVID) and the year 2021 (which is not finished). We don't make any data frame for the year 2013 and below, because we see that we have not many observations which date prior to the year 2013.
-The graph represent the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in winter. The effect of colder temperatures and snow on crime in Baltimore is known by the Baltimore Police Department who yet admits that "snow's effect on crime can be hard to predict" as its effect might depend on the type of crime. Domestic violence for example often increase as temperature decreases while aggravated assault decrease.
+The idea is that, after having analysed crime spatially, we now want to get information about how crime evolves temporally. We therefore have created a separate crime data set for each year. The results are interesting. If we compare how many observations we have in each crime-per-year data frame, we see that we have ~40.000ish cases a year except for 2020 (which is certainly due to COVID) and the year 2021 (which is not finished). We don't make any data frame for the years 2013 and below, because we see that we have not many observations which date prior to the year 2013.
+The graph represents the monthly evolution of crime for each year. We see that there seems to be a sort of pattern and that, each year, crime increases mid-year before decreasing in winter. The effect of colder temperatures and snow on crime in Baltimore is known by the Baltimore Police Department who yet admits that "snow's effect on crime can be hard to predict" as its effect might depend on the type of crime. Domestic violence for example often increase as temperature decreases while aggravated assault decrease .
 
 Interesting article on the effect of snow on crime in Baltimore:<br>
 [https://www.baltimoresun.com/maryland/baltimore-city/bal-md.ci.snowcrime09feb09-story.html]
