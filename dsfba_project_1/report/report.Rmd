@@ -10,6 +10,10 @@ output:
     toc_float: true
     code_folding: hide
 ---
+<style>
+body {
+text-align: justify}
+</style>
 
 ```{r child = c('exec_sum.Rmd', 'intro.Rmd', 'data.Rmd', 'eda.Rmd', 'analysis.Rmd', 'concl.Rmd')}
 ```
