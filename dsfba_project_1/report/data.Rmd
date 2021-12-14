@@ -45,7 +45,7 @@ This data set represents the location and characteristics of major crime against
 
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**RowID**","**CrimeDateTime**","**CrimeCode**","**Location**","**Description**","**Weapon**","**Post**","**District**","**Neighborhood**","**Latitude**","**Longitude**","**GeoLocation**","**Premise**"),c(" $→$ ID of the row, 350'294 in total"," $→$  date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd"," $→$ Code corresponding to the type of crime committed"," $→$ Textual information on where the crime was committed "," $→$ Textual description of the crime committed corresponding to a CrimeCode."," $→$ Provides details on what weapon has been used, if any"," $→$ Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: https://shorturl.at/buDIN"," $→$ Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central."," $→$ Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the data set about Community Statistical Areas."," $→$ Latitude, Coordinate system: EPSG:4326 WGS 84"," $→$ Longitude, Coordinate system: EPSG:4326 WGS 84"," $→$ Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84"," $→$ Information on the premise where the crime was committed.")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**RowID**","**CrimeDateTime**","**CrimeCode**","**Location**","**Description**","**Weapon**","**Post**","**District**","**Neighborhood**","**Latitude**","**Longitude**","**GeoLocation**","**Premise**"),c("ID of the row, 350'294 in total"," date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd","Code corresponding to the type of crime committed","Textual information on where the crime was committed ","Textual description of the crime committed corresponding to a CrimeCode.","Provides details on what weapon has been used, if any","Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: https://shorturl.at/buDIN","Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.","Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the data set about Community Statistical Areas.","Latitude, Coordinate system: EPSG:4326 WGS 84","Longitude, Coordinate system: EPSG:4326 WGS 84","Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84","Information on the premise where the crime was committed.")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 
 ```  
    
@@ -77,7 +77,7 @@ This data set represents closed circuit camera locations capturing activity with
   
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**X**","**Y**","**OBJECTID**","**CAM_NUM**","**LOCATION**","**PROJ**","**XCCORD**","**YCOORD**"),c(" $→$ Longitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator"," $→$ Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator"," $→$ ID of of the camera, 837 in total"," $→$ Unique number attributed to the camera. This might suggest that the data set does not show the location of every camera in Baltimore."," $→$ Textual information on where the camera is located"," $→$ Name of the area in which the camera is located. It does not always match the name of the standard community statistical areas."," $→$ Longitude, Coordinate system: EPSG:4326 WGS 84"," $→$ Latitude, Coordinate system: EPSG:4326 WGS 84")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**X**","**Y**","**OBJECTID**","**CAM_NUM**","**LOCATION**","**PROJ**","**XCCORD**","**YCOORD**"),c("Longitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator","Latitude, Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator","ID of of the camera, 837 in total","Unique number attributed to the camera. This might suggest that the data set does not show the location of every camera in Baltimore.","Textual information on where the camera is located","Name of the area in which the camera is located. It does not always match the name of the standard community statistical areas.","Longitude, Coordinate system: EPSG:4326 WGS 84","Latitude, Coordinate system: EPSG:4326 WGS 84")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 
 ```  
 
@@ -101,7 +101,7 @@ Federal and state governments use such estimates to allocate funds to local comm
 
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**CSA2010**","**hhpov15 - hhpov19**","**Shape_Area - Shape_Length**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019."," $→$ standard fields to determine the area and the perimeter of a polygon")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**CSA2010**","**hhpov15 - hhpov19**","**Shape_Area - Shape_Length**"),c("name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.","each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.","standard fields to determine the area and the perimeter of a polygon")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 ```
 
 ```{r}
@@ -116,7 +116,7 @@ This data set provides information about the Community Statistical Area geograph
 
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**community**","**neigh**","**tracts**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ name of the neighbourhoods contained in the area."," $→$ census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (https://shorturl.at/drvGL).")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**community**","**neigh**","**tracts**"),c("name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.","name of the neighbourhoods contained in the area.","census tract associated with each neighbourhood. An interactive map of neighborhood statistical areas with census tracts is available online (https://shorturl.at/drvGL).")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 ```
 
 
@@ -136,7 +136,7 @@ This data set provides information about the population in each Community Statis
   
 ```{r results='markup'}
 
-knitr::kable(cbind(c("**community**","**tpop20**"),c(" $→$ name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning."," $→$ total population in for each Community Statistical Area in 2020")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
+knitr::kable(cbind(c("**community**","**tpop20**"),c("name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.","total population in for each Community Statistical Area in 2020")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
 ```
   
 ```{r echo=TRUE}
