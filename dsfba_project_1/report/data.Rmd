@@ -16,33 +16,6 @@ We have five main raw data sets. All data sets were retrieved on Baltimore gover
 
 This data set represents the location and characteristics of major crime against persons such as homicide, shooting, robbery, aggrevated assault etc. within the city of Baltimore. This data set contains 350'294 observations.
 
-   + **RowID** = ID of the row, 350'294 in total
-   
-   + **CrimeDateTime** = date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd
-  
-   + **CrimeCode** = Code corresponding to the type of crime committed
-  
-   + **Location** = Textual information on where the crime was committed 
-  
-   + **Description** = Textual description of the crime committed corresponding to a CrimeCode.
-  
-   + **Weapon** = Provides details on what weapon has been used, if any
-
-   + **Post** = Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here:
-   http://moit.baltimorecity.gov/sites/default/files/police_districts_w_posts.pdf?__cf_chl_captcha_tk__=pmd_NhnE710SS8QEWdKOyT5Ug6IJZGoF6iIntFYY30vctes-1634309136-0-gqNtZGzNAxCjcnBszQPl
-
-   + **District** = Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.
-
-   + **Neighborhood** = Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the data set about Community Statistical Areas.
-
-   + **Latitude** = Latitude, Coordinate system: EPSG:4326 WGS 84
-  
-   + **Longitude** = Longitude, Coordinate system: EPSG:4326 WGS 84
-    
-   + **GeoLocation** = Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84
-  
-   + **Premise** = Information on the premise where the crime was committed.
-
 ```{r results='markup'}
 
 knitr::kable(cbind(c("**RowID**","**CrimeDateTime**","**CrimeCode**","**Location**","**Description**","**Weapon**","**Post**","**District**","**Neighborhood**","**Latitude**","**Longitude**","**GeoLocation**","**Premise**"),c("ID of the row, 350'294 in total"," date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd","Code corresponding to the type of crime committed","Textual information on where the crime was committed ","Textual description of the crime committed corresponding to a CrimeCode.","Provides details on what weapon has been used, if any","Number corresponding to the Police Post concerned. A map with corresponding police posts can be found here: https://shorturl.at/buDIN","Name of the district, regrouping different neighbourhoods. Baltimore is officially divided into nine geographical regions: North, Northeast, East, Southeast, South, Southwest, West, Northwest, and Central.","Name of the neighborhood in which the crime was committed. Most names matches with neighborhood names contained in the data set about Community Statistical Areas.","Latitude, Coordinate system: EPSG:4326 WGS 84","Longitude, Coordinate system: EPSG:4326 WGS 84","Combination of latitude and longitude, Coordinate system: EPSG:4326 WGS 84","Information on the premise where the crime was committed.")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
@@ -58,22 +31,6 @@ _Source of the data set:_ <br> [https://data.baltimorecity.gov/datasets/part1-cr
 ### 2.2 CCTV Data set
 
 This data set represents closed circuit camera locations capturing activity within 256ft (~2 blocks). It contains 837 observations in total.
-
-  + **X = Longitude:** Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
-
-  + **Y = Latitude:** Coordinate system: EPSG:3857 WGS 84 / Pseudo-Mercator
-
-  + **OBJECTID** = ID of of the camera, 837 in total
-
-  + **CAM_NUM** = Unique number attributed to the camera. This might suggest that the data set does not show the location of every camera in Baltimore.
-
-  + **LOCATION** = Textual information on where the camera is located
-
-  + **PROJ** = Name of the area in which the camera is located. It does not always match the name of the "standard" community statistical areas.
-
-  + **XCCORD** = Longitude, Coordinate system: EPSG:4326 WGS 84
-
-  + **YCOORD** = Latitude, Coordinate system: EPSG:4326 WGS 84
   
 ```{r results='markup'}
 
@@ -92,12 +49,6 @@ _Source of the data set:_ <br>  [https://data.baltimorecity.gov/datasets/cctv-lo
 This data set provides information about the percent of family households living below the poverty line. This indicator measures the percentage of households whose income fell below the poverty threshold out of all households in an area. 
 
 Federal and state governments use such estimates to allocate funds to local communities. Local communities use these estimates to identify the number of individuals or families eligible for various programs. These information will be useful for us to study the dispersion of CCTVs within Baltimore in comparison to the poverty level in a given area.  This data set contains 55 observations, one percentage for each community statistical area. There seems to only be one NA. The most relevant variables are the following: 
-
-  + **CSA2010** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
-
-  + **hhpov15 - hhpov19** = each these five column contains the percent of Family Households Living Below the Poverty Line for a given year, from 2015 to 2019.
-
-  + **Shape_Area - Shape_Length** = standard fields to determine the area and the perimeter of a polygon
 
 ```{r results='markup'}
 
@@ -130,10 +81,6 @@ _Source of the data set:_ <br> [https://data.baltimorecity.gov/datasets/communit
 
 This data set provides information about the population in each Community Statistical Area. Information about the total population in 2010 and 2020 are provided. It will be useful to calculate values per capita in each community. The most relevant variables are the following:
 
-  + **community** = name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.
-
-  + **tpop20** = total population in for each Community Statistical Area in 2020
-  
 ```{r results='markup'}
 
 knitr::kable(cbind(c("**community**","**tpop20**"),c("name of the community statistical area. The Baltimore Data Collaborative and the Baltimore City Department of Planning divided Baltimore into 56 CSAs. These 56 units combine Census Bureau geographies together in ways that match Baltimore’s understanding of community boundaries, and are used in social planning.","total population in for each Community Statistical Area in 2020")),col.names = c('Variable','Meaning')) %>% kable_styling(position = "center")
