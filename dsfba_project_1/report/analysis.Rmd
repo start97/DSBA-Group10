@@ -4,7 +4,7 @@
 source(here::here("scripts/setup.R"))
 ```
 
-### 4.1 CCTVs VS Crime - Does the presence of CCTV deter crime?
+### 4.1 RQ1 - Does the presence of CCTV deter crime?
 
 In order to be in position to comment on the effectiveness of CCTVs on crime deterrence, one is first going to investigate the relationship between CCTV density and crime per capita. Based on our EDA, we have already seen that both crime and CCTV **seemed** to be highly concentrated in the city center which might have indicated a correlation. To verify this observation, we create a simple linear regression model. We first create a new data frame called `CCTV_VS_crimes` (which basically is a left joint). The results of linear regression indicates a moderate correlation between higher CCTV density and higher crime per capita. The $R^2$ is at 42.9%. Plotting the observations enables one to see this tendency. The blue line represents the regression line.
 
@@ -271,7 +271,7 @@ print(Baltimore_map_2, vp = viewport(0.8, 0.27, width = 0.5, height = 0.5)) #By 
 
 The fact that we observe crimes committed right next to surveillance cameras reinforces the hypothesis put forward so far and allows us to answer our first research question once and for all: it does not seem that CCTVs reduce crime.
 
-### 4.2 What types of crimes may be deterred by surveillance cameras?
+### 4.2 RQ2 - What types of crimes may be deterred by surveillance cameras?
 
 Although it is impossible to prove the effectiveness of surveillance cameras on crime in general, it is interesting to investigate whether different results are obtained when crime is broken down by type. The methodology we will use is the same as with crime in general. We start with felonies and misdemeanors, then we analyse violent and property crimes.
 
@@ -920,7 +920,7 @@ stargazer(regression9,
 <br><br>
 None of the comparisons between CCTV density and different crime type evolution seem to indicate significant relationships. Thus, it seems reasonable to conclude that in addition to being ineffective in reducing crime in general, CCTVs do not seem particularly effective in preventing any particular type of crime. However, from this analysis we found that violent crime appears to be an important determinant of CCTV density. This finding will be used to answer our fourth research question.
 
-### 4.3 Research question 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
+### 4.3 RQ 3 - Is the impact of CCTV on crime reduction higher/lower/same in higher income neighborhoods compared to lower income neighborhoods?
 
 As the actual effectiveness of CCTV in preventing crime is not so clear, answering our third research question does not really make sense. Yet what we can still investigate is how crime has evolved in each area based on its poverty level. Indeed, it is interesting to see whether, for example, inequalities in terms of security between richer and poorer areas exist.
 
@@ -952,7 +952,7 @@ stargazer(Evolution_VS_poverty_regr,
 <br><br>
 The very poor $R^2$ (6.48%) indicates that there is a poor correlation between the change in crime per capita between 2014 and 2019 and the poverty metric used. We cannot claim that inequalities in terms of security over that period exist.
 
-### 4.4 Research question 4 - Are there more public cameras in poorer areas compared to wealthier areas?
+### 4.4 RQ4 - Are there more public cameras in poorer areas compared to wealthier areas?
 
 We want to see whether there is a correlation between CCTV density and poverty level. As explained in the introduction, CCTVs pose several privacy issues. One of our initial hypothesis was that the government respected more the privacy of wealthier people. So, similarly, we perform a simple linear regression. The results here are not so conclusive, since we have a poor $adjusted R^2$ (24.4%) and a poor $R^2$ (25.8%). The next sub-section illustrates this phenomenon in a map.
 
