@@ -6,7 +6,7 @@ source(here::here("scripts/setup.R"))
 
 ### Data source
 
-We considered investigating three US cities such as Buffalo, Washington and Baltimore. This preliminary selection was based on the fact that these were the only three cities for which we found interesting CCTV data. After a more thorough analysis of the data sets we could retrieve for each of these respective cities, we ended up choosing Baltimore as their CCTV data set seemed to be the most complete and interesting and because their open data portal offered a lot of seemingly interesting other information.
+We considered investigating three US cities: Buffalo, Washington and Baltimore. This preliminary selection was based on the fact that these were the only three cities for which we found interesting CCTV data. After a more thorough analysis of the data sets we could retrieve for each of these respective cities, we ended up choosing Baltimore as their CCTV data set seemed to be the most complete and interesting one. We also noticed that Baltimore's open data portal offered a lot of seemingly interesting other information about the city.
 <br>
 We have five main raw data sets. All data sets were retrieved on Baltimore government's open data portal. We found data about crimes committed in Baltimore, CCTV location in the city and poverty level. We also found a data set showing the reference boundaries of the Community Statistical Area geographies. The latter will certainly be helpful to match each data set's observations together. Finally, we also obtained a data set containing the respective population of each community.
 
@@ -37,7 +37,7 @@ knitr::kable(cbind(
   ),
   c(
     "ID of the row, 350'294 in total",
-    " date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd",
+    "Date and time of the crime. Format yyyy/mm/dd hh:mm:sstzd",
     "Code corresponding to the type of crime committed",
     "Textual information on where the crime was committed ",
     "Textual description of the crime committed corresponding to a CrimeCode.",

@@ -16,7 +16,7 @@ We carried out our analyses using mainly 5 data sets retrieved on Baltimore's op
 
   + Analysing our data sets, we found that CCTVs were mostly concentrated in the city centre. Crime per capita was also highest in the inner city, suggesting a correlation between crime per capita and CCTV. Over the 2014-2019 period, crime (in absolute numbers) has increased slightly, although there has been a downward trend since a peak in 2017.
   
-  + CCTVs are not significantly correlated with crime reduction. Furthermore, it is observed that crimes are sometimes committed right in front of the surveillance cameras leading us to believe that CCTVs are not effective crime deterrents. A similar conclusion is found for all specific types of crime.
+  + CCTVs are not significantly correlated with crime reduction. Furthermore, it is observed that crimes are sometimes committed right in front of surveillance cameras leading us to believe that CCTVs are not effective crime deterrents. A similar conclusion is found for all specific types of crime.
   
   + The most important determinant of CCTV density in a given area is not race, nor education or socio-economic condition but violent crime per capita.
 
